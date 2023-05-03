@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Iniciar sesión</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="form" novalidate (ngSubmit)="login()">
+    <ion-list>
+      <ion-item>
+        <ion-label position="stacked">Correo electrónico</ion-label>
+        <ion-input formControlName="email"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Contraseña</ion-label>
+        <ion-input type="password" formControlName="password"></ion-input>
+      </ion-item>
+    </ion-list>
+    <ion-row>
+      <ion-col>
+        <ion-button type="submit" expand="block">Iniciar sesión</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button routerLink="/register" type="button" expand="block">Registrase</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="showError">
+      <ion-col>
+        <p>Por favor, introduce un correo y contraseña válidos.</p>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-content>

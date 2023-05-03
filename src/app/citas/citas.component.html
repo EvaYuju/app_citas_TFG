@@ -1,0 +1,24 @@
+<!--<p>citas works!<p>{{ miVariable }}</p>
+  <button (click)="miFuncion()">Ejecutar función</button>-->
+
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Reservar cita</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <ion-list>
+      <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+        <ion-item>
+          <ion-label position="floating">Fecha</ion-label>
+          <ion-datetime display-format="DD/MM/YYYY" name="date" required></ion-datetime>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Hora</ion-label>
+          <ion-datetime display-format="h:mm A" picker-format="h:mm A" name="time" required></ion-datetime>
+        </ion-item>
+        <ion-button type="submit" expand="block" color="primary">Reservar cita</ion-button>
+      </form>
+    </ion-list>
+  </ion-content>
