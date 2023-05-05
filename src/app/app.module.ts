@@ -13,7 +13,10 @@ import { environment } from '../environments/environment';
 import { provideAuth,getAuth } from '@angular/fire/auth';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore'; // Importa esto
+
 import { AngularFireDatabaseModule } from '@angular/fire/database';
+
 
 
 @NgModule({
@@ -29,5 +32,7 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
+  AngularFireModule.initializeApp(environment.firebase), // Agrega esto
+  AngularFirestoreModule // Agrega esto
 })
 export class AppModule {}

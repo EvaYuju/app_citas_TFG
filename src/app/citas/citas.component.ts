@@ -13,21 +13,22 @@ export class CitasComponent  implements OnInit {
   //miVariable: string = '¡Hola, mundo!';
   // Variables
   //doctorId: string;
-  citas: any;
+  citas: any[] = [];
 
-  constructor(private activatedRoute: ActivatedRoute, private navController: NavController, private firestore: AngularFirestore) { }
+  constructor(private navController: NavController, private firestore: AngularFirestore) { }
 
 
   ngOnInit() {
-    this.doctorId = this.activatedRoute.snapshot.paramMap.get('doctorId');
+    // Aquí obtenemos las citas de Firebase
+    this.firestore.collection('citas').valueChanges().subscribe((citas: any[]) => {
+      this.citas = citas;
+    });
   }
 
   //miFuncion(): void { console.log('Funcion ejecutada.'); }
-  
-  onSubmit(form) {
-    const date = form.value.date;
-    const time = form.value.time;
-    // Llamada a Firebase para guardar la cita
+
+  navigateToHome() {
+    this.navController.navigateBack('home');
   }
 
 
