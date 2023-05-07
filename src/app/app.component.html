@@ -15,12 +15,25 @@
               <ion-label>{{ p.title }}</ion-label>
             </ion-item>
           </ion-menu-toggle>
+          <!--<ion-menu-toggle auto-hide="false">
+            <ion-item [routerLink]="['/contacto']">
+              <ion-icon slot="start" icon="log-out"></ion-icon>
+              <ion-label>Contacto_toggle</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item [routerLink]="['/specialties']">
+              <ion-icon slot="start" icon="bandage"></ion-icon>
+              <ion-label>Especialidades</ion-label>
+            </ion-item>
+          </ion-menu-toggle>-->
           <ion-menu-toggle auto-hide="false">
             <ion-item (click)="logout()">
               <ion-icon slot="start" icon="log-out"></ion-icon>
               <ion-label>Cerrar sesión</ion-label>
             </ion-item>
           </ion-menu-toggle>
+
         </ion-list>
 
 

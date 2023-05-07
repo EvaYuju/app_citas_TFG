@@ -14,4 +14,8 @@ export class HomePage {
     this.navCtrl.navigateForward('citas');
   }
 
+  navigateToContact() {
+    this.navCtrl.navigateForward('contacto');
+  }
+
 }

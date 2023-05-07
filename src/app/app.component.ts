@@ -12,11 +12,13 @@ export class AppComponent {
 
   // Pestañas laterales
   public appPages = [
-    { title: 'Pedir cita', url: '/folder/Archived', icon: 'bag-add' },
-    { title: 'Especialidades', url: '/folder/Inbox', icon: 'bandage' },
-    { title: 'Doctoras/es', url: '/folder/Outbox', icon: 'people' },
-    { title: 'Mis citas', url: '/folder/Favorites', icon: 'calendar-number' },
-    { title: 'Contacto', url: '/folder/Spam', icon: 'call' },
+    { title: 'Volver a Inicio', url: '/home', icon: 'home' }, // ok
+    { title: 'Pedir cita', url: '/folder/Pedir cita', icon: 'bag-add' },
+    { title: 'Especialidades', url: '/specialties', icon: 'bandage' }, // ok
+    { title: 'Doctoras/es', url: '/folder/Doctores/as', icon: 'people' },
+    { title: 'Mis citas', url: '/folder/Mis citas', icon: 'calendar-number' },
+    { title: 'Contacto', url: '/contacto', icon: 'call' }, // ok
+
   ];
 
   // Usuario

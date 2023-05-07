@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { ActivatedRoute } from '@angular/router';
-import { AngularFirestore } from '@angular/fire/firestore';
+//import { ActivatedRoute } from '@angular/router';
+//import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-citas',
@@ -10,22 +10,28 @@ import { AngularFirestore } from '@angular/fire/firestore';
 })
 export class CitasComponent  implements OnInit {
 
-  //miVariable: string = '¡Hola, mundo!';
+  miVariable: string = '¡Hola, mundo!';
   // Variables
   //doctorId: string;
   citas: any[] = [];
 
-  constructor(private navController: NavController, private firestore: AngularFirestore) { }
+  //constructor(private navController: NavController, private firestore: AngularFirestore) { }
+  constructor(private navController: NavController) { }
 
+ ngOnInit() {
+    // Aquí obtenemos las citas de Firebase
+    //this.firestore.collection('citas').valueChanges().subscribe((citas: any[]) => {
+     // this.citas = citas; });
+  }
 
-  ngOnInit() {
+ /* ngOnInit() {
     // Aquí obtenemos las citas de Firebase
     this.firestore.collection('citas').valueChanges().subscribe((citas: any[]) => {
       this.citas = citas;
     });
-  }
+  } */
 
-  //miFuncion(): void { console.log('Funcion ejecutada.'); }
+  miFuncion(): void { console.log('Funcion ejecutada.'); }
 
   navigateToHome() {
     this.navController.navigateBack('home');
