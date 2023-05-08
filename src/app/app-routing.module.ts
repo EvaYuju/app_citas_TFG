@@ -13,9 +13,10 @@ const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 
 
 const routes: Routes = [
+
   {
     path: '',
-    redirectTo: 'folder/Inbox',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {

@@ -12,10 +12,6 @@ import { environment } from '../environments/environment';
 
 import { provideAuth,getAuth } from '@angular/fire/auth';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
-//import { AngularFireModule } from '@angular/fire';
-//import { AngularFirestoreModule } from '@angular/fire/firestore'; // Importa esto
-
-//import { AngularFireDatabaseModule } from '@angular/fire/database';
 
 
 
@@ -25,14 +21,13 @@ import { provideFirestore,getFirestore } from '@angular/fire/firestore';
   imports: [
   BrowserModule,
   IonicModule.forRoot(),
-  AppRoutingModule, provideFirebaseApp(() => initializeApp(environment.firebase)),
-  provideAuth(() => getAuth()),
+  AppRoutingModule, provideFirebaseApp(() => initializeApp(environment.firebase)), // también
+  provideAuth(() => getAuth()), // Servicios que necesitamos para conectar base de datos-proyecto
   provideFirestore(() => getFirestore()),
   AuthGuardModule
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
-  //AngularFireModule.initializeApp(environment.firebase), // Agrega esto
-  //AngularFirestoreModule // Agrega esto
+
 })
 export class AppModule {}
