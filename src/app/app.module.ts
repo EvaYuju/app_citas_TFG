@@ -13,10 +13,13 @@ import { environment } from '../environments/environment';
 import { provideAuth,getAuth } from '@angular/fire/auth';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 
+import { PacientesComponent } from './pacientes/pacientes.component'; // Importa el componente PacientesComponent aquí
+import { FormsModule } from '@angular/forms';
+
 
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, PacientesComponent],
   entryComponents: [],
   imports: [
   BrowserModule,
@@ -24,7 +27,8 @@ import { provideFirestore,getFirestore } from '@angular/fire/firestore';
   AppRoutingModule, provideFirebaseApp(() => initializeApp(environment.firebase)), // también
   provideAuth(() => getAuth()), // Servicios que necesitamos para conectar base de datos-proyecto
   provideFirestore(() => getFirestore()),
-  AuthGuardModule
+  AuthGuardModule,
+  FormsModule
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
