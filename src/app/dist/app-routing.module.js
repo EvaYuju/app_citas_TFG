@@ -12,6 +12,7 @@ var common_1 = require("@angular/common");
 var router_1 = require("@angular/router");
 var auth_guard_1 = require("@angular/fire/auth-guard"); //Para controlar los accesos a url sin iniciar sesión
 var citas_component_1 = require("./citas/citas.component");
+var pacientes_component_1 = require("./pacientes/pacientes.component");
 var specialties_component_1 = require("./specialties/specialties.component");
 //import { SpecialtiesRoutingModule } from './specialties-routing.module';
 var redirectUnauthorizedToLogin = function () { return auth_guard_1.redirectUnauthorizedTo(['login']); };
@@ -45,6 +46,10 @@ var routes = [
     },
     {
         path: 'citas', component: citas_component_1.CitasComponent
+    },
+    {
+        path: 'pacientes',
+        component: pacientes_component_1.PacientesComponent
     },
     {
         path: 'contacto',

@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard, redirectUnauthorizedTo } from '@angular/fire/auth-guard'; //Para controlar los accesos a url sin iniciar sesión
-import { CitasComponent } from './citas/citas.component';
 
+import { CitasComponent } from './citas/citas.component';
+import { PacientesComponent } from './pacientes/pacientes.component';
 import { SpecialtiesComponent } from './specialties/specialties.component';
 //import { SpecialtiesRoutingModule } from './specialties-routing.module';
 
@@ -42,7 +43,11 @@ const routes: Routes = [
     loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
   },
   {
-  path: 'citas', component: CitasComponent
+    path: 'citas', component: CitasComponent
+  },
+  {
+    path: 'pacientes',
+    component: PacientesComponent
   },
   {
     path: 'contacto',

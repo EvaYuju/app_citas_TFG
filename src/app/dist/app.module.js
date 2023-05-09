@@ -18,8 +18,8 @@ var app_1 = require("@angular/fire/app");
 var environment_1 = require("../environments/environment");
 var auth_1 = require("@angular/fire/auth");
 var firestore_1 = require("@angular/fire/firestore");
-var pacientes_component_1 = require("./pacientes/pacientes.component"); // Importa el componente PacientesComponent aquí
 var forms_1 = require("@angular/forms");
+var pacientes_component_1 = require("./pacientes/pacientes.component"); // Importa el componente PacientesComponent aquí
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }

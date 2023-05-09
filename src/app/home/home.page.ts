@@ -18,4 +18,8 @@ export class HomePage {
     this.navCtrl.navigateForward('contacto');
   }
 
+  navigateToPacientes() {
+    this.navCtrl.navigateForward('pacientes');
+  }
+
 }
