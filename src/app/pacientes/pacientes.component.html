@@ -8,10 +8,15 @@
   <ion-card>
     <ion-card-header>
       <ion-card-title>Información del Paciente</ion-card-title>
+      <div *ngIf="mensaje" class="mensaje-exito">{{ mensaje }}</div>
     </ion-card-header>
     <ion-card-content>
       <ion-item>
-        <ion-label position="floating">Nombre</ion-label>
+        <ion-label position="floating">DNI</ion-label>
+        <ion-input [(ngModel)]="paciente.dni"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Nombre Completo</ion-label>
         <ion-input [(ngModel)]="paciente.nombre"></ion-input>
       </ion-item>
       <ion-item>
@@ -33,5 +38,7 @@
     </ion-card-content>
   </ion-card>
 
+
   <ion-button expand="full" (click)="agregarPaciente()">Agregar Paciente</ion-button>
 </ion-content>
+

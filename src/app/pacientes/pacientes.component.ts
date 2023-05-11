@@ -9,7 +9,7 @@ import { PacientesService } from '../services/pacientes.service';
 })
 export class PacientesComponent implements OnInit{
   paciente: Pacientes = {
-    id: '',
+    dni: '',
     nombre: '',
     edad: null,
     direccion: '',
@@ -17,20 +17,58 @@ export class PacientesComponent implements OnInit{
     email: ''
   };
 
+  mensaje: string = '';
+
   constructor(private pacientesService: PacientesService) { }
 
   ngOnInit() {
   }
 
   agregarPaciente() {
-    this.pacientesService.addPaciente(this.paciente)
-      .then(() => {
-        console.log('Paciente agregado correctamente');
-        // Aquí puedes realizar acciones adicionales después de agregar el paciente, como limpiar el formulario o mostrar un mensaje de éxito.
+    if (!this.camposValidos()) {
+      this.mensaje = 'Por favor, completa todos los campos.';
+      return;
+    }
+
+    this.pacientesService.getPacientePorDNI(this.paciente.dni)
+      .then((pacienteExistente) => {
+        if (pacienteExistente) {
+          this.mensaje = 'Ya existe un paciente con este DNI.';
+        } else {
+          this.pacientesService.addPaciente(this.paciente)
+            .then(() => {
+              this.mensaje = 'Paciente agregado correctamente.';
+              this.limpiarFormulario();
+            })
+            .catch((error) => {
+              this.mensaje = 'Error al agregar el paciente: ' + error;
+            });
+        }
       })
-      .catch(error => {
-        console.error('Error al agregar el paciente:', error);
-        // Aquí puedes manejar el error de manera adecuada, como mostrar un mensaje de error al usuario.
+      .catch((error) => {
+        this.mensaje = 'Error al buscar el paciente: ' + error;
       });
+  }
+
+  camposValidos() {
+    return (
+      this.paciente.dni &&
+      this.paciente.nombre &&
+      this.paciente.edad &&
+      this.paciente.direccion &&
+      this.paciente.telefono &&
+      this.paciente.email
+    );
+  }
+
+  limpiarFormulario() {
+    this.paciente = {
+      dni: '',
+      nombre: '',
+      edad: null,
+      direccion: '',
+      telefono: '',
+      email: ''
+    };
   }
 }

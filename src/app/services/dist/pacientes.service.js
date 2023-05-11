@@ -19,6 +19,12 @@ var PacientesService = /** @class */ (function () {
         var pacienteRef = firestore_1.collection(this.firestore, 'pacientes');
         return firestore_1.addDoc(pacienteRef, paciente);
     };
+    PacientesService.prototype.getPacientePorDNI = function (dni) {
+        var pacienteRef = firestore_1.collection(this.firestore, 'pacientes');
+        var q = firestore_1.query(pacienteRef, firestore_1.where('dni', '==', dni));
+        return firestore_1.getDocs(q)
+            .then(function (snapshot) { return !snapshot.empty; });
+    };
     PacientesService = __decorate([
         core_1.Injectable({
             providedIn: 'root'
@@ -27,3 +33,13 @@ var PacientesService = /** @class */ (function () {
     return PacientesService;
 }());
 exports.PacientesService = PacientesService;
+/*
+  getPlaces(): Observable<Place[]> {
+    const placeRef = collection(this.firestore, 'places');
+    return collectionData(placeRef, { idField: 'id' }) as Observable<Place[]>;
+  }
+
+  deletePlace(place: Place) {
+    const placeDocRef = doc(this.firestore, `places/${place.id}`);
+    return deleteDoc(placeDocRef);
+  }*/

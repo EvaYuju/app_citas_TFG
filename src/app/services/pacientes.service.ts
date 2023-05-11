@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, query, where, getDocs } from '@angular/fire/firestore';
 import { Pacientes } from '../models/pacientes';
 
 
@@ -17,6 +17,16 @@ export class PacientesService {
     const pacienteRef = collection(this.firestore, 'pacientes');
     return addDoc(pacienteRef, paciente);
   }
+
+  getPacientePorDNI(dni: string) {
+    const pacienteRef = collection(this.firestore, 'pacientes');
+    const q = query(pacienteRef, where('dni', '==', dni));
+    return getDocs(q)
+      .then((snapshot) => !snapshot.empty);
+  }
+
+}
+
 /*
   getPlaces(): Observable<Place[]> {
     const placeRef = collection(this.firestore, 'places');
@@ -27,5 +37,3 @@ export class PacientesService {
     const placeDocRef = doc(this.firestore, `places/${place.id}`);
     return deleteDoc(placeDocRef);
   }*/
-
-}
