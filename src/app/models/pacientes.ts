@@ -1,4 +1,5 @@
 export interface Pacientes {
+  id: string;
   dni: string;
   nombre: string;
   edad: number | null;

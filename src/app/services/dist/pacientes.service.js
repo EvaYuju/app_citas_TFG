@@ -10,13 +10,15 @@ exports.PacientesService = void 0;
 var core_1 = require("@angular/core");
 var firestore_1 = require("@angular/fire/firestore");
 var PacientesService = /** @class */ (function () {
-    // Inyectamos Firebase en el constructor para poder trabajar con esa herramienta
+    // Inyectamos Firestore en el constructor para poder trabajar con esa herramienta
     function PacientesService(firestore) {
         this.firestore = firestore;
     }
+    //(recibe un paciente de tipo:)
     PacientesService.prototype.addPaciente = function (paciente) {
         // Ref a la bd = metodo collection(importamos)(1ºparametro Sºfirestores, 2ºparam nombreColeccion)
         var pacienteRef = firestore_1.collection(this.firestore, 'pacientes');
+        // retornar la llamada a addDoc(params: la coleccion, lo que insertamos)
         return firestore_1.addDoc(pacienteRef, paciente);
     };
     PacientesService.prototype.getPacientePorDNI = function (dni) {
@@ -24,6 +26,41 @@ var PacientesService = /** @class */ (function () {
         var q = firestore_1.query(pacienteRef, firestore_1.where('dni', '==', dni));
         return firestore_1.getDocs(q)
             .then(function (snapshot) { return !snapshot.empty; });
+    };
+    PacientesService.prototype.buscarPacientePorDNI = function (dni) {
+        var pacienteRef = firestore_1.collection(this.firestore, 'pacientes');
+        var q = firestore_1.query(pacienteRef, firestore_1.where('dni', '==', dni));
+        return firestore_1.getDocs(q)
+            .then(function (snapshot) {
+            if (!snapshot.empty) {
+                var pacientes_1 = [];
+                snapshot.forEach(function (doc) {
+                    var paciente = doc.data();
+                    paciente.id = doc.id;
+                    pacientes_1.push(paciente);
+                });
+                return pacientes_1;
+            }
+            else {
+                return [];
+            }
+        });
+    };
+    PacientesService.prototype.modificarPaciente = function (paciente) {
+        var pacienteRef = firestore_1.doc(this.firestore, 'pacientes', paciente.id);
+        var pacienteData = {
+            dni: paciente.dni,
+            nombre: paciente.nombre,
+            edad: paciente.edad,
+            direccion: paciente.direccion,
+            telefono: paciente.telefono,
+            email: paciente.email
+        };
+        return firestore_1.updateDoc(pacienteRef, pacienteData);
+    };
+    PacientesService.prototype.borrarPaciente = function (id) {
+        var pacienteRef = firestore_1.doc(this.firestore, 'pacientes', id);
+        return firestore_1.deleteDoc(pacienteRef);
     };
     PacientesService = __decorate([
         core_1.Injectable({
@@ -33,13 +70,3 @@ var PacientesService = /** @class */ (function () {
     return PacientesService;
 }());
 exports.PacientesService = PacientesService;
-/*
-  getPlaces(): Observable<Place[]> {
-    const placeRef = collection(this.firestore, 'places');
-    return collectionData(placeRef, { idField: 'id' }) as Observable<Place[]>;
-  }
-
-  deletePlace(place: Place) {
-    const placeDocRef = doc(this.firestore, `places/${place.id}`);
-    return deleteDoc(placeDocRef);
-  }*/

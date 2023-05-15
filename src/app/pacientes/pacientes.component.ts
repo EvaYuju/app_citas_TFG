@@ -9,6 +9,7 @@ import { PacientesService } from '../services/pacientes.service';
 })
 export class PacientesComponent implements OnInit{
   paciente: Pacientes = {
+    id: '',
     dni: '',
     nombre: '',
     edad: null,
@@ -18,6 +19,12 @@ export class PacientesComponent implements OnInit{
   };
 
   mensaje: string = '';
+  
+  pacientesEncontrados: Pacientes[] = [];
+  pacienteSeleccionado: Pacientes | null = null;
+
+  dniBuscar: string = ''; // Agrega esta línea para definir la propiedad dniBuscar
+
 
   constructor(private pacientesService: PacientesService) { }
 
@@ -50,6 +57,50 @@ export class PacientesComponent implements OnInit{
       });
   }
 
+  buscarPacientePorDNI(dni: string) {
+    this.pacientesService.buscarPacientePorDNI(dni)
+    .then((pacientes) => {
+    this.pacientesEncontrados = pacientes;
+    if (pacientes.length === 0) {
+    this.mensaje = 'No se encontraron pacientes con este DNI.';
+    } else {
+    this.mensaje = '';
+    }
+    })
+    .catch((error) => {
+    this.mensaje = 'Error al buscar el paciente: ' + error;
+    this.pacientesEncontrados = [];
+    });
+    }
+
+    seleccionarPaciente(paciente: Pacientes) {
+    this.pacienteSeleccionado = { ...paciente };
+    }
+
+    modificarPaciente() {
+    if (this.pacienteSeleccionado) {
+    this.pacientesService.modificarPaciente(this.pacienteSeleccionado)
+    .then(() => {
+    this.mensaje = 'Paciente modificado correctamente.';
+    this.pacienteSeleccionado = null;
+    })
+    .catch((error) => {
+    this.mensaje = 'Error al modificar el paciente: ' + error;
+    });
+    }
+    }
+
+    borrarPaciente(id: string) {
+    this.pacientesService.borrarPaciente(id)
+    .then(() => {
+    this.mensaje = 'Paciente eliminado correctamente.';
+    this.pacientesEncontrados = this.pacientesEncontrados.filter(paciente => paciente.id !== id);
+    })
+    .catch((error) => {
+    this.mensaje = 'Error al eliminar el paciente: ' + error;
+    });
+    }
+
   camposValidos() {
     return (
       this.paciente.dni &&
@@ -63,6 +114,7 @@ export class PacientesComponent implements OnInit{
 
   limpiarFormulario() {
     this.paciente = {
+      id: '',
       dni: '',
       nombre: '',
       edad: null,

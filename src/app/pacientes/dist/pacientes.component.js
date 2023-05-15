@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12,6 +23,7 @@ var PacientesComponent = /** @class */ (function () {
     function PacientesComponent(pacientesService) {
         this.pacientesService = pacientesService;
         this.paciente = {
+            id: '',
             dni: '',
             nombre: '',
             edad: null,
@@ -20,6 +32,9 @@ var PacientesComponent = /** @class */ (function () {
             email: ''
         };
         this.mensaje = '';
+        this.pacientesEncontrados = [];
+        this.pacienteSeleccionado = null;
+        this.dniBuscar = ''; // Agrega esta línea para definir la propiedad dniBuscar
     }
     PacientesComponent.prototype.ngOnInit = function () {
     };
@@ -47,6 +62,47 @@ var PacientesComponent = /** @class */ (function () {
             _this.mensaje = 'Error al buscar el paciente: ' + error;
         });
     };
+    PacientesComponent.prototype.buscarPacientePorDNI = function (dni) {
+        var _this = this;
+        this.pacientesService.buscarPacientePorDNI(dni)
+            .then(function (pacientes) {
+            _this.pacientesEncontrados = pacientes;
+            if (pacientes.length === 0) {
+                _this.mensaje = 'No se encontraron pacientes con este DNI.';
+            }
+            else {
+                _this.mensaje = '';
+            }
+        })["catch"](function (error) {
+            _this.mensaje = 'Error al buscar el paciente: ' + error;
+            _this.pacientesEncontrados = [];
+        });
+    };
+    PacientesComponent.prototype.seleccionarPaciente = function (paciente) {
+        this.pacienteSeleccionado = __assign({}, paciente);
+    };
+    PacientesComponent.prototype.modificarPaciente = function () {
+        var _this = this;
+        if (this.pacienteSeleccionado) {
+            this.pacientesService.modificarPaciente(this.pacienteSeleccionado)
+                .then(function () {
+                _this.mensaje = 'Paciente modificado correctamente.';
+                _this.pacienteSeleccionado = null;
+            })["catch"](function (error) {
+                _this.mensaje = 'Error al modificar el paciente: ' + error;
+            });
+        }
+    };
+    PacientesComponent.prototype.borrarPaciente = function (id) {
+        var _this = this;
+        this.pacientesService.borrarPaciente(id)
+            .then(function () {
+            _this.mensaje = 'Paciente eliminado correctamente.';
+            _this.pacientesEncontrados = _this.pacientesEncontrados.filter(function (paciente) { return paciente.id !== id; });
+        })["catch"](function (error) {
+            _this.mensaje = 'Error al eliminar el paciente: ' + error;
+        });
+    };
     PacientesComponent.prototype.camposValidos = function () {
         return (this.paciente.dni &&
             this.paciente.nombre &&
@@ -57,6 +113,7 @@ var PacientesComponent = /** @class */ (function () {
     };
     PacientesComponent.prototype.limpiarFormulario = function () {
         this.paciente = {
+            id: '',
             dni: '',
             nombre: '',
             edad: null,
