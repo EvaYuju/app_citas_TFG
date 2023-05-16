@@ -12,28 +12,28 @@ export class DoctorsService {
   //(recibe un doctor de tipo:)
   addDoctor(doctor: Doctor) {
     // Ref a la bd = metodo collection(importamos)(1ºparametro Sºfirestores, 2ºparam nombreColeccion)
-    const doctorRef = collection(this.firestore, 'doctors');
+    const doctorRef = collection(this.firestore, 'doctores');
     return addDoc(doctorRef, doctor)
   }
   getDoctorPorEspecialidad(specialty: string) {
-    const doctorRef = collection(this.firestore, 'pacientes');
+    const doctorRef = collection(this.firestore, 'doctores');
     const q = query(doctorRef, where('specialty', '==', specialty));
     return getDocs(q)
       .then((snapshot) => !snapshot.empty);
   }
   buscarDoctorPorEspecialidad(specialty: string) {
-    const doctorRef = collection(this.firestore, 'doctors');
+    const doctorRef = collection(this.firestore, 'doctores');
     const q = query(doctorRef, where('specialty', '==', specialty));
     return getDocs(q)
       .then((snapshot) => {
         if (!snapshot.empty) {
-          const doctors: any = [];
+          const doctores: any = [];
           snapshot.forEach((doc) => {
             const doctor = doc.data() as Doctor;
             doctor.id = doc.id;
-            doctors.push(doctor);
+            doctores.push(doctor);
           });
-          return doctors;
+          return doctores;
         } else {
           return [];
         }
@@ -41,7 +41,7 @@ export class DoctorsService {
   }
 
   modificarDoctor(doctor: Doctor) {
-    const doctorRef = doc(this.firestore, 'doctors', doctor.id);
+    const doctorRef = doc(this.firestore, 'doctores', doctor.id);
     const doctorData = {
       dni: doctor.dni,
       name: doctor.name,
@@ -51,7 +51,7 @@ export class DoctorsService {
   }
 
   borrarDoctor(id: string) {
-    const doctorRef = doc(this.firestore, 'doctors', id);
+    const doctorRef = doc(this.firestore, 'doctores', id);
     return deleteDoc(doctorRef);
 
   }

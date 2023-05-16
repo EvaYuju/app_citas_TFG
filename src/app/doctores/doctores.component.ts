@@ -87,6 +87,7 @@ export class DoctoresComponent implements OnInit {
   seleccionarDoctor(doctor: Doctor) {
     this.doctorSeleccionado = doctor;
     this.name = doctor.name;
+    this.dni = doctor.dni;
     this.specialty = doctor.specialty;
   }
 

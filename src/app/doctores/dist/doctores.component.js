@@ -80,6 +80,7 @@ var DoctoresComponent = /** @class */ (function () {
     DoctoresComponent.prototype.seleccionarDoctor = function (doctor) {
         this.doctorSeleccionado = doctor;
         this.name = doctor.name;
+        this.dni = doctor.dni;
         this.specialty = doctor.specialty;
     };
     DoctoresComponent.prototype.actualizarListaDoctores = function () {
