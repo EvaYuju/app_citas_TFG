@@ -1,20 +1,128 @@
-<p>citas works!<p>{{ miVariable }}</p>
-  <button (click)="miFuncion()">Ejecutar función</button>
-<!--
-  <ion-header>
-    <ion-toolbar color="primary">
-      <ion-buttons slot="start">
-        <ion-back-button defaultHref="/home"></ion-back-button>
-      </ion-buttons>
-      <ion-title>Mis Citas</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Agregar Cita</ion-title>
+  </ion-toolbar>
+</ion-header>
 
-  <ion-content>
-    <ion-list>
-      <ion-item *ngFor="let cita of citas">
-        {{ cita.fecha }} - {{ cita.hora }} - {{ cita.medico }}
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Información de la cita</ion-card-title>
+      <div *ngIf="mensaje" class="mensaje-exito">{{ mensaje }}</div>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating">ID</ion-label>
+        <ion-input [(ngModel)]="cita.id"></ion-input>
       </ion-item>
-    </ion-list>
-  </ion-content>
--->
+      <ion-item>
+        <ion-label position="floating">pacienteId</ion-label>
+        <ion-input [(ngModel)]="cita.pacienteId"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">doctorId</ion-label>
+        <ion-input type="number" [(ngModel)]="cita.doctorId"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">especialidad</ion-label>
+        <ion-input [(ngModel)]="cita.especialidad"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">fecha</ion-label>
+        <ion-input [(ngModel)]="cita.fecha"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">motivo</ion-label>
+        <ion-input type="email" [(ngModel)]="cita.motivo"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Estado</ion-label>
+        <ion-input type="email" [(ngModel)]="cita.estado"></ion-input>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-button expand="full" (click)="agregarCita()">Agregar Cita</ion-button>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Buscar Cita</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating">DNI</ion-label>
+        <ion-input [(ngModel)]="idBuscar"></ion-input> id
+      </ion-item>
+      <ion-button expand="full" (click)="buscarCitaPorID(idBuscar)"
+        >Buscar</ion-button
+      >
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="citasEncontradas.length > 0">
+    <ion-card-header>
+      <ion-card-title>Citass Encontrados</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let cita of citasEncontradas">
+          <ion-label>{{ cita.id }}</ion-label>
+          <ion-button slot="end" (click)="seleccionarCita(cita)"
+            >Seleccionar</ion-button
+          >
+          <ion-button slot="end" color="danger" (click)="borrarCita(cita.id)"
+            >Borrar</ion-button
+          >
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="citaSeleccionada">
+    <ion-card-header>
+      <ion-card-title>Modificar Cita</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating">ID</ion-label>
+        <ion-input [(ngModel)]="citaSeleccionada.id"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">pacienteId</ion-label>
+        <ion-input [(ngModel)]="citaSeleccionada.pacienteId"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">doctorId</ion-label>
+        <ion-input
+          type="number"
+          [(ngModel)]="citaSeleccionada.doctorId"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">especialidad</ion-label>
+        <ion-input [(ngModel)]="citaSeleccionada.especialidad"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">fecha</ion-label>
+        <ion-input [(ngModel)]="citaSeleccionada.fecha"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">motivo</ion-label>
+        <ion-input
+          type="email"
+          [(ngModel)]="citaSeleccionada.motivo"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">estado</ion-label>
+        <ion-input
+          type="email"
+          [(ngModel)]="citaSeleccionada.estado"
+        ></ion-input>
+      </ion-item>
+    </ion-card-content>
+    <ion-button expand="full" (click)="modificarCita()"
+      >Modificar Paciente</ion-button
+    >
+  </ion-card>
+</ion-content>

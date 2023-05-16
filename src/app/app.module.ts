@@ -18,10 +18,10 @@ import { FormsModule } from '@angular/forms';
 import { PacientesComponent } from './pacientes/pacientes.component';
 import { SpecialtiesComponent } from './specialties/specialties.component';
 import { DoctoresComponent } from './doctores/doctores.component';
-
+import { CitasComponent } from './citas/citas.component';
 
 @NgModule({
-  declarations: [AppComponent, PacientesComponent, SpecialtiesComponent, DoctoresComponent],
+  declarations: [AppComponent, PacientesComponent, SpecialtiesComponent, DoctoresComponent, CitasComponent],
   entryComponents: [],
   imports: [
   BrowserModule,
