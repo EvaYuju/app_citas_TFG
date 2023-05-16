@@ -49,13 +49,13 @@ var AppComponent = /** @class */ (function () {
     function AppComponent(auth, router) {
         this.auth = auth;
         this.router = router;
-        // Pestañas laterales
+        // Pestañas laterales // ok = Correctas
         this.appPages = [
             { title: 'Inicio', url: '/home', icon: 'home' },
-            { title: 'Pedir cita', url: '/folder/Pedir cita', icon: 'bag-add' },
+            { title: 'Pacientes', url: '/pacientes', icon: 'people-circle' },
+            { title: 'Doctoras/es', url: '/doctores', icon: 'people' },
             { title: 'Especialidades', url: '/specialties', icon: 'bandage' },
-            { title: 'Doctoras/es', url: '/folder/Doctores/as', icon: 'people' },
-            { title: 'Mis citas', url: '/folder/Mis citas', icon: 'calendar-number' },
+            { title: 'Mis citas', url: '/citas', icon: 'calendar-number' },
             { title: 'Contacto', url: '/contacto', icon: 'call' },
         ];
         // Usuario

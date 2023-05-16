@@ -14,14 +14,14 @@ import { provideAuth,getAuth } from '@angular/fire/auth';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 
 import { FormsModule } from '@angular/forms';
-
-import { PacientesComponent } from './pacientes/pacientes.component'; // Importa el componente PacientesComponent aquí
-
-
+// Importamos los componentes que usamos aquí
+import { PacientesComponent } from './pacientes/pacientes.component';
+import { SpecialtiesComponent } from './specialties/specialties.component';
+import { DoctoresComponent } from './doctores/doctores.component';
 
 
 @NgModule({
-  declarations: [AppComponent, PacientesComponent],
+  declarations: [AppComponent, PacientesComponent, SpecialtiesComponent, DoctoresComponent],
   entryComponents: [],
   imports: [
   BrowserModule,

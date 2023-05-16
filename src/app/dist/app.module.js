@@ -19,13 +19,16 @@ var environment_1 = require("../environments/environment");
 var auth_1 = require("@angular/fire/auth");
 var firestore_1 = require("@angular/fire/firestore");
 var forms_1 = require("@angular/forms");
-var pacientes_component_1 = require("./pacientes/pacientes.component"); // Importa el componente PacientesComponent aquí
+// Importamos los componentes que usamos aquí
+var pacientes_component_1 = require("./pacientes/pacientes.component");
+var specialties_component_1 = require("./specialties/specialties.component");
+var doctores_component_1 = require("./doctores/doctores.component");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         core_1.NgModule({
-            declarations: [app_component_1.AppComponent, pacientes_component_1.PacientesComponent],
+            declarations: [app_component_1.AppComponent, pacientes_component_1.PacientesComponent, specialties_component_1.SpecialtiesComponent, doctores_component_1.DoctoresComponent],
             entryComponents: [],
             imports: [
                 platform_browser_1.BrowserModule,

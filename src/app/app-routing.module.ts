@@ -1,3 +1,4 @@
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -7,7 +8,7 @@ import { AuthGuard, redirectUnauthorizedTo } from '@angular/fire/auth-guard'; //
 import { CitasComponent } from './citas/citas.component';
 import { PacientesComponent } from './pacientes/pacientes.component';
 import { SpecialtiesComponent } from './specialties/specialties.component';
-//import { SpecialtiesRoutingModule } from './specialties-routing.module';
+import { DoctoresComponent } from './doctores/doctores.component';
 
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
@@ -61,10 +62,14 @@ const routes: Routes = [
     path: 'specialties',
     component: SpecialtiesComponent
   },
+  {
+    path: 'doctores',
+    component: DoctoresComponent
+  },
 ];
 
 @NgModule({
-  declarations: [SpecialtiesComponent],
+  declarations: [],
   imports: [
     CommonModule, RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
   ],

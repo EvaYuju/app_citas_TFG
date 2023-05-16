@@ -14,7 +14,7 @@ var auth_guard_1 = require("@angular/fire/auth-guard"); //Para controlar los acc
 var citas_component_1 = require("./citas/citas.component");
 var pacientes_component_1 = require("./pacientes/pacientes.component");
 var specialties_component_1 = require("./specialties/specialties.component");
-//import { SpecialtiesRoutingModule } from './specialties-routing.module';
+var doctores_component_1 = require("./doctores/doctores.component");
 var redirectUnauthorizedToLogin = function () { return auth_guard_1.redirectUnauthorizedTo(['login']); };
 var routes = [
     {
@@ -63,13 +63,17 @@ var routes = [
         path: 'specialties',
         component: specialties_component_1.SpecialtiesComponent
     },
+    {
+        path: 'doctores',
+        component: doctores_component_1.DoctoresComponent
+    },
 ];
 var AppRoutingModule = /** @class */ (function () {
     function AppRoutingModule() {
     }
     AppRoutingModule = __decorate([
         core_1.NgModule({
-            declarations: [specialties_component_1.SpecialtiesComponent],
+            declarations: [],
             imports: [
                 common_1.CommonModule, router_1.RouterModule.forRoot(routes, { preloadingStrategy: router_1.PreloadAllModules })
             ],

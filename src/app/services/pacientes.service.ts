@@ -1,8 +1,6 @@
-
 import { Injectable } from '@angular/core';
 import { Firestore, collection, addDoc, query, where, getDocs, doc, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { Pacientes } from '../models/pacientes';
-
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +9,6 @@ export class PacientesService {
 
   // Inyectamos Firestore en el constructor para poder trabajar con esa herramienta
   constructor(private firestore: Firestore) { }
-
     //(recibe un paciente de tipo:)
   addPaciente(paciente: Pacientes){
     // Ref a la bd = metodo collection(importamos)(1ºparametro Sºfirestores, 2ºparam nombreColeccion)
