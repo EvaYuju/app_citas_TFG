@@ -1,0 +1,33 @@
+
+.header-toolbar {
+  --background: linear-gradient(to right, #002f6c, #0055b3, #002f6c);
+  --ion-color-base: #ffffff;
+  text-align: center;
+  }
+
+  .logo-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  }
+
+  .logo-image {
+  max-width: 200px;
+  }
+
+  .description {
+  text-align: center;
+  margin-top: 30px;
+  color: black;
+  }
+
+  .buttons-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+  }
+
+  ion-button {
+  margin-bottom: 10px;
+  }

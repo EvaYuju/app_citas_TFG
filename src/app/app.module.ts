@@ -19,9 +19,11 @@ import { PacientesComponent } from './pacientes/pacientes.component';
 import { SpecialtiesComponent } from './specialties/specialties.component';
 import { DoctoresComponent } from './doctores/doctores.component';
 import { CitasComponent } from './citas/citas.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
+
 
 @NgModule({
-  declarations: [AppComponent, PacientesComponent, SpecialtiesComponent, DoctoresComponent, CitasComponent],
+  declarations: [AppComponent, PacientesComponent, SpecialtiesComponent, DoctoresComponent, CitasComponent, LandingPageComponent],
   entryComponents: [],
   imports: [
   BrowserModule,

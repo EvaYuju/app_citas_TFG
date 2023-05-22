@@ -10,62 +10,84 @@ exports.AppRoutingModule = void 0;
 var core_1 = require("@angular/core");
 var common_1 = require("@angular/common");
 var router_1 = require("@angular/router");
-var auth_guard_1 = require("@angular/fire/auth-guard"); //Para controlar los accesos a url sin iniciar sesión
-var citas_component_1 = require("./citas/citas.component");
+var auth_guard_1 = require("@angular/fire/auth-guard");
 var pacientes_component_1 = require("./pacientes/pacientes.component");
+var citas_component_1 = require("./citas/citas.component");
 var specialties_component_1 = require("./specialties/specialties.component");
 var doctores_component_1 = require("./doctores/doctores.component");
+var landing_page_component_1 = require("./landing-page/landing-page.component");
 var redirectUnauthorizedToLogin = function () { return auth_guard_1.redirectUnauthorizedTo(['login']); };
+var redirectLoggedInToHome = function () { return auth_guard_1.redirectLoggedInTo(['home']); };
 var routes = [
     {
         path: '',
-        redirectTo: 'login',
+        redirectTo: 'landing-page',
         pathMatch: 'full'
     },
+    // Resto de las rutas...
+    // ...
     {
         path: 'folder/:id',
         loadChildren: function () { return Promise.resolve().then(function () { return require('./folder/folder.module'); }).then(function (m) { return m.FolderPageModule; }); }
     },
     {
-        path: 'home',
-        loadChildren: function () { return Promise.resolve().then(function () { return require('./home/home.module'); }).then(function (m) { return m.HomePageModule; }); }
-    },
-    {
-        path: 'home',
-        canActivate: [auth_guard_1.AuthGuard],
-        data: { authGuardPipe: redirectUnauthorizedToLogin },
-        loadChildren: function () { return Promise.resolve().then(function () { return require('./home/home.module'); }).then(function (m) { return m.HomePageModule; }); }
+        path: 'landing-page',
+        component: landing_page_component_1.LandingPageComponent
     },
     {
         path: 'login',
-        loadChildren: function () { return Promise.resolve().then(function () { return require('./login/login.module'); }).then(function (m) { return m.LoginPageModule; }); }
+        loadChildren: function () { return Promise.resolve().then(function () { return require('./login/login.module'); }).then(function (m) { return m.LoginPageModule; }); },
+        canActivate: [auth_guard_1.AuthGuard],
+        data: { authGuardPipe: redirectLoggedInToHome }
     },
     {
         path: 'register',
-        loadChildren: function () { return Promise.resolve().then(function () { return require('./register/register.module'); }).then(function (m) { return m.RegisterPageModule; }); }
+        loadChildren: function () { return Promise.resolve().then(function () { return require('./register/register.module'); }).then(function (m) { return m.RegisterPageModule; }); },
+        canActivate: [auth_guard_1.AuthGuard],
+        data: { authGuardPipe: redirectLoggedInToHome }
+    },
+    // Páginas que solo se pueden acceder si el usuario está autenticado
+    {
+        path: 'home',
+        loadChildren: function () { return Promise.resolve().then(function () { return require('./home/home.module'); }).then(function (m) { return m.HomePageModule; }); },
+        canActivate: [auth_guard_1.AuthGuard],
+        data: { authGuardPipe: redirectUnauthorizedToLogin }
     },
     {
-        path: 'citas', component: citas_component_1.CitasComponent
+        path: 'citas',
+        component: citas_component_1.CitasComponent,
+        canActivate: [auth_guard_1.AuthGuard],
+        data: { authGuardPipe: redirectUnauthorizedToLogin }
     },
     {
         path: 'pacientes',
-        component: pacientes_component_1.PacientesComponent
+        component: pacientes_component_1.PacientesComponent,
+        canActivate: [auth_guard_1.AuthGuard],
+        data: { authGuardPipe: redirectUnauthorizedToLogin }
     },
     {
         path: 'contacto',
-        loadChildren: function () { return Promise.resolve().then(function () { return require('./contacto/contacto.module'); }).then(function (m) { return m.ContactoPageModule; }); }
+        loadChildren: function () { return Promise.resolve().then(function () { return require('./contacto/contacto.module'); }).then(function (m) { return m.ContactoPageModule; }); },
+        canActivate: [auth_guard_1.AuthGuard],
+        data: { authGuardPipe: redirectUnauthorizedToLogin }
     },
     {
         path: 'folder',
-        loadChildren: function () { return Promise.resolve().then(function () { return require('./folder/folder.module'); }).then(function (m) { return m.FolderPageModule; }); }
+        loadChildren: function () { return Promise.resolve().then(function () { return require('./folder/folder.module'); }).then(function (m) { return m.FolderPageModule; }); },
+        canActivate: [auth_guard_1.AuthGuard],
+        data: { authGuardPipe: redirectUnauthorizedToLogin }
     },
     {
         path: 'specialties',
-        component: specialties_component_1.SpecialtiesComponent
+        component: specialties_component_1.SpecialtiesComponent,
+        canActivate: [auth_guard_1.AuthGuard],
+        data: { authGuardPipe: redirectUnauthorizedToLogin }
     },
     {
         path: 'doctores',
-        component: doctores_component_1.DoctoresComponent
+        component: doctores_component_1.DoctoresComponent,
+        canActivate: [auth_guard_1.AuthGuard],
+        data: { authGuardPipe: redirectUnauthorizedToLogin }
     },
 ];
 var AppRoutingModule = /** @class */ (function () {
@@ -75,7 +97,8 @@ var AppRoutingModule = /** @class */ (function () {
         core_1.NgModule({
             declarations: [],
             imports: [
-                common_1.CommonModule, router_1.RouterModule.forRoot(routes, { preloadingStrategy: router_1.PreloadAllModules })
+                common_1.CommonModule,
+                router_1.RouterModule.forRoot(routes, { preloadingStrategy: router_1.PreloadAllModules })
             ],
             exports: [router_1.RouterModule]
         })
