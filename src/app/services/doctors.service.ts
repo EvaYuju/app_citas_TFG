@@ -14,9 +14,9 @@ export class DoctorsService {
     return addDoc(doctorRef, doctor);
   }
 
-  getDoctorPorEspecialidad(specialty: string) {
+  getDoctorPorEspecialidad(especialidad: string) {
     const doctorRef = collection(this.firestore, 'doctores');
-    const q = query(doctorRef, where('specialty', '==', specialty));
+    const q = query(doctorRef, where('especialidad', '==', especialidad));
     return getDocs(q)
       .then((snapshot) => !snapshot.empty);
   }
@@ -27,9 +27,9 @@ export class DoctorsService {
       .then((snapshot) => !snapshot.empty);
   }
 
-  buscarDoctorPorEspecialidad(specialty: string) {
+  buscarDoctorPorEspecialidad(especialidad: string) {
     const doctorRef = collection(this.firestore, 'doctores');
-    const q = query(doctorRef, where('specialty', '==', specialty));
+    const q = query(doctorRef, where('especialidad', '==', especialidad));
     return getDocs(q)
       .then((snapshot) => {
         if (!snapshot.empty) {
@@ -46,12 +46,19 @@ export class DoctorsService {
       });
   }
 
+  
+
   modificarDoctor(doctor: Doctor) {
     const doctorRef = doc(this.firestore, 'doctores', doctor.id);
     const doctorData = {
+      id: doctor.id,
+      nombre: doctor.nombre,
+      apellidos: doctor.apellidos,
       dni: doctor.dni,
-      name: doctor.nombre,
-      especialidad: doctor.especialidad
+      nColegiado: doctor.nColegiado,
+      especialidad: doctor.especialidad,
+      telefono: doctor.telefono,
+      correoElectronico: doctor.correoElectronico
     };
     return updateDoc(doctorRef, doctorData);
   }

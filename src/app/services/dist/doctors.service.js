@@ -17,9 +17,9 @@ var DoctorsService = /** @class */ (function () {
         var doctorRef = firestore_1.collection(this.firestore, 'doctores');
         return firestore_1.addDoc(doctorRef, doctor);
     };
-    DoctorsService.prototype.getDoctorPorEspecialidad = function (specialty) {
+    DoctorsService.prototype.getDoctorPorEspecialidad = function (especialidad) {
         var doctorRef = firestore_1.collection(this.firestore, 'doctores');
-        var q = firestore_1.query(doctorRef, firestore_1.where('specialty', '==', specialty));
+        var q = firestore_1.query(doctorRef, firestore_1.where('especialidad', '==', especialidad));
         return firestore_1.getDocs(q)
             .then(function (snapshot) { return !snapshot.empty; });
     };
@@ -29,9 +29,9 @@ var DoctorsService = /** @class */ (function () {
         return firestore_1.getDocs(q)
             .then(function (snapshot) { return !snapshot.empty; });
     };
-    DoctorsService.prototype.buscarDoctorPorEspecialidad = function (specialty) {
+    DoctorsService.prototype.buscarDoctorPorEspecialidad = function (especialidad) {
         var doctorRef = firestore_1.collection(this.firestore, 'doctores');
-        var q = firestore_1.query(doctorRef, firestore_1.where('specialty', '==', specialty));
+        var q = firestore_1.query(doctorRef, firestore_1.where('especialidad', '==', especialidad));
         return firestore_1.getDocs(q)
             .then(function (snapshot) {
             if (!snapshot.empty) {
@@ -51,9 +51,14 @@ var DoctorsService = /** @class */ (function () {
     DoctorsService.prototype.modificarDoctor = function (doctor) {
         var doctorRef = firestore_1.doc(this.firestore, 'doctores', doctor.id);
         var doctorData = {
+            id: doctor.id,
+            nombre: doctor.nombre,
+            apellidos: doctor.apellidos,
             dni: doctor.dni,
-            name: doctor.name,
-            specialty: doctor.specialty
+            nColegiado: doctor.nColegiado,
+            especialidad: doctor.especialidad,
+            telefono: doctor.telefono,
+            correoElectronico: doctor.correoElectronico
         };
         return firestore_1.updateDoc(doctorRef, doctorData);
     };

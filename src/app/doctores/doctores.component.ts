@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Doctor } from '../models/doctor';
 import { DoctorsService } from '../services/doctors.service';
+import { Especialidad } from '../models/specialties';
 
 @Component({
   selector: 'app-doctores',
@@ -19,19 +20,25 @@ export class DoctoresComponent implements OnInit {
     telefono: '',
     correoElectronico: '',
     horario: this.generarHorario(),
-    citas: ''
+    //citas: ''
   };
-
-
 
   mensaje: string = '';
 
   doctorsEncontrados: Doctor[] = [];
   doctorSeleccionado: Doctor | null = null;
 
-  specialtyBuscar: string = ''; // Agrega esta línea para definir la propiedad specialtyBuscar
+  specialtyBuscar: string = '';
 
-  constructor(private doctorsService: DoctorsService) { }
+  especialidades: Especialidad[] = [
+    // ...
+  ];
+
+  constructor(private doctorsService: DoctorsService) {
+    this.loadDoctorsBySpecialty();
+
+    
+  }
 
   ngOnInit() {
   }
@@ -40,32 +47,30 @@ export class DoctoresComponent implements OnInit {
     if (!this.camposValidos()) {
       this.mensaje = 'Por favor, completa todos los campos.';
       return;
-    };
+    }
 
     this.doctorsService.getDoctorPorDni(this.doctor.dni)
-    .then((exists) => {
-      if (exists) {
-        this.mensaje = 'Ya existe un doctor con ese DNI.';
-      } else {
-        this.doctorsService.addDoctor(this.doctor)
-          .then(() => {
-            this.mensaje = 'Doctor agregado exitosamente.';
-            this.limpiarFormulario();
-            //this.buscarDoctorPorEspecialidad(this.specialtyBuscar); // Actualiza la lista de doctores
-            //this.actualizarListaDoctores();
-          })
-          .catch((error: any) => {
-            this.mensaje = 'Error al agregar doctor: ' + error;
-          });
-      }
-    })
-    .catch((error: any) => {
-      this.mensaje = 'Error al verificar la existencia del doctor: ' + error;
-    });
-}
+      .then((exists) => {
+        if (exists) {
+          this.mensaje = 'Ya existe un doctor con ese DNI.';
+        } else {
+          this.doctorsService.addDoctor(this.doctor)
+            .then(() => {
+              this.mensaje = 'Doctor agregado exitosamente.';
+              this.limpiarFormulario();
+            })
+            .catch((error: any) => {
+              this.mensaje = 'Error al agregar doctor: ' + error;
+            });
+        }
+      })
+      .catch((error: any) => {
+        this.mensaje = 'Error al verificar la existencia del doctor: ' + error;
+      });
+  }
 
-  buscarDoctorPorEspecialidad(specialty: string) {
-    this.doctorsService.buscarDoctorPorEspecialidad(specialty)
+  buscarDoctorPorEspecialidad(especialidad: string) {
+    this.doctorsService.buscarDoctorPorEspecialidad(especialidad)
       .then((doctors) => {
         this.doctorsEncontrados = doctors;
         if (doctors.length === 0) {
@@ -91,7 +96,7 @@ export class DoctoresComponent implements OnInit {
         .then(() => {
           this.mensaje = 'Doctor modificado correctamente.';
           this.doctorSeleccionado = null;
-          this.buscarDoctorPorEspecialidad(this.specialtyBuscar); // Actualiza la lista de doctores
+          this.buscarDoctorPorEspecialidad(this.specialtyBuscar);
         })
         .catch((error) => {
           this.mensaje = 'Error al modificar el doctor: ' + error;
@@ -110,6 +115,7 @@ export class DoctoresComponent implements OnInit {
       });
   }
 
+  // Validación
   camposValidos() {
     return (
       this.doctor.dni &&
@@ -118,20 +124,44 @@ export class DoctoresComponent implements OnInit {
     );
   }
 
+  // Métodos adicionales
   limpiarFormulario() {
     this.doctor = {
-    id: '',
-    nombre: '',
-    apellidos: '',
-    dni: '',
-    nColegiado: '',
-    especialidad: '',
-    telefono: '',
-    correoElectronico: '',
-    horario: this.generarHorario(),
-    citas: ''
+      id: '',
+      nombre: '',
+      apellidos: '',
+      dni: '',
+      nColegiado: '',
+      especialidad: '',
+      telefono: '',
+      correoElectronico: '',
+      horario: this.generarHorario(),
+      //citas: ''
     };
   }
+
+  loadDoctorsBySpecialty() {
+    const especialidadSeleccionada = this.specialtyBuscar;
+    if (especialidadSeleccionada) {
+      this.doctorsService.buscarDoctorPorEspecialidad(especialidadSeleccionada)
+        .then((doctors) => {
+          this.doctorsEncontrados = doctors;
+          if (doctors.length === 0) {
+            this.mensaje = 'No se encontraron doctores con esta especialidad.';
+          } else {
+            this.mensaje = '';
+          }
+        })
+        .catch((error) => {
+          this.mensaje = 'Error al buscar el doctor: ' + error;
+          this.doctorsEncontrados = [];
+        });
+    } else {
+      this.doctorsEncontrados = [];
+      this.mensaje = '';
+    }
+  }
+
   generarHorario() {
     const horario = [];
     const horaInicio = new Date().setHours(8, 0, 0); // Establecer hora de inicio en 8:00 AM
@@ -155,5 +185,8 @@ export class DoctoresComponent implements OnInit {
     const opciones = { hour: 'numeric', minute: 'numeric' } as const;
     return hora.toLocaleTimeString([], opciones);
   }
+
+
+
 
 }

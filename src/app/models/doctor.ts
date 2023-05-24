@@ -8,5 +8,5 @@ export interface Doctor {
   telefono: string;
   correoElectronico: string;
   horario: string[];
-  citas: string; //Quitar
+  //citas: string; //Quitar
 }

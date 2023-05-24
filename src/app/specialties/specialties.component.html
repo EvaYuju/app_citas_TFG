@@ -1,19 +1,37 @@
-<ion-header>
-  <ion-toolbar>
-  <!-- Boton menú lateral -->
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>Especialidades Médicas</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let especialidad of especialidades">
-      <ion-label>{{ especialidad }}</ion-label>
+    <ion-item>
+      <ion-label>Selecciona una especialidad</ion-label>
+      <ion-select placeholder="Especialidad" [(ngModel)]="selectedSpecialty" (ionChange)="loadDoctorsBySpecialty()">
+        <!--En el ion-select, se ha agregado el evento (ionChange) para llamar al método 
+          loadDoctorsBySpecialty() cada vez que se selecciona una especialidad. 
+          Esto asegura que se carguen y muestren los doctores correspondientes 
+          a la especialidad seleccionada.-->
+        <ion-select-option *ngFor="let especialidad of especialidades" [value]="especialidad">
+          {{ especialidad.nombre }}
+        </ion-select-option>
+      </ion-select>
     </ion-item>
   </ion-list>
 
+  <!-- Muestra los detalles de la especialidad seleccionada -->
+  <ion-card *ngIf="selectedSpecialty">
+    <ion-card-header>
+      <ion-card-title>{{ selectedSpecialty.nombre }}</ion-card-title>
+    </ion-card-header>
 
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          {{ selectedSpecialty.descripcion }}
+        </ion-item>
+      </ion-list>
+      <ion-list>
+        <p>Doctores:</p>
+        <ion-item *ngFor="let doctor of selectedSpecialty.doctores">
+          {{ doctor.nombre }} {{ doctor.apellidos }}
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
