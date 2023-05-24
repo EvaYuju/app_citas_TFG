@@ -39,5 +39,5 @@ export class SpecialtiesComponent {
     'Terapia Respiratoria',
     // Agrega más especialidades según tus necesidades
   ];
-  
+
 }

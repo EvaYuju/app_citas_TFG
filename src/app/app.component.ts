@@ -14,9 +14,9 @@ export class AppComponent {
   public appPages = [
     { title: 'Inicio', url: '/home', icon: 'home' }, // ok
     { title: 'Pacientes', url: '/pacientes', icon: 'people-circle' }, // ok
-    { title: 'Doctoras/es', url: '/doctores', icon: 'people' }, // ok
+    { title: 'Doctores', url: '/doctores', icon: 'people' }, // ok
     { title: 'Especialidades', url: '/specialties', icon: 'bandage' }, // ok
-    { title: 'Mis citas', url: '/citas', icon: 'calendar-number' }, // ok
+    { title: 'Citas', url: '/citas', icon: 'calendar-number' }, // ok
     { title: 'Contacto', url: '/contacto', icon: 'call' }, // ok
 
   ];

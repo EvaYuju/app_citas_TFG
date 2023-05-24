@@ -7,68 +7,94 @@ import { DoctorsService } from '../services/doctors.service';
   templateUrl: './doctores.component.html',
   styleUrls: ['./doctores.component.scss']
 })
+
 export class DoctoresComponent implements OnInit {
-  doctores: Doctor[] = [];
-  id: string = '';
-  dni: string = '';
-  name: string = '';
-  specialty: string = '';
-  especialidadBusqueda: string = '';
+  doctor: Doctor = {
+    id: '',
+    nombre: '',
+    apellidos: '',
+    dni: '',
+    nColegiado: '',
+    especialidad: '',
+    telefono: '',
+    correoElectronico: '',
+    horario: this.generarHorario(),
+    citas: ''
+  };
 
 
-  doctorSeleccionado: Doctor | null = null;
+
   mensaje: string = '';
 
-  constructor(private doctorsService: DoctorsService) {}
+  doctorsEncontrados: Doctor[] = [];
+  doctorSeleccionado: Doctor | null = null;
 
-  ngOnInit(): void {
-    this.actualizarListaDoctores();
-  }
+  specialtyBuscar: string = ''; // Agrega esta línea para definir la propiedad specialtyBuscar
 
-  buscarDoctorPorEspecialidad(specialty: string) {
-    this.especialidadBusqueda = specialty;
-    this.actualizarListaDoctores();
+  constructor(private doctorsService: DoctorsService) { }
+
+  ngOnInit() {
   }
 
   agregarDoctor() {
-    const doctor: Doctor = {
-      id: '',
-      dni: this.dni,
-      name: this.name,
-      specialty: this.specialty
+    if (!this.camposValidos()) {
+      this.mensaje = 'Por favor, completa todos los campos.';
+      return;
     };
 
-    this.doctorsService.getDoctorPorEspecialidad(this.specialty)
-      .then((exists: boolean) => {
-        if (exists) {
-          this.mensaje = 'El doctor ya existe';
+    this.doctorsService.getDoctorPorDni(this.doctor.dni)
+    .then((exists) => {
+      if (exists) {
+        this.mensaje = 'Ya existe un doctor con ese DNI.';
+      } else {
+        this.doctorsService.addDoctor(this.doctor)
+          .then(() => {
+            this.mensaje = 'Doctor agregado exitosamente.';
+            this.limpiarFormulario();
+            //this.buscarDoctorPorEspecialidad(this.specialtyBuscar); // Actualiza la lista de doctores
+            //this.actualizarListaDoctores();
+          })
+          .catch((error: any) => {
+            this.mensaje = 'Error al agregar doctor: ' + error;
+          });
+      }
+    })
+    .catch((error: any) => {
+      this.mensaje = 'Error al verificar la existencia del doctor: ' + error;
+    });
+}
+
+  buscarDoctorPorEspecialidad(specialty: string) {
+    this.doctorsService.buscarDoctorPorEspecialidad(specialty)
+      .then((doctors) => {
+        this.doctorsEncontrados = doctors;
+        if (doctors.length === 0) {
+          this.mensaje = 'No se encontraron doctores con esta especialidad.';
+          this.limpiarFormulario();
         } else {
-          this.doctorsService.addDoctor(doctor)
-            .then(() => {
-              this.mensaje = 'Doctor agregado exitosamente';
-              this.limpiarFormulario();
-              this.actualizarListaDoctores();
-            })
-            .catch((error: any) => {
-              this.mensaje = 'Error al agregar doctor: ' + error;
-            });
+          this.mensaje = '';
         }
       })
-      .catch((error: any) => {
-        this.mensaje = 'Error al verificar la existencia del doctor: ' + error;
+      .catch((error) => {
+        this.mensaje = 'Error al buscar el doctor: ' + error;
+        this.doctorsEncontrados = [];
       });
+  }
+
+  seleccionarDoctor(doctor: Doctor) {
+    this.doctorSeleccionado = { ...doctor };
   }
 
   modificarDoctor() {
     if (this.doctorSeleccionado) {
       this.doctorsService.modificarDoctor(this.doctorSeleccionado)
         .then(() => {
-          this.mensaje = 'Doctor modificado exitosamente';
-          this.limpiarFormulario();
-          this.actualizarListaDoctores();
+          this.mensaje = 'Doctor modificado correctamente.';
+          this.doctorSeleccionado = null;
+          this.buscarDoctorPorEspecialidad(this.specialtyBuscar); // Actualiza la lista de doctores
         })
-        .catch((error: any) => {
-          this.mensaje = 'Error al modificar doctor: ' + error;
+        .catch((error) => {
+          this.mensaje = 'Error al modificar el doctor: ' + error;
         });
     }
   }
@@ -76,35 +102,58 @@ export class DoctoresComponent implements OnInit {
   borrarDoctor(id: string) {
     this.doctorsService.borrarDoctor(id)
       .then(() => {
-        this.mensaje = 'Doctor borrado exitosamente';
-        this.actualizarListaDoctores();
+        this.mensaje = 'Doctor eliminado correctamente.';
+        this.doctorsEncontrados = this.doctorsEncontrados.filter(doctor => doctor.id !== id);
       })
-      .catch((error: any) => {
-        this.mensaje = 'Error al borrar doctor: ' + error;
+      .catch((error) => {
+        this.mensaje = 'Error al eliminar el doctor: ' + error;
       });
   }
 
-  seleccionarDoctor(doctor: Doctor) {
-    this.doctorSeleccionado = doctor;
-    this.name = doctor.name;
-    this.dni = doctor.dni;
-    this.specialty = doctor.specialty;
+  camposValidos() {
+    return (
+      this.doctor.dni &&
+      this.doctor.nombre &&
+      this.doctor.especialidad
+    );
   }
 
-  private actualizarListaDoctores() {
-    this.doctorsService.buscarDoctorPorEspecialidad(this.especialidadBusqueda)
-      .then((doctores: Doctor[]) => {
-        this.doctores = doctores;
-      })
-      .catch((error: any) => {
-        this.mensaje = 'Error al buscar doctores: ' + error;
-      });
+  limpiarFormulario() {
+    this.doctor = {
+    id: '',
+    nombre: '',
+    apellidos: '',
+    dni: '',
+    nColegiado: '',
+    especialidad: '',
+    telefono: '',
+    correoElectronico: '',
+    horario: this.generarHorario(),
+    citas: ''
+    };
+  }
+  generarHorario() {
+    const horario = [];
+    const horaInicio = new Date().setHours(8, 0, 0); // Establecer hora de inicio en 8:00 AM
+    const horaFin = new Date().setHours(15, 0, 0); // Establecer hora de fin en 3:00 PM
+
+    const tiempoIncremento = 30; // Incremento de tiempo en minutos
+
+    let horaActual = horaInicio;
+    while (horaActual <= horaFin) {
+      const hora = new Date(horaActual);
+      const horaFormateada = this.formatoHora(hora);
+      horario.push(horaFormateada);
+
+      horaActual += tiempoIncremento * 60 * 1000; // Convertir el incremento a milisegundos
+    }
+
+    return horario;
   }
 
-  private limpiarFormulario() {
-    this.name = '';
-    this.dni = '';
-    this.specialty = '';
-    this.doctorSeleccionado = null;
+  formatoHora(hora: Date) {
+    const opciones = { hour: 'numeric', minute: 'numeric' } as const;
+    return hora.toLocaleTimeString([], opciones);
   }
+
 }

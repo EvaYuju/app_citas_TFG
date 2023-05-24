@@ -10,13 +10,10 @@ exports.DoctorsService = void 0;
 var core_1 = require("@angular/core");
 var firestore_1 = require("@angular/fire/firestore");
 var DoctorsService = /** @class */ (function () {
-    // Inyectamos Firestore en el constructor para poder trabajar con esa herramienta
     function DoctorsService(firestore) {
         this.firestore = firestore;
     }
-    //(recibe un doctor de tipo:)
     DoctorsService.prototype.addDoctor = function (doctor) {
-        // Ref a la bd = metodo collection(importamos)(1ºparametro Sºfirestores, 2ºparam nombreColeccion)
         var doctorRef = firestore_1.collection(this.firestore, 'doctores');
         return firestore_1.addDoc(doctorRef, doctor);
     };
@@ -26,19 +23,25 @@ var DoctorsService = /** @class */ (function () {
         return firestore_1.getDocs(q)
             .then(function (snapshot) { return !snapshot.empty; });
     };
+    DoctorsService.prototype.getDoctorPorDni = function (dni) {
+        var doctorRef = firestore_1.collection(this.firestore, 'doctores');
+        var q = firestore_1.query(doctorRef, firestore_1.where('dni', '==', dni));
+        return firestore_1.getDocs(q)
+            .then(function (snapshot) { return !snapshot.empty; });
+    };
     DoctorsService.prototype.buscarDoctorPorEspecialidad = function (specialty) {
         var doctorRef = firestore_1.collection(this.firestore, 'doctores');
         var q = firestore_1.query(doctorRef, firestore_1.where('specialty', '==', specialty));
         return firestore_1.getDocs(q)
             .then(function (snapshot) {
             if (!snapshot.empty) {
-                var doctores_1 = [];
+                var doctors_1 = [];
                 snapshot.forEach(function (doc) {
                     var doctor = doc.data();
                     doctor.id = doc.id;
-                    doctores_1.push(doctor);
+                    doctors_1.push(doctor);
                 });
-                return doctores_1;
+                return doctors_1;
             }
             else {
                 return [];

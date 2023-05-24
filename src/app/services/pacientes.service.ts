@@ -47,10 +47,10 @@ export class PacientesService {
     const pacienteData = {
       dni: paciente.dni,
       nombre: paciente.nombre,
-      edad: paciente.edad,
+      edad: paciente.fechaNacimiento,
       direccion: paciente.direccion,
       telefono: paciente.telefono,
-      email: paciente.email
+      email: paciente.correoElectronico
     };
     return updateDoc(pacienteRef, pacienteData);
   }

@@ -1,9 +1,13 @@
 export interface Pacientes {
   id: string;
-  dni: string;
   nombre: string;
-  edad: number | null;
+  apellidos: string;
+  dni: string;
+  nSeguridadSocial: string;
+  fechaNacimiento: Date;
   direccion: string;
   telefono: string;
-  email: string;
+  correoElectronico: string;
+  historialMedico: string;
+  citas: string; //Quitar
 }

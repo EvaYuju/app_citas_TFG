@@ -1,6 +1,12 @@
 export interface Doctor {
   id: string;
+  nombre: string;
+  apellidos: string;
   dni: string;
-  name: string;
-  specialty: string;
+  nColegiado: string;
+  especialidad: string;
+  telefono: string;
+  correoElectronico: string;
+  horario: string[];
+  citas: string; //Quitar
 }

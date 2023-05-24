@@ -7,33 +7,39 @@ import { Doctor } from '../models/doctor';
 })
 export class DoctorsService {
 
-  // Inyectamos Firestore en el constructor para poder trabajar con esa herramienta
   constructor(private firestore: Firestore) { }
-  //(recibe un doctor de tipo:)
+
   addDoctor(doctor: Doctor) {
-    // Ref a la bd = metodo collection(importamos)(1ºparametro Sºfirestores, 2ºparam nombreColeccion)
     const doctorRef = collection(this.firestore, 'doctores');
-    return addDoc(doctorRef, doctor)
+    return addDoc(doctorRef, doctor);
   }
+
   getDoctorPorEspecialidad(specialty: string) {
     const doctorRef = collection(this.firestore, 'doctores');
     const q = query(doctorRef, where('specialty', '==', specialty));
     return getDocs(q)
       .then((snapshot) => !snapshot.empty);
   }
+  getDoctorPorDni(dni: string) {
+    const doctorRef = collection(this.firestore, 'doctores');
+    const q = query(doctorRef, where('dni', '==', dni));
+    return getDocs(q)
+      .then((snapshot) => !snapshot.empty);
+  }
+
   buscarDoctorPorEspecialidad(specialty: string) {
     const doctorRef = collection(this.firestore, 'doctores');
     const q = query(doctorRef, where('specialty', '==', specialty));
     return getDocs(q)
       .then((snapshot) => {
         if (!snapshot.empty) {
-          const doctores: any = [];
+          const doctors: Doctor[] = [];
           snapshot.forEach((doc) => {
             const doctor = doc.data() as Doctor;
             doctor.id = doc.id;
-            doctores.push(doctor);
+            doctors.push(doctor);
           });
-          return doctores;
+          return doctors;
         } else {
           return [];
         }
@@ -44,8 +50,8 @@ export class DoctorsService {
     const doctorRef = doc(this.firestore, 'doctores', doctor.id);
     const doctorData = {
       dni: doctor.dni,
-      name: doctor.name,
-      specialty: doctor.specialty
+      name: doctor.nombre,
+      especialidad: doctor.especialidad
     };
     return updateDoc(doctorRef, doctorData);
   }
@@ -53,6 +59,5 @@ export class DoctorsService {
   borrarDoctor(id: string) {
     const doctorRef = doc(this.firestore, 'doctores', id);
     return deleteDoc(doctorRef);
-
   }
 }

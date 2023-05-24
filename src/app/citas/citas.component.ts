@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { Citas } from './../models/citas';
 import { CitasService } from '../services/citas.service';
+import { DoctorsService } from '../services/doctors.service';
 
 @Component({
   selector: 'app-citas',
@@ -17,7 +18,10 @@ export class CitasComponent implements OnInit {
     fecha: new Date(),
     motivo: '',
     estado: '',
+    comentario: ''
   };
+
+  doctors: any[] = [];
 
   mensaje: string = '';
 
@@ -128,6 +132,7 @@ export class CitasComponent implements OnInit {
       fecha: new Date('01-01-01'),
       motivo: '',
       estado: '',
+      comentario: ''
     };
   }
 }

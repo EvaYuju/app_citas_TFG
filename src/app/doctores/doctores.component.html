@@ -1,68 +1,113 @@
 <ion-header>
   <ion-toolbar>
-  <!-- Boton menú lateral -->
+    <!-- Boton menú lateral -->
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>
-      Doctores
-    </ion-title>
+    <ion-title>Doctores</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-grid>
-    <ion-row>
-      <ion-col size="12">
-        <ion-item>
-          <ion-label position="floating">Especialidad</ion-label>
-          <ion-input type="text" [(ngModel)]="especialidadBusqueda"></ion-input>
-        </ion-item>
-      </ion-col>
-      <ion-col size="12">
-        <ion-button expand="full" (click)="buscarDoctorPorEspecialidad(especialidadBusqueda)">Buscar</ion-button>
-      </ion-col>
-    </ion-row>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Agregar Doctor</ion-card-title>
+    </ion-card-header>
 
-    <ion-row>
-      <ion-col size="12">
-        <ion-item *ngFor="let doctor of doctores">
-          <ion-label>{{ doctor.name }}</ion-label>
-          <ion-buttons slot="end">
-            <ion-button color="secondary" (click)="seleccionarDoctor(doctor)">Seleccionar</ion-button>
-            <ion-button color="danger" (click)="borrarDoctor(doctor.id)">Borrar</ion-button>
-          </ion-buttons>
-        </ion-item>
-      </ion-col>
-    </ion-row>
+    <ion-card-content>
+      <!-- Agregar Doctor Form -->
+      <ion-item>
+        <ion-label position="floating">DNI</ion-label>
+        <ion-input [(ngModel)]="doctor.dni"></ion-input>
+      </ion-item>
 
-    <ion-row>
-      <ion-col size="12">
-        <ion-item>
-          <ion-label position="floating">Nombre</ion-label>
-          <ion-input type="text" [(ngModel)]="name"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">DNI</ion-label>
-          <ion-input type="text" [(ngModel)]="dni"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Especialidad</ion-label>
-          <ion-input type="text" [(ngModel)]="specialty"></ion-input>
-        </ion-item>
-      </ion-col>
-      <ion-col size="12">
-        <ion-button expand="full" (click)="agregarDoctor()">Agregar</ion-button>
-        <ion-button expand="full" (click)="modificarDoctor()" [disabled]="!doctorSeleccionado">Modificar</ion-button>
-      </ion-col>
-    </ion-row>
+      <ion-item>
+        <ion-label position="floating">Nombre</ion-label>
+        <ion-input [(ngModel)]="doctor.nombre"></ion-input>
+      </ion-item>
 
-    <ion-row>
-      <ion-col size="12">
-        <ion-item *ngIf="mensaje">
-          <ion-label>{{ mensaje }}</ion-label>
+      <ion-item>
+        <ion-label position="floating">Especialidad</ion-label>
+        <ion-input [(ngModel)]="doctor.especialidad"></ion-input>
+      </ion-item>
+
+      <ion-button expand="full" (click)="agregarDoctor()">Agregar</ion-button>
+
+      <!-- Mensaje de estado -->
+      <div *ngIf="mensaje">
+        {{ mensaje }}
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Buscar Doctor</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <!-- Buscar Doctor Form -->
+      <ion-item>
+        <ion-label position="floating">Especialidad</ion-label>
+        <ion-input [(ngModel)]="specialtyBuscar"></ion-input>
+      </ion-item>
+
+      <ion-button expand="full" (click)="buscarDoctorPorEspecialidad(specialtyBuscar)">Buscar</ion-button>
+
+      <!-- Mensaje de resultado de búsqueda -->
+      <div *ngIf="doctorsEncontrados.length === 0 && mensaje">
+        {{ mensaje }}
+      </div>
+
+      <!-- Lista de doctores encontrados -->
+      <ion-label *ngIf="doctorsEncontrados.length > 0">Lista de doctores encontrados - Seleccione un doctor para modificar</ion-label>
+      <ion-list>
+        <ion-item *ngFor="let doctor of doctorsEncontrados" (click)="seleccionarDoctor(doctor)">
+          {{ doctor.nombre }} - {{ doctor.especialidad }}
         </ion-item>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="doctorSeleccionado">
+    <ion-card-header>
+      <ion-card-title>Modificar Doctor</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <!-- Modificar Doctor Form -->
+      <ion-item>
+        <ion-label position="floating">DNI</ion-label>
+        <ion-input [(ngModel)]="doctorSeleccionado.dni"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Nombre</ion-label>
+        <ion-input [(ngModel)]="doctorSeleccionado.nombre"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Especialidad</ion-label>
+        <ion-input [(ngModel)]="doctorSeleccionado.especialidad"></ion-input>
+      </ion-item>
+
+      <ion-button expand="full" (click)="modificarDoctor()">Modificar</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="doctorsEncontrados.length > 0">
+    <ion-card-header>
+      <ion-card-title>Eliminar Doctor</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <!-- Lista de doctores encontrados para eliminar -->
+      <ion-list>
+        <ion-item *ngFor="let doctor of doctorsEncontrados">
+          {{ doctor.nombre }} - {{ doctor.especialidad }}
+          <ion-button slot="end" color="danger" (click)="borrarDoctor(doctor.id)">Eliminar</ion-button>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

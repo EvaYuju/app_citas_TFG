@@ -10,16 +10,20 @@ import { PacientesService } from '../services/pacientes.service';
 export class PacientesComponent implements OnInit{
   paciente: Pacientes = {
     id: '',
-    dni: '',
     nombre: '',
-    edad: null,
+    apellidos: '',
+    dni: '',
+    nSeguridadSocial: '',
+    fechaNacimiento: new Date(),
     direccion: '',
     telefono: '',
-    email: ''
+    correoElectronico: '',
+    historialMedico: '',
+    citas: ''
   };
 
   mensaje: string = '';
-  
+
   pacientesEncontrados: Pacientes[] = [];
   pacienteSeleccionado: Pacientes | null = null;
 
@@ -105,22 +109,26 @@ export class PacientesComponent implements OnInit{
     return (
       this.paciente.dni &&
       this.paciente.nombre &&
-      this.paciente.edad &&
+      this.paciente.fechaNacimiento &&
       this.paciente.direccion &&
       this.paciente.telefono &&
-      this.paciente.email
+      this.paciente.correoElectronico
     );
   }
 
   limpiarFormulario() {
     this.paciente = {
       id: '',
-      dni: '',
       nombre: '',
-      edad: null,
+      apellidos: '',
+      dni: '',
+      nSeguridadSocial: '',
+      fechaNacimiento: new Date(),
       direccion: '',
       telefono: '',
-      email: ''
+      correoElectronico: '',
+      historialMedico: '',
+      citas: ''
     };
   }
 }

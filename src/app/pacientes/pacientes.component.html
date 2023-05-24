@@ -26,7 +26,7 @@
       </ion-item>
       <ion-item>
         <ion-label position="floating">Edad</ion-label>
-        <ion-input type="number" [(ngModel)]="paciente.edad"></ion-input>
+        <ion-input type="number" [(ngModel)]="paciente.fechaNacimiento"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label position="floating">Dirección</ion-label>
@@ -38,13 +38,13 @@
       </ion-item>
       <ion-item>
         <ion-label position="floating">Email</ion-label>
-        <ion-input type="email" [(ngModel)]="paciente.email"></ion-input>
+        <ion-input type="email" [(ngModel)]="paciente.correoElectronico"></ion-input>
       </ion-item>
     </ion-card-content>
     <ion-button (click)="agregarPaciente()">Agregar Paciente</ion-button>
   </ion-card>
 
-  
+
 
   <ion-card>
     <ion-card-header>
@@ -89,7 +89,7 @@
       </ion-item>
       <ion-item>
         <ion-label position="floating">Edad</ion-label>
-        <ion-input type="number" [(ngModel)]="pacienteSeleccionado.edad"></ion-input>
+        <ion-input type="number" [(ngModel)]="pacienteSeleccionado.fechaNacimiento"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label position="floating">Dirección</ion-label>
@@ -101,7 +101,7 @@
       </ion-item>
       <ion-item>
         <ion-label position="floating">Email</ion-label>
-        <ion-input type="email" [(ngModel)]="pacienteSeleccionado.email"></ion-input>
+        <ion-input type="email" [(ngModel)]="pacienteSeleccionado.correoElectronico"></ion-input>
       </ion-item>
     </ion-card-content>
     <ion-button (click)="modificarPaciente()">Modificar Paciente</ion-button>
