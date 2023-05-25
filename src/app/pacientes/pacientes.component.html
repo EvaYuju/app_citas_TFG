@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-        <!-- Boton menú lateral -->
+    <!-- Boton menú lateral -->
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
@@ -9,7 +9,7 @@
 </ion-header>
 
 <ion-content>
-    <!-- Formulario de agregar paciente -->
+  <!-- Formulario de agregar paciente -->
   <ion-card>
     <ion-card-header>
       <ion-card-title>Información del Paciente</ion-card-title>
@@ -25,8 +25,16 @@
         <ion-input [(ngModel)]="paciente.nombre"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating">Edad</ion-label>
-        <ion-input type="number" [(ngModel)]="paciente.fechaNacimiento"></ion-input>
+        <ion-label position="floating">Apellidos</ion-label>
+        <ion-input [(ngModel)]="paciente.apellidos"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Número de Seguridad Social</ion-label>
+        <ion-input [(ngModel)]="paciente.nSeguridadSocial"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Fecha de Nacimiento</ion-label>
+        <ion-input type="date" [(ngModel)]="paciente.fechaNacimiento"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label position="floating">Dirección</ion-label>
@@ -40,11 +48,13 @@
         <ion-label position="floating">Email</ion-label>
         <ion-input type="email" [(ngModel)]="paciente.correoElectronico"></ion-input>
       </ion-item>
+      <ion-item>
+        <ion-label position="floating">Historial Médico</ion-label>
+        <ion-textarea [(ngModel)]="paciente.historialMedico"></ion-textarea>
+      </ion-item>
     </ion-card-content>
     <ion-button (click)="agregarPaciente()">Agregar Paciente</ion-button>
   </ion-card>
-
-
 
   <ion-card>
     <ion-card-header>
@@ -88,8 +98,16 @@
         <ion-input [(ngModel)]="pacienteSeleccionado.nombre"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating">Edad</ion-label>
-        <ion-input type="number" [(ngModel)]="pacienteSeleccionado.fechaNacimiento"></ion-input>
+        <ion-label position="floating">Apellidos</ion-label>
+        <ion-input [(ngModel)]="pacienteSeleccionado.apellidos"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Número de Seguridad Social</ion-label>
+        <ion-input [(ngModel)]="pacienteSeleccionado.nSeguridadSocial"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Fecha de Nacimiento</ion-label>
+        <ion-input type="date" [(ngModel)]="pacienteSeleccionado.fechaNacimiento"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label position="floating">Dirección</ion-label>
@@ -102,6 +120,10 @@
       <ion-item>
         <ion-label position="floating">Email</ion-label>
         <ion-input type="email" [(ngModel)]="pacienteSeleccionado.correoElectronico"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Historial Médico</ion-label>
+        <ion-textarea [(ngModel)]="pacienteSeleccionado.historialMedico"></ion-textarea>
       </ion-item>
     </ion-card-content>
     <ion-button (click)="modificarPaciente()">Modificar Paciente</ion-button>
