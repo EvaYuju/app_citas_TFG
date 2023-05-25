@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Doctor } from '../models/doctor';
 import { DoctorsService } from '../services/doctors.service';
 import { Especialidad } from '../models/specialties';
+import { SpecialtiesService } from '../services/specialties.service';
 
 @Component({
   selector: 'app-doctores',
@@ -30,17 +31,16 @@ export class DoctoresComponent implements OnInit {
 
   specialtyBuscar: string = '';
 
-  especialidades: Especialidad[] = [
-    // ...
-  ];
+  especialidades: Especialidad[] = [];
 
-  constructor(private doctorsService: DoctorsService) {
+  constructor(private doctorsService: DoctorsService, private specialtiesService: SpecialtiesService) {
     this.loadDoctorsBySpecialty();
 
-    
+
   }
 
   ngOnInit() {
+    this.loadSpecialties();
   }
 
   agregarDoctor() {
@@ -186,6 +186,11 @@ export class DoctoresComponent implements OnInit {
     return hora.toLocaleTimeString([], opciones);
   }
 
+  loadSpecialties(){
+    this.specialtiesService.getAllSpecialties().then((listSpecialties) => {
+      this.especialidades = listSpecialties;
+    });
+  }
 
 
 

@@ -3,6 +3,9 @@ import { NavController } from '@ionic/angular';
 import { Citas } from './../models/citas';
 import { CitasService } from '../services/citas.service';
 import { DoctorsService } from '../services/doctors.service';
+import { SpecialtiesService } from '../services/specialties.service';
+import { Especialidad } from '../models/specialties';
+import { Doctor } from '../models/doctor';
 
 @Component({
   selector: 'app-citas',
@@ -21,18 +24,24 @@ export class CitasComponent implements OnInit {
     comentario: ''
   };
 
-  doctors: any[] = [];
+  doctors: Doctor[] = [];
 
   mensaje: string = '';
 
+  specialtyBuscar: string = '';
+  doctorSeleccionado: Doctor | null = null;
   citasEncontradas: Citas[] = [];
   citaSeleccionada: Citas | null = null;
-
+  especialidades: Especialidad[] = [];
   idBuscar: string = ''; // Agrega esta línea para definir la propiedad idBuscar
 
-  constructor(private citasService: CitasService) {}
+  constructor(private citasService: CitasService, private doctorsService: DoctorsService, private specialtiesService: SpecialtiesService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.loadSpecialties();
+  }
+
+
 
   agregarCita() {
     if (!this.camposValidos()) {
@@ -95,6 +104,33 @@ export class CitasComponent implements OnInit {
           this.mensaje = 'Error al modificar la cita: ' + error;
         });
     }
+  }
+
+  buscarDoctorPorEspecialidad(especialidad: string) {
+    this.doctorsService.buscarDoctorPorEspecialidad(especialidad)
+      .then((doctors) => {
+        this.doctors = doctors;
+        if (doctors.length === 0) {
+          this.mensaje = 'No se encontraron doctores con esta especialidad.';
+          this.limpiarFormulario();
+        } else {
+          this.mensaje = '';
+        }
+      })
+      .catch((error) => {
+        this.mensaje = 'Error al buscar el doctor: ' + error;
+        this.doctors = [];
+      });
+  }
+
+  loadSpecialties(){
+    this.specialtiesService.getAllSpecialties().then((listSpecialties) => {
+      this.especialidades = listSpecialties;
+    });
+  }
+
+  seleccionarDoctor(doctor: Doctor) {
+    this.doctorSeleccionado = { ...doctor };
   }
 
   borrarCita(id: string) {

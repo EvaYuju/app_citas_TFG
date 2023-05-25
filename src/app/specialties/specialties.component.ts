@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Especialidad } from './../models/specialties';
 import { DoctorsService } from '../services/doctors.service';
+import { SpecialtiesService } from '../services/specialties.service';
 
 @Component({
   selector: 'app-specialties',
@@ -8,7 +9,8 @@ import { DoctorsService } from '../services/doctors.service';
   styleUrls: ['./specialties.component.scss'],
 })
 export class SpecialtiesComponent implements OnInit {
-  especialidades: Especialidad[] = [
+  especialidades: Especialidad[] = [];
+  /*[
     { id: '1', nombre: 'Cardiología', descripcion: 'Especialidad en el estudio y tratamiento de enfermedades del corazón.', doctores: [] },
     { id: '2', nombre: 'Dermatología', descripcion: 'Especialidad en el cuidado y tratamiento de la piel.', doctores: [] },
     { id: '3', nombre: 'Endocrinología', descripcion: 'Especialidad en el estudio y tratamiento de trastornos hormonales.', doctores: [] },
@@ -39,14 +41,15 @@ export class SpecialtiesComponent implements OnInit {
     { id: '28', nombre: 'Reumatología', descripcion: 'Especialidad en el estudio y tratamiento de enfermedades reumáticas.', doctores: [] },
     { id: '29', nombre: 'Terapia Ocupacional', descripcion: 'Especialidad en el tratamiento de personas con dificultades en sus actividades diarias.', doctores: [] },
     { id: '30', nombre: 'Terapia Respiratoria', descripcion: 'Especialidad en el tratamiento de enfermedades respiratorias.', doctores: [] }
-  ];
+  ];*/
 
   selectedSpecialty: Especialidad | undefined;
 
-  constructor(private doctorsService: DoctorsService) {}
+  constructor(private doctorsService: DoctorsService, private specialtiesService: SpecialtiesService) {}
 
   ngOnInit() {
     this.loadDoctorsBySpecialty();
+    this.loadSpecialties();
   }
 
   // Método para mostrar nombre-doctor segun especialidad seleccionada
@@ -63,5 +66,11 @@ export class SpecialtiesComponent implements OnInit {
           console.error('Error al cargar los nombres de los doctores por especialidad:', error);
         });
     }
+  }
+
+  loadSpecialties(){
+    this.specialtiesService.getAllSpecialties().then((listSpecialties) => {
+      this.especialidades = listSpecialties;
+    });
   }
 }

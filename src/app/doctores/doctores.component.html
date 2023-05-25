@@ -37,8 +37,17 @@
       </ion-item>
 
       <ion-item>
-        <ion-label position="floating">Especialidad</ion-label>
-        <ion-input [(ngModel)]="doctor.especialidad"></ion-input>
+
+        <ion-select placeholder="Especialidad" [(ngModel)]="doctor.especialidad">
+          <!--En el ion-select, se ha agregado el evento (ionChange) para llamar al método
+            loadDoctorsBySpecialty() cada vez que se selecciona una especialidad.
+            Esto asegura que se carguen y muestren los doctores correspondientes
+            a la especialidad seleccionada.-->
+          <ion-select-option *ngFor="let especialidad of especialidades" [value]="especialidad.nombre">
+            {{ especialidad.nombre }}
+          </ion-select-option>
+        </ion-select>
+
       </ion-item>
 
       <ion-item>
@@ -69,7 +78,15 @@
       <!-- Buscar Doctor Form -->
       <ion-item>
         <ion-label position="floating">Especialidad</ion-label>
-        <ion-input [(ngModel)]="specialtyBuscar"></ion-input>
+        <ion-select placeholder="Especialidad" [(ngModel)]="specialtyBuscar">
+          <!--En el ion-select, se ha agregado el evento (ionChange) para llamar al método
+            loadDoctorsBySpecialty() cada vez que se selecciona una especialidad.
+            Esto asegura que se carguen y muestren los doctores correspondientes
+            a la especialidad seleccionada.-->
+          <ion-select-option *ngFor="let especialidad of especialidades" [value]="especialidad.nombre">
+            {{ especialidad.nombre }}
+          </ion-select-option>
+        </ion-select>
       </ion-item>
 
       <ion-button expand="full" (click)="buscarDoctorPorEspecialidad(specialtyBuscar)">Buscar</ion-button>
@@ -118,7 +135,15 @@
 
       <ion-item>
         <ion-label position="floating">Especialidad</ion-label>
-        <ion-input [(ngModel)]="doctorSeleccionado.especialidad"></ion-input>
+        <ion-select placeholder="Especialidad" [(ngModel)]="doctorSeleccionado.especialidad">
+          <!--En el ion-select, se ha agregado el evento (ionChange) para llamar al método
+            loadDoctorsBySpecialty() cada vez que se selecciona una especialidad.
+            Esto asegura que se carguen y muestren los doctores correspondientes
+            a la especialidad seleccionada.-->
+          <ion-select-option *ngFor="let especialidad of especialidades" [value]="especialidad.nombre">
+            {{ especialidad.nombre }}
+          </ion-select-option>
+        </ion-select>
       </ion-item>
 
       <ion-item>
