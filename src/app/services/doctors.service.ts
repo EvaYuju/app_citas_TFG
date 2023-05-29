@@ -21,8 +21,8 @@ export class DoctorsService {
       .then((snapshot) => !snapshot.empty);
   }
   getDoctorPorDni(dni: string) {
-    const doctorRef = collection(this.firestore, 'doctores');
-    const q = query(doctorRef, where('dni', '==', dni));
+    const doctorRef2 = collection(this.firestore, 'doctores');
+    const q = query(doctorRef2, where('dni', '==', dni));
     return getDocs(q)
       .then((snapshot) => !snapshot.empty);
   }
@@ -46,7 +46,27 @@ export class DoctorsService {
       });
   }
 
-  
+
+  buscarDoctorPorDNI(dni: string) {
+    const doctorRef2 = collection(this.firestore, 'doctores');
+    const q = query(doctorRef2, where('dni', '==', dni));
+    return getDocs(q)
+      .then((snapshot) => {
+        if (!snapshot.empty) {
+          const doctors: Doctor[] = [];
+          snapshot.forEach((doc) => {
+            const doctor = doc.data() as Doctor;
+            doctor.id = doc.id;
+            doctors.push(doctor);
+          });
+          return doctors;
+        } else {
+          return [];
+        }
+      });
+  }
+
+
 
   modificarDoctor(doctor: Doctor) {
     const doctorRef = doc(this.firestore, 'doctores', doctor.id);

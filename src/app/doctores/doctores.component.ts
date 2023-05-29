@@ -27,9 +27,11 @@ export class DoctoresComponent implements OnInit {
   mensaje: string = '';
 
   doctorsEncontrados: Doctor[] = [];
+  doctorsEncontradosDNI: Doctor[] = [];
   doctorSeleccionado: Doctor | null = null;
 
   specialtyBuscar: string = '';
+  dniBuscar: string = '';
 
   especialidades: Especialidad[] = [];
 
@@ -85,6 +87,23 @@ export class DoctoresComponent implements OnInit {
         this.doctorsEncontrados = [];
       });
   }
+
+  buscarDoctorPorDNI(dni: string) {
+    this.doctorsService.buscarDoctorPorDNI(dni)
+    .then((doctors) => {
+    this.doctorsEncontrados = doctors;
+    if (doctors.length === 0) {
+    this.mensaje = 'No se encontraron pacientes con este DNI.';
+    } else {
+    this.mensaje = '';
+    }
+    })
+    .catch((error) => {
+    this.mensaje = 'Error al buscar el paciente: ' + error;
+    this.doctorsEncontradosDNI = [];
+    });
+    }
+
 
   seleccionarDoctor(doctor: Doctor) {
     this.doctorSeleccionado = { ...doctor };

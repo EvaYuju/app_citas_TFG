@@ -20,8 +20,9 @@ exports.__esModule = true;
 exports.DoctoresComponent = void 0;
 var core_1 = require("@angular/core");
 var DoctoresComponent = /** @class */ (function () {
-    function DoctoresComponent(doctorsService) {
+    function DoctoresComponent(doctorsService, specialtiesService) {
         this.doctorsService = doctorsService;
+        this.specialtiesService = specialtiesService;
         this.doctor = {
             id: '',
             nombre: '',
@@ -35,14 +36,15 @@ var DoctoresComponent = /** @class */ (function () {
         };
         this.mensaje = '';
         this.doctorsEncontrados = [];
+        this.doctorsEncontradosDNI = [];
         this.doctorSeleccionado = null;
         this.specialtyBuscar = '';
-        this.especialidades = [
-        // ...
-        ];
+        this.dniBuscar = '';
+        this.especialidades = [];
         this.loadDoctorsBySpecialty();
     }
     DoctoresComponent.prototype.ngOnInit = function () {
+        this.loadSpecialties();
     };
     DoctoresComponent.prototype.agregarDoctor = function () {
         var _this = this;
@@ -83,6 +85,22 @@ var DoctoresComponent = /** @class */ (function () {
         })["catch"](function (error) {
             _this.mensaje = 'Error al buscar el doctor: ' + error;
             _this.doctorsEncontrados = [];
+        });
+    };
+    DoctoresComponent.prototype.buscarDoctorPorDNI = function (dni) {
+        var _this = this;
+        this.doctorsService.buscarDoctorPorDNI(dni)
+            .then(function (doctors) {
+            _this.doctorsEncontrados = doctors;
+            if (doctors.length === 0) {
+                _this.mensaje = 'No se encontraron pacientes con este DNI.';
+            }
+            else {
+                _this.mensaje = '';
+            }
+        })["catch"](function (error) {
+            _this.mensaje = 'Error al buscar el paciente: ' + error;
+            _this.doctorsEncontradosDNI = [];
         });
     };
     DoctoresComponent.prototype.seleccionarDoctor = function (doctor) {
@@ -171,6 +189,12 @@ var DoctoresComponent = /** @class */ (function () {
     DoctoresComponent.prototype.formatoHora = function (hora) {
         var opciones = { hour: 'numeric', minute: 'numeric' };
         return hora.toLocaleTimeString([], opciones);
+    };
+    DoctoresComponent.prototype.loadSpecialties = function () {
+        var _this = this;
+        this.specialtiesService.getAllSpecialties().then(function (listSpecialties) {
+            _this.especialidades = listSpecialties;
+        });
     };
     DoctoresComponent = __decorate([
         core_1.Component({

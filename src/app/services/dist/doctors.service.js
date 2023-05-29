@@ -24,8 +24,8 @@ var DoctorsService = /** @class */ (function () {
             .then(function (snapshot) { return !snapshot.empty; });
     };
     DoctorsService.prototype.getDoctorPorDni = function (dni) {
-        var doctorRef = firestore_1.collection(this.firestore, 'doctores');
-        var q = firestore_1.query(doctorRef, firestore_1.where('dni', '==', dni));
+        var doctorRef2 = firestore_1.collection(this.firestore, 'doctores');
+        var q = firestore_1.query(doctorRef2, firestore_1.where('dni', '==', dni));
         return firestore_1.getDocs(q)
             .then(function (snapshot) { return !snapshot.empty; });
     };
@@ -42,6 +42,25 @@ var DoctorsService = /** @class */ (function () {
                     doctors_1.push(doctor);
                 });
                 return doctors_1;
+            }
+            else {
+                return [];
+            }
+        });
+    };
+    DoctorsService.prototype.buscarDoctorPorDNI = function (dni) {
+        var doctorRef2 = firestore_1.collection(this.firestore, 'doctores');
+        var q = firestore_1.query(doctorRef2, firestore_1.where('dni', '==', dni));
+        return firestore_1.getDocs(q)
+            .then(function (snapshot) {
+            if (!snapshot.empty) {
+                var doctors_2 = [];
+                snapshot.forEach(function (doc) {
+                    var doctor = doc.data();
+                    doctor.id = doc.id;
+                    doctors_2.push(doctor);
+                });
+                return doctors_2;
             }
             else {
                 return [];

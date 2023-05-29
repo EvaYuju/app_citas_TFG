@@ -76,6 +76,7 @@
 
     <ion-card-content>
       <!-- Buscar Doctor Form -->
+      <!-- Buscar Doctor Especialidad -->
       <ion-item>
         <ion-label position="floating">Especialidad</ion-label>
         <ion-select placeholder="Especialidad" [(ngModel)]="specialtyBuscar">
@@ -88,9 +89,18 @@
           </ion-select-option>
         </ion-select>
       </ion-item>
-
       <ion-button expand="full" (click)="buscarDoctorPorEspecialidad(specialtyBuscar)">Buscar</ion-button>
 
+      <!-- Buscar Doctor DNI -->
+      <ion-item>
+        <ion-label position="floating">DNI</ion-label>
+        <ion-input [(ngModel)]="dniBuscar">
+
+        </ion-input>
+
+      </ion-item>
+
+      <ion-button expand="full" (click)="buscarDoctorPorDNI(dniBuscar)">Buscar</ion-button>
       <!-- Mensaje de resultado de búsqueda -->
       <div *ngIf="doctorsEncontrados.length === 0 && mensaje">
         {{ mensaje }}
