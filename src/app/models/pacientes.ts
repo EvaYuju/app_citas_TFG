@@ -9,5 +9,5 @@ export interface Pacientes {
   telefono: string;
   correoElectronico: string;
   historialMedico: string;
-  citas: string; //Quitar
+  //citas: string; //Quitar
 }

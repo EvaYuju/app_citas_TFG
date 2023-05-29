@@ -18,10 +18,10 @@
     <ion-card-content>
       <ion-item>
         <ion-label position="floating">DNI</ion-label>
-        <ion-input [(ngModel)]="paciente.dni"></ion-input>
+        <ion-input placeholder="000000000X"[(ngModel)]="paciente.dni"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating">Nombre Completo</ion-label>
+        <ion-label position="floating">Nombre</ion-label>
         <ion-input [(ngModel)]="paciente.nombre"></ion-input>
       </ion-item>
       <ion-item>
@@ -42,7 +42,7 @@
       </ion-item>
       <ion-item>
         <ion-label position="floating">Teléfono</ion-label>
-        <ion-input [(ngModel)]="paciente.telefono"></ion-input>
+        <ion-input type="tel" placeholder="+34-888-888-888" [(ngModel)]="paciente.telefono"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label position="floating">Email</ion-label>
@@ -53,7 +53,7 @@
         <ion-textarea [(ngModel)]="paciente.historialMedico"></ion-textarea>
       </ion-item>
     </ion-card-content>
-    <ion-button (click)="agregarPaciente()">Agregar Paciente</ion-button>
+    <ion-button expand="block" (click)="agregarPaciente()">Agregar Paciente</ion-button>
   </ion-card>
 
   <ion-card>
@@ -65,7 +65,7 @@
         <ion-label position="floating">DNI</ion-label>
         <ion-input [(ngModel)]="dniBuscar"></ion-input>
       </ion-item>
-      <ion-button (click)="buscarPacientePorDNI(dniBuscar)">Buscar</ion-button>
+      <ion-button expand="block" (click)="buscarPacientePorDNI(dniBuscar)">Buscar</ion-button>
     </ion-card-content>
   </ion-card>
 

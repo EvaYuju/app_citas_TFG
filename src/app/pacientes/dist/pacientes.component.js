@@ -24,12 +24,15 @@ var PacientesComponent = /** @class */ (function () {
         this.pacientesService = pacientesService;
         this.paciente = {
             id: '',
-            dni: '',
             nombre: '',
-            edad: null,
+            apellidos: '',
+            dni: '',
+            nSeguridadSocial: '',
+            fechaNacimiento: new Date(),
             direccion: '',
             telefono: '',
-            email: ''
+            correoElectronico: '',
+            historialMedico: ''
         };
         this.mensaje = '';
         this.pacientesEncontrados = [];
@@ -106,20 +109,23 @@ var PacientesComponent = /** @class */ (function () {
     PacientesComponent.prototype.camposValidos = function () {
         return (this.paciente.dni &&
             this.paciente.nombre &&
-            this.paciente.edad &&
+            this.paciente.fechaNacimiento &&
             this.paciente.direccion &&
             this.paciente.telefono &&
-            this.paciente.email);
+            this.paciente.correoElectronico);
     };
     PacientesComponent.prototype.limpiarFormulario = function () {
         this.paciente = {
             id: '',
-            dni: '',
             nombre: '',
-            edad: null,
+            apellidos: '',
+            dni: '',
+            nSeguridadSocial: '',
+            fechaNacimiento: new Date(),
             direccion: '',
             telefono: '',
-            email: ''
+            correoElectronico: '',
+            historialMedico: ''
         };
     };
     PacientesComponent = __decorate([

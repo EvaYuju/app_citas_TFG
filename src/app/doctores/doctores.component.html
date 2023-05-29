@@ -18,7 +18,7 @@
       <!-- Agregar Doctor Form -->
       <ion-item>
         <ion-label position="floating">DNI</ion-label>
-        <ion-input [(ngModel)]="doctor.dni"></ion-input>
+        <ion-input placeholder="000000000X" [(ngModel)]="doctor.dni"></ion-input>
       </ion-item>
 
       <ion-item>
@@ -52,7 +52,7 @@
 
       <ion-item>
         <ion-label position="floating">Teléfono</ion-label>
-        <ion-input [(ngModel)]="doctor.telefono"></ion-input>
+        <ion-input type="tel" placeholder="+34-888-888-888" [(ngModel)]="doctor.telefono"></ion-input>
       </ion-item>
 
       <ion-item>
@@ -95,12 +95,23 @@
       <div *ngIf="doctorsEncontrados.length === 0 && mensaje">
         {{ mensaje }}
       </div>
+    </ion-card-content>
+  </ion-card>
 
-      <!-- Lista de doctores encontrados -->
-      <ion-label *ngIf="doctorsEncontrados.length > 0">Lista de doctores encontrados - Seleccione un doctor para modificar</ion-label>
+  <!-- Lista de doctores encontrados -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title *ngIf="doctorsEncontrados.length > 0">Pacientes Encontrados</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list></ion-list>
+      <ion-label *ngIf="doctorsEncontrados.length > 0">Lista de doctores encontrados - Seleccione un doctor para
+        modificar</ion-label>
       <ion-list>
-        <ion-item *ngFor="let doctor of doctorsEncontrados" (click)="seleccionarDoctor(doctor)">
-          {{ doctor.nombre }} - {{ doctor.especialidad }}
+        <ion-item *ngFor="let doctor of doctorsEncontrados">
+          <ion-label>{{ doctor.nombre }} - {{ doctor.especialidad }}</ion-label>
+          <ion-button slot="end" (click)="seleccionarDoctor(doctor)">Seleccionar</ion-button>
+          <ion-button slot="end" color="danger" (click)="borrarDoctor(doctor.id)">Eliminar</ion-button>
         </ion-item>
       </ion-list>
     </ion-card-content>
@@ -156,23 +167,8 @@
         <ion-input [(ngModel)]="doctorSeleccionado.correoElectronico"></ion-input>
       </ion-item>
 
-      <ion-button expand="full" (click)="modificarDoctor()">Modificar</ion-button>
+      <ion-button expand="full" (click)="modificarDoctor()">Guardar cambios</ion-button>
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngIf="doctorsEncontrados.length > 0">
-    <ion-card-header>
-      <ion-card-title>Eliminar Doctor</ion-card-title>
-    </ion-card-header>
-
-    <ion-card-content>
-      <!-- Lista de doctores encontrados para eliminar -->
-      <ion-list>
-        <ion-item *ngFor="let doctor of doctorsEncontrados">
-          {{ doctor.nombre }} - {{ doctor.especialidad }}
-          <ion-button slot="end" color="danger" (click)="borrarDoctor(doctor.id)">Eliminar</ion-button>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
 </ion-content>

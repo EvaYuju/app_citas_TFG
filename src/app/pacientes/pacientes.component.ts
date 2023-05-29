@@ -19,7 +19,7 @@ export class PacientesComponent implements OnInit{
     telefono: '',
     correoElectronico: '',
     historialMedico: '',
-    citas: ''
+    //citas: ''
   };
 
   mensaje: string = '';
@@ -128,7 +128,7 @@ export class PacientesComponent implements OnInit{
       telefono: '',
       correoElectronico: '',
       historialMedico: '',
-      citas: ''
+      //citas: ''
     };
   }
 }
