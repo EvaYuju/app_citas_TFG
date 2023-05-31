@@ -9,6 +9,7 @@ exports.__esModule = true;
 exports.PacientesService = void 0;
 var core_1 = require("@angular/core");
 var firestore_1 = require("@angular/fire/firestore");
+//import { v4 as uuidv4 } from 'uuid'; // Importa la función uuidv4 para generar un id único
 var PacientesService = /** @class */ (function () {
     // Inyectamos Firestore en el constructor para poder trabajar con esa herramienta
     function PacientesService(firestore) {
@@ -18,6 +19,8 @@ var PacientesService = /** @class */ (function () {
     PacientesService.prototype.addPaciente = function (paciente) {
         // Ref a la bd = metodo collection(importamos)(1ºparametro Sºfirestores, 2ºparam nombreColeccion)
         var pacienteRef = firestore_1.collection(this.firestore, 'pacientes');
+        //const id = uuidv4(); // Genera un id único utilizando la función uuidv4()
+        //const pacienteWithId = { ...paciente, id }; // Crea un nuevo objeto que incluya el id generado
         // retornar la llamada a addDoc(params: la coleccion, lo que insertamos)
         return firestore_1.addDoc(pacienteRef, paciente);
     };

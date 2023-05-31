@@ -94,24 +94,22 @@
       <!-- Buscar Doctor DNI -->
       <ion-item>
         <ion-label position="floating">DNI</ion-label>
-        <ion-input [(ngModel)]="dniBuscar">
-
-        </ion-input>
-
+        <ion-input [(ngModel)]="dniBuscar"></ion-input>
       </ion-item>
-
       <ion-button expand="full" (click)="buscarDoctorPorDNI(dniBuscar)">Buscar</ion-button>
+      
       <!-- Mensaje de resultado de búsqueda -->
       <div *ngIf="doctorsEncontrados.length === 0 && mensaje">
         {{ mensaje }}
       </div>
+      
     </ion-card-content>
   </ion-card>
 
   <!-- Lista de doctores encontrados -->
   <ion-card>
     <ion-card-header>
-      <ion-card-title *ngIf="doctorsEncontrados.length > 0">Pacientes Encontrados</ion-card-title>
+      <ion-card-title *ngIf="doctorsEncontrados.length > 0">Doctores Encontrados</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <ion-list></ion-list>

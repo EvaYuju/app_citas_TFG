@@ -10,6 +10,7 @@ import {
   updateDoc,
   deleteDoc,
 } from '@angular/fire/firestore';
+//import { v4 as uuidv4 } from 'uuid';
 import { Citas } from '../models/citas';
 
 @Injectable({
@@ -19,12 +20,25 @@ export class CitasService {
   // Inyectamos Firestore en el constructor para poder trabajar con esa herramienta
   constructor(private firestore: Firestore) {}
 
-  //(recibe un paciente de tipo:)
+  /*//(recibe un paciente de tipo:)
   addCita(cita: Citas) {
     // Ref a la bd = metodo collection(importamos)(1ºparametro Sºfirestores, 2ºparam nombreColeccion)
     const citaRef = collection(this.firestore, 'citas');
+
     // retornar la llamada a addDoc(params: la coleccion, lo que insertamos)
     return addDoc(citaRef, cita);
+  }*/
+
+   async addCita(cita: Citas) {
+    try {
+      const citaRef = collection(this.firestore, 'citas');
+      const docRef = await addDoc(citaRef, cita);
+      const citaId = docRef.id;
+      cita.id = citaId;
+      console.log('Cita creada con ID:', citaId);
+    } catch (error) {
+      console.error('Error al crear la cita:', error);
+    }
   }
 
   getCitaPorID(id: string) {
@@ -38,7 +52,7 @@ export class CitasService {
     const q = query(citaRef, where('id', '==', id));
     return getDocs(q).then((snapshot) => {
       if (!snapshot.empty) {
-        const citas: any = [];
+        const citas: Citas[] = []; // Cambio: Define el tipo de citas como Citas[]
         snapshot.forEach((doc) => {
           const cita = doc.data() as Citas;
           cita.id = doc.id;
@@ -50,6 +64,7 @@ export class CitasService {
       }
     });
   }
+  
 
   modificarCita(cita: Citas) {
     const citaRef = doc(this.firestore, 'citas', cita.id);

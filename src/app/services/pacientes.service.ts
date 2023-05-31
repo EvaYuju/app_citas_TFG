@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Firestore, collection, addDoc, query, where, getDocs, doc, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { Pacientes } from '../models/pacientes';
+//import { v4 as uuidv4 } from 'uuid'; // Importa la función uuidv4 para generar un id único
+
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +15,9 @@ export class PacientesService {
   addPaciente(paciente: Pacientes){
     // Ref a la bd = metodo collection(importamos)(1ºparametro Sºfirestores, 2ºparam nombreColeccion)
     const pacienteRef = collection(this.firestore, 'pacientes');
+    //const id = uuidv4(); // Genera un id único utilizando la función uuidv4()
+    //const pacienteWithId = { ...paciente, id }; // Crea un nuevo objeto que incluya el id generado
+
     // retornar la llamada a addDoc(params: la coleccion, lo que insertamos)
     return addDoc(pacienteRef, paciente);
   }

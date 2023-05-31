@@ -31,12 +31,15 @@ var CitasComponent = /** @class */ (function () {
             doctorId: '',
             especialidad: '',
             fecha: new Date(),
+            hora: '',
             motivo: '',
             estado: '',
             comentario: ''
         };
         this.doctors = [];
         this.mensaje = '';
+        this.mensajeID = '';
+        this.mensajeDoc = '';
         this.specialtyBuscar = '';
         this.doctorSeleccionado = null;
         this.citasEncontradas = [];
@@ -44,6 +47,8 @@ var CitasComponent = /** @class */ (function () {
         this.especialidades = [];
         this.idBuscar = ''; // Agrega esta línea para definir la propiedad idBuscar
         this.usuarioRol = ''; // Agrega esta línea para almacenar el rol del usuario
+        this.minDate = '';
+        this.horariosDoctor = [];
     }
     CitasComponent.prototype.ngOnInit = function () {
         this.citaSeleccionada = this.cita;
@@ -55,34 +60,27 @@ var CitasComponent = /** @class */ (function () {
             this.mensaje = 'Por favor, completa todos los campos.';
             return;
         }
+        // Obtener la hora seleccionada del componente ion-datetime y asignarla al campo 'hora'
+        var selectedDateTime = new Date(this.cita.fecha);
+        var selectedTime = ('0' + selectedDateTime.getHours()).slice(-2) + ':' + ('0' + selectedDateTime.getMinutes()).slice(-2);
+        this.cita.hora = selectedTime;
         this.citasService
-            .getCitaPorID(this.cita.id)
-            .then(function (citaExistente) {
-            if (citaExistente) {
-                _this.mensaje = 'Ya existe una cita con este ID.';
-            }
-            else {
-                _this.citasService
-                    .addCita(_this.cita)
-                    .then(function () {
-                    _this.mensaje = 'Cita agregada correctamente.';
-                    _this.limpiarFormulario();
-                })["catch"](function (error) {
-                    _this.mensaje = 'Error al agregar la cita: ' + error;
-                });
-            }
+            .addCita(this.cita)
+            .then(function () {
+            _this.mensajeID =
+                'Cita agregada correctamente. ID de la cita: ' + _this.cita.id;
+            _this.limpiarFormulario();
         })["catch"](function (error) {
-            _this.mensaje = 'Error al buscar la cita: ' + error;
+            _this.mensaje = 'Error al agregar la cita: ' + error;
         });
     };
     CitasComponent.prototype.buscarCitaPorID = function (id) {
         var _this = this;
-        this.citasService
-            .buscarCitaPorID(id)
+        this.citasService.buscarCitaPorID(this.cita.id)
             .then(function (citas) {
             _this.citasEncontradas = citas;
             if (citas.length === 0) {
-                _this.mensaje = 'No se encontraron citas con este DID.';
+                _this.mensaje = 'No se encontraron citas con este ID.';
             }
             else {
                 _this.mensaje = '';
@@ -115,14 +113,15 @@ var CitasComponent = /** @class */ (function () {
             .then(function (doctors) {
             _this.doctors = doctors;
             if (doctors.length === 0) {
-                _this.mensaje = 'No se encontraron doctores con esta especialidad.';
+                _this.mensajeDoc = 'No se encontraron doctores con esta especialidad.';
                 _this.limpiarFormulario();
             }
             else {
-                _this.mensaje = '';
+                _this.mensajeDoc = '';
+                _this.horariosDoctor = doctors[0].horario;
             }
         })["catch"](function (error) {
-            _this.mensaje = 'Error al buscar el doctor: ' + error;
+            _this.mensajeDoc = 'Error al buscar el doctor: ' + error;
             _this.doctors = [];
         });
     };
@@ -134,6 +133,28 @@ var CitasComponent = /** @class */ (function () {
     };
     CitasComponent.prototype.seleccionarDoctor = function (doctor) {
         this.doctorSeleccionado = __assign({}, doctor);
+        this.loadDoctorSchedule();
+    };
+    CitasComponent.prototype.loadDoctorSchedule = function () {
+        if (this.doctorSeleccionado) {
+            this.minDate = this.getFormattedDate(new Date());
+            // Obtener los horarios del doctor seleccionado
+            this.horariosDoctor = this.doctorSeleccionado.horario;
+            // Utilizar el primer horario disponible como fecha mínima
+            this.minDate += ' ' + this.horariosDoctor[0];
+        }
+    };
+    // Aquí se obtiene el horario del doctor seleccionado y se establece como fecha mínima permitida
+    // para la selección en el componente ion-datetime.
+    // Asegúrate de que el horario del doctor sea un array de strings que representen las horas disponibles.
+    // Por ejemplo, ['09:00', '10:00', '11:00', ...].
+    CitasComponent.prototype.getFormattedDate = function (date) {
+        var year = date.getFullYear();
+        var month = ('0' + (date.getMonth() + 1)).slice(-2);
+        var day = ('0' + date.getDate()).slice(-2);
+        var hours = ('0' + date.getHours()).slice(-2);
+        var minutes = ('0' + date.getMinutes()).slice(-2);
+        return day + "/" + month + "/" + year + " " + hours + ":" + minutes;
     };
     CitasComponent.prototype.borrarCita = function (id) {
         var _this = this;
@@ -147,8 +168,7 @@ var CitasComponent = /** @class */ (function () {
         });
     };
     CitasComponent.prototype.camposValidos = function () {
-        return (this.cita.id &&
-            this.cita.pacienteId &&
+        return (this.cita.pacienteId &&
             this.cita.doctorId &&
             this.cita.especialidad &&
             this.cita.fecha &&
@@ -162,6 +182,7 @@ var CitasComponent = /** @class */ (function () {
             doctorId: '',
             especialidad: '',
             fecha: new Date(),
+            hora: '',
             motivo: '',
             estado: '',
             comentario: ''
