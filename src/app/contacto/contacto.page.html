@@ -20,7 +20,7 @@
             <form (ngSubmit)="submitForm()">
               <ion-item>
                 <ion-label>Fecha de Consulta</ion-label>
-                <ion-input type="text" value="{{ contactForm.fechaConsulta | date: 'MM/dd/yyyy' }}" disabled></ion-input>
+                <ion-input type="text" value="{{ contactForm.fechaConsulta | date: 'dd/MM/yyyy' }}" disabled></ion-input>
               </ion-item>
 
               <ion-item>
