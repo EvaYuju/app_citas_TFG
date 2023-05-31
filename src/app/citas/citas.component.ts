@@ -64,11 +64,9 @@ export class CitasComponent implements OnInit {
       this.mensaje = 'Por favor, completa todos los campos.';
       return;
     }
-
-    // Obtener la hora seleccionada del componente ion-datetime y asignarla al campo 'hora'
-  const selectedDateTime: Date = new Date(this.cita.fecha);
-  const selectedTime: string = ('0' + selectedDateTime.getHours()).slice(-2) + ':' + ('0' + selectedDateTime.getMinutes()).slice(-2);
-  this.cita.hora = selectedTime;
+  
+    // Obtener la hora seleccionada del componente ion-select y asignarla al campo 'hora'
+    this.cita.hora = this.cita.hora.substring(0, 5);
   
     this.citasService
       .addCita(this.cita)
@@ -82,9 +80,10 @@ export class CitasComponent implements OnInit {
       });
   }
   
+  
 
   buscarCitaPorID(id: string) {
-    this.citasService.buscarCitaPorID(this.cita.id)
+    this.citasService.buscarCitaPorID(id)
       .then((citas) => {
         this.citasEncontradas = citas;
         if (citas.length === 0) {

@@ -45,6 +45,7 @@ exports.__esModule = true;
 exports.CitasService = void 0;
 var core_1 = require("@angular/core");
 var firestore_1 = require("@angular/fire/firestore");
+var firestore_2 = require("firebase/firestore");
 var CitasService = /** @class */ (function () {
     // Inyectamos Firestore en el constructor para poder trabajar con esa herramienta
     function CitasService(firestore) {
@@ -107,7 +108,7 @@ var CitasService = /** @class */ (function () {
     };
     CitasService.prototype.modificarCita = function (cita) {
         var citaRef = firestore_1.doc(this.firestore, 'citas', cita.id);
-        return firestore_1.updateDoc(citaRef, 'citas', cita);
+        return firestore_2.setDoc(citaRef, cita);
     };
     CitasService.prototype.borrarCita = function (id) {
         var citaRef = firestore_1.doc(this.firestore, 'citas', id);

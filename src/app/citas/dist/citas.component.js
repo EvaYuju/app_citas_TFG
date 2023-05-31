@@ -60,10 +60,8 @@ var CitasComponent = /** @class */ (function () {
             this.mensaje = 'Por favor, completa todos los campos.';
             return;
         }
-        // Obtener la hora seleccionada del componente ion-datetime y asignarla al campo 'hora'
-        var selectedDateTime = new Date(this.cita.fecha);
-        var selectedTime = ('0' + selectedDateTime.getHours()).slice(-2) + ':' + ('0' + selectedDateTime.getMinutes()).slice(-2);
-        this.cita.hora = selectedTime;
+        // Obtener la hora seleccionada del componente ion-select y asignarla al campo 'hora'
+        this.cita.hora = this.cita.hora.substring(0, 5);
         this.citasService
             .addCita(this.cita)
             .then(function () {
@@ -76,7 +74,7 @@ var CitasComponent = /** @class */ (function () {
     };
     CitasComponent.prototype.buscarCitaPorID = function (id) {
         var _this = this;
-        this.citasService.buscarCitaPorID(this.cita.id)
+        this.citasService.buscarCitaPorID(id)
             .then(function (citas) {
             _this.citasEncontradas = citas;
             if (citas.length === 0) {

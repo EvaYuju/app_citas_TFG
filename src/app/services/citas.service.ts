@@ -12,6 +12,7 @@ import {
 } from '@angular/fire/firestore';
 //import { v4 as uuidv4 } from 'uuid';
 import { Citas } from '../models/citas';
+import { setDoc } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -68,7 +69,7 @@ export class CitasService {
 
   modificarCita(cita: Citas) {
     const citaRef = doc(this.firestore, 'citas', cita.id);
-    return updateDoc(citaRef, 'citas', cita);
+    return setDoc(citaRef, cita);
   }
 
   borrarCita(id: string) {

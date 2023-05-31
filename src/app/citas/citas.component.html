@@ -14,9 +14,6 @@
 
     <ion-card-header>
       <ion-card-title>Agregar cita</ion-card-title>
-
-      <div *ngIf="mensaje" class="mensaje-exito">{{ mensaje }}</div>
-      <div *ngIf="mensajeID" class="mensaje-exito">{{ mensajeID }}</div>
     </ion-card-header>
 
     <ion-card-content>
@@ -40,8 +37,8 @@
       </ion-item>
 
       <!-- Mensaje de resultado de búsqueda -->
-      <div *ngIf="doctors.length === 0 && mensaje">
-        {{ mensaje }}
+      <div *ngIf="doctors.length === 0 && mensajeDoc">
+        {{ mensajeDoc }}
       </div>
       <!-- Doctores encontrados -->
       <ion-item>
@@ -73,16 +70,14 @@
       </ion-item>
 
       <!--<ion-item *ngIf="usuarioRol === 'ADMIN' || usuarioRol === 'DOCTOR'"> pendiente-->
-      <ion-item>
+      <ion-item class="estado-item">
         <ion-label position="floating">Estado</ion-label>
-        <ion-item>
-          <ion-label>Estado</ion-label>
           <ion-select [(ngModel)]="cita.estado">
             <ion-select-option value="pendiente">Pendiente</ion-select-option>
             <ion-select-option value="confirmada" disabled>Confirmada</ion-select-option>
             <ion-select-option value="denegada" disabled>Denegada</ion-select-option>
           </ion-select>
-        </ion-item>
+
       </ion-item>
 
 
@@ -177,12 +172,12 @@
       <!--<ion-item *ngIf="usuarioRol === 'ADMIN' || usuarioRol === 'DOCTOR'"> pendiente-->
       <ion-item>
         <ion-label position="floating">Estado</ion-label>
-        <ion-item>
+        <ion-item class="estado-item">
           <ion-label>Estado</ion-label>
-          <ion-select [(ngModel)]="cita.estado">
-            <ion-select-option value="confirmada">Confirma</ion-select-option>
+          <ion-select [(ngModel)]="citaSeleccionada.estado">
+            <ion-select-option value="confirmada">Confirmar</ion-select-option>
             <ion-select-option value="pendiente">Pendiente</ion-select-option>
-            <ion-select-option value="denegada">Rechazada</ion-select-option>
+            <ion-select-option value="denegada">Denegar</ion-select-option>
             <ion-select-option value="cancelada">Cancelar</ion-select-option>
           </ion-select>
         </ion-item>
