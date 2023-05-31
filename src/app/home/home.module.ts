@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
+import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 
 @NgModule({
@@ -16,4 +18,17 @@ import { HomePageRoutingModule } from './home-routing.module';
   ],
   declarations: [HomePage]
 })
-export class HomePageModule {}
+export class HomePageModule {
+
+  constructor(
+    private auth: AuthService,
+    private router: Router
+  ) {}
+
+  async logout(){
+    localStorage.removeItem('ROL');
+    this.auth.logout();
+    this.router.navigate(['/login']);
+  }
+
+}

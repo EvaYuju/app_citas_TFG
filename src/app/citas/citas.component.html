@@ -1,7 +1,8 @@
 <ion-header>
   <ion-toolbar>
+    <!-- Boton menú lateral -->
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+      <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
     <ion-title>Citas</ion-title>
   </ion-toolbar>
@@ -57,10 +58,11 @@
 
       <ion-item>
         <ion-label position="floating">Fecha</ion-label>
-        <ion-datetime
-          displayFormat="DD/MM/YYYY HH:mm"
-          [(ngModel)]="cita.fecha"
-        ></ion-datetime>
+        <br/>
+        <ion-item>
+          <ion-label position="floating">Fecha</ion-label>
+          <ion-input type="date" [(ngModel)]="cita.fecha"></ion-input>
+        </ion-item>
       </ion-item>
 
       <ion-item>
@@ -68,18 +70,19 @@
         <ion-input type="email" [(ngModel)]="cita.motivo"></ion-input>
       </ion-item>
 
-      <ion-item>
+      <ion-item *ngIf="usuarioRol === 'ADMIN' || usuarioRol === 'DOCTOR'"> <!--pendiente-->
         <ion-label position="floating">Estado</ion-label>
         <ion-item>
           <ion-label>Estado</ion-label>
-          <ion-select multiple [(ngModel)]="cita.estado">
+          <ion-select [(ngModel)]="cita.estado">
             <ion-select-option value="confirmada">Confirmada</ion-select-option>
-            <ion-select-option value="cancelada">Cancelada</ion-select-option>
             <ion-select-option value="pendiente">Pendiente</ion-select-option>
+            <ion-select-option value="denegada">Denegada</ion-select-option>
           </ion-select>
         </ion-item>
-
       </ion-item>
+
+    
 
       <ion-item>
         <ion-label position="floating">Comentario</ion-label>

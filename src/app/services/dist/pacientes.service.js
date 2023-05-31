@@ -49,12 +49,13 @@ var PacientesService = /** @class */ (function () {
     PacientesService.prototype.modificarPaciente = function (paciente) {
         var pacienteRef = firestore_1.doc(this.firestore, 'pacientes', paciente.id);
         var pacienteData = {
+            id: paciente.id,
             dni: paciente.dni,
             nombre: paciente.nombre,
-            edad: paciente.edad,
+            edad: paciente.fechaNacimiento,
             direccion: paciente.direccion,
             telefono: paciente.telefono,
-            email: paciente.email
+            email: paciente.correoElectronico
         };
         return firestore_1.updateDoc(pacienteRef, pacienteData);
     };

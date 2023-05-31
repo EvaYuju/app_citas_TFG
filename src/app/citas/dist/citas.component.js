@@ -20,8 +20,11 @@ exports.__esModule = true;
 exports.CitasComponent = void 0;
 var core_1 = require("@angular/core");
 var CitasComponent = /** @class */ (function () {
-    function CitasComponent(citasService) {
+    function CitasComponent(citasService, doctorsService, specialtiesService, usuariosService) {
         this.citasService = citasService;
+        this.doctorsService = doctorsService;
+        this.specialtiesService = specialtiesService;
+        this.usuariosService = usuariosService;
         this.cita = {
             id: '',
             pacienteId: '',
@@ -29,14 +32,23 @@ var CitasComponent = /** @class */ (function () {
             especialidad: '',
             fecha: new Date(),
             motivo: '',
-            estado: ''
+            estado: '',
+            comentario: ''
         };
+        this.doctors = [];
         this.mensaje = '';
+        this.specialtyBuscar = '';
+        this.doctorSeleccionado = null;
         this.citasEncontradas = [];
         this.citaSeleccionada = null;
+        this.especialidades = [];
         this.idBuscar = ''; // Agrega esta línea para definir la propiedad idBuscar
+        this.usuarioRol = ''; // Agrega esta línea para almacenar el rol del usuario
     }
-    CitasComponent.prototype.ngOnInit = function () { };
+    CitasComponent.prototype.ngOnInit = function () {
+        this.citaSeleccionada = this.cita;
+        this.loadSpecialties();
+    };
     CitasComponent.prototype.agregarCita = function () {
         var _this = this;
         if (!this.camposValidos()) {
@@ -96,6 +108,33 @@ var CitasComponent = /** @class */ (function () {
             });
         }
     };
+    CitasComponent.prototype.buscarDoctorPorEspecialidad = function (especialidad) {
+        var _this = this;
+        this.doctorsService
+            .buscarDoctorPorEspecialidad(especialidad)
+            .then(function (doctors) {
+            _this.doctors = doctors;
+            if (doctors.length === 0) {
+                _this.mensaje = 'No se encontraron doctores con esta especialidad.';
+                _this.limpiarFormulario();
+            }
+            else {
+                _this.mensaje = '';
+            }
+        })["catch"](function (error) {
+            _this.mensaje = 'Error al buscar el doctor: ' + error;
+            _this.doctors = [];
+        });
+    };
+    CitasComponent.prototype.loadSpecialties = function () {
+        var _this = this;
+        this.specialtiesService.getAllSpecialties().then(function (listSpecialties) {
+            _this.especialidades = listSpecialties;
+        });
+    };
+    CitasComponent.prototype.seleccionarDoctor = function (doctor) {
+        this.doctorSeleccionado = __assign({}, doctor);
+    };
     CitasComponent.prototype.borrarCita = function (id) {
         var _this = this;
         this.citasService
@@ -122,9 +161,10 @@ var CitasComponent = /** @class */ (function () {
             pacienteId: '',
             doctorId: '',
             especialidad: '',
-            fecha: new Date('01-01-01'),
+            fecha: new Date(),
             motivo: '',
-            estado: ''
+            estado: '',
+            comentario: ''
         };
     };
     CitasComponent = __decorate([

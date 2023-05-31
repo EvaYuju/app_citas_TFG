@@ -10,16 +10,17 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent {
 
-  // Pestañas laterales // ok = Correctas
-  public appPages = [
-    { title: 'Inicio', url: '/home', icon: 'home' }, // ok
-    { title: 'Pacientes', url: '/pacientes', icon: 'people-circle' }, // ok
-    { title: 'Doctores', url: '/doctores', icon: 'people' }, // ok
-    { title: 'Especialidades', url: '/specialties', icon: 'bandage' }, // ok
-    { title: 'Citas', url: '/citas', icon: 'calendar-number' }, // ok
-    { title: 'Contacto', url: '/contacto', icon: 'call' }, // ok
+  // Pestañas laterales // 
+  public appPages = this.authSetAppPages();
+  /*[
+    { title: 'Inicio', url: '/home', icon: 'home' },
+    { title: 'Pacientes', url: '/pacientes', icon: 'people-circle' },
+    { title: 'Doctores', url: '/doctores', icon: 'people' },
+    { title: 'Especialidades', url: '/specialties', icon: 'bandage' },
+    { title: 'Citas', url: '/citas', icon: 'calendar-number', },
+    { title: 'Contacto', url: '/contacto', icon: 'call' },
 
-  ];
+  ];*/
 
   // Usuario
 user$ = this.auth.authState$.pipe( // Trae el estado de la sesión
@@ -32,7 +33,32 @@ user$ = this.auth.authState$.pipe( // Trae el estado de la sesión
   ) {}
 
   async logout(){
+    localStorage.removeItem('ROL');
     this.auth.logout();
     this.router.navigate(['/login']);
+  }
+
+  authSetAppPages(){
+    const rol = localStorage.getItem('ROL');
+    if(rol == 'PACIENTE'){
+      return [{ title: 'Inicio', url: '/home', icon: 'home' },
+    { title: 'Pacientes', url: '/pacientes', icon: 'people-circle' },
+    { title: 'Citas', url: '/citas', icon: 'calendar-number', },
+    { title: 'Especialidades', url: '/specialties', icon: 'bandage' },
+    { title: 'Contacto', url: '/contacto', icon: 'call' },
+  ];
+    }else if(rol == 'DOCTOR') {
+      return [];
+    }else if(rol == 'ADMIN'){
+      return [
+    { title: 'Inicio', url: '/home', icon: 'home' },
+    { title: 'Pacientes', url: '/pacientes', icon: 'people-circle' },
+    { title: 'Doctores', url: '/doctores', icon: 'people' },
+    { title: 'Especialidades', url: '/specialties', icon: 'bandage' },
+    { title: 'Citas', url: '/citas', icon: 'calendar-number', },
+    { title: 'Contacto', url: '/contacto', icon: 'call' },
+      ];
+    }
+    return [];
   }
 }

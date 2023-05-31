@@ -45,6 +45,7 @@ export class PacientesService {
   modificarPaciente(paciente: Pacientes) {
     const pacienteRef = doc(this.firestore, 'pacientes', paciente.id);
     const pacienteData = {
+      id: paciente.id,
       dni: paciente.dni,
       nombre: paciente.nombre,
       edad: paciente.fechaNacimiento,

@@ -1,19 +1,135 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
 
 <ion-header>
-  <ion-toolbar class="header-toolbar">
-    <ion-title class="app-title">Clínica SAFA</ion-title>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button class="header-buttons" fill="clear" href="www.google.com"
+      >Calle Calatrava, 38, 41002 Sevilla</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button class="header-buttons" fill="clear" href="tel:+34954370550">+34 954 37 05 50</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content class="landing-content">
-  <div class="logo-container">
-    <img src="assets/logo.png" alt="Logo de la Clínica SAFA" class="logo-image">
+
+
+
+<ion-content>
+  <div class="background-container">
+    <img src="assets/fondo6.jpg" alt="Fondo" class="background-image" />
   </div>
-  <div class="description">
-    <h2>Bienvenido a Clínica SAFA</h2>
-    <p>Tu salud en buenas manos.</p>
-  </div>
-  <div class="buttons-container">
-    <ion-button expand="block" color="primary" routerLink="/login">Iniciar sesión</ion-button>
-    <ion-button expand="block" color="secondary" routerLink="/register">Registrarse</ion-button>
+  <div class="landing-content">
+    <div class="logo-container">
+      <img
+        src="assets/logo3.png"
+        alt="Logo de la Clínica SAFA"
+        class="logo-image"
+      />
+    </div>
+    <div class="description" style="font-family: 'Kanit', sans-serif">
+      <h1
+        style="
+          color: #006195;
+          font-size: 40px;
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.226);
+        "
+      >
+        Clínica SAFA
+      </h1>
+    </div>
+
+    <br />
+    <div class="card-container">
+      <ion-card class="custom-card">
+        <ion-card-header>
+          <ion-label style="font-family: 'Kanit', sans-serif; font-weight: 400;" class="card-title">Inicio de sesión</ion-label>
+          <div style="height: 10px;"></div>
+          <ion-segment value="pacientes">
+            <ion-segment-button value="pacientes">
+              <ion-icon name="person"></ion-icon>
+              <ion-label>Área Pacientes</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="medicos">
+              <ion-icon name="medkit"></ion-icon>
+              <ion-label>Área Médicos</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list *ngIf="selectedSegment === 'pacientes'">
+            <ion-item>
+              <ion-label position="floating">Correo electrónico</ion-label>
+
+              <ion-input type="email"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Contraseña</ion-label>
+              <ion-input type="password"></ion-input>
+            </ion-item>
+            <div style="height: 20px;"></div>
+            <ion-item lines="none">
+              <ion-button expand="block" style="--background: #006195"
+                >Iniciar sesión</ion-button>
+            </ion-item>
+            <ion-item lines="none">
+              <ion-button
+                expand="block"
+                fill="clear"
+                color="medium"
+                size="small"
+                >¿Olvidó su contraseña?</ion-button
+              >
+            </ion-item>
+            <ion-item lines="none">
+              <ion-button
+                expand="block"
+                fill="clear"
+                color="medium"
+                size="small"
+                routerLink="/register"
+                >Registrarse</ion-button
+              >
+            </ion-item>
+          </ion-list>
+          <ion-list *ngIf="selectedSegment === 'medicos'">
+            <ion-item>
+              <ion-label position="floating">Correo electrónico</ion-label>
+              <ion-input type="email"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Contraseña</ion-label>
+              <ion-input type="password"></ion-input>
+            </ion-item>
+
+            <ion-item lines="none">
+              <ion-button expand="block" style="--background: #006195"
+                >Iniciar sesión</ion-button
+              >
+            </ion-item>
+            <ion-item lines="none">
+              <ion-button
+                expand="block"
+                fill="clear"
+                color="medium"
+                size="small"
+                >¿Olvidó su contraseña?</ion-button
+              >
+            </ion-item>
+            <ion-item lines="none">
+              <ion-button
+                expand="block"
+                fill="clear"
+                color="medium"
+                size="small"
+                routerLink="/register"
+                >Registrarse</ion-button
+              >
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    </div>
   </div>
 </ion-content>

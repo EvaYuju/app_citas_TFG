@@ -1,6 +1,8 @@
 import { Pacientes } from './../models/pacientes';
 import { Component, OnInit } from '@angular/core';
 import { PacientesService } from '../services/pacientes.service';
+import { AuthService } from '../services/auth.service';
+import { UsuariosService } from '../services/usuarios.service';
 
 @Component({
   selector: 'app-pacientes',
@@ -21,7 +23,8 @@ export class PacientesComponent implements OnInit{
     historialMedico: '',
     //citas: ''
   };
-
+  //PARA AUTHENTICATION
+  rol: any;
   mensaje: string = '';
 
   pacientesEncontrados: Pacientes[] = [];
@@ -33,6 +36,12 @@ export class PacientesComponent implements OnInit{
   constructor(private pacientesService: PacientesService) { }
 
   ngOnInit() {
+    //PARA AUTHENTICATION
+    this.rol = localStorage.getItem('ROL');
+  }
+  //PARA AUTHENTICATION
+  isAuthenticated(rol:string){
+    return this.rol == rol;
   }
 
   agregarPaciente() {

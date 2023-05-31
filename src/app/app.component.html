@@ -1,6 +1,6 @@
 <ion-app>
   <ion-split-pane contentId="main-content">
-    <ion-menu contentId="main-content" type="overlay">
+    <!--<ion-menu contentId="main-content" type="overlay">
       <ion-content>
         <ion-list id="inbox-list">
           <ng-container *ngIf="user$ | async as user">
@@ -15,7 +15,7 @@
               <ion-label>{{ p.title }}</ion-label>
             </ion-item>
           </ion-menu-toggle>
-          <!--<ion-menu-toggle auto-hide="false">
+          <ion-menu-toggle auto-hide="false">
             <ion-item [routerLink]="['/contacto']">
               <ion-icon slot="start" icon="log-out"></ion-icon>
               <ion-label>Contacto_toggle</ion-label>
@@ -26,7 +26,7 @@
               <ion-icon slot="start" icon="bandage"></ion-icon>
               <ion-label>Especialidades</ion-label>
             </ion-item>
-          </ion-menu-toggle>-->
+          </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false">
             <ion-item (click)="logout()">
               <ion-icon slot="start" icon="log-out"></ion-icon>
@@ -39,7 +39,7 @@
 
 
       </ion-content>
-    </ion-menu>
+    </ion-menu>-->
     <ion-router-outlet id="main-content"></ion-router-outlet>
   </ion-split-pane>
 </ion-app>

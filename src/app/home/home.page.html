@@ -9,18 +9,29 @@
 
 <ion-content>
   <div class="welcome-message">
-    <h1>Bienvenido a Clínica SAFA</h1>
-    <p>Estamos aquí para cuidar de ti. Desde nuestros médicos altamente capacitados hasta nuestras instalaciones de última generación, nos enorgullece ofrecer el mejor cuidado de salud posible.</p>
+    <ion-card-title>Bienvenido a Clínica SAFA</ion-card-title>
+    <ion-card-subtitle>Menú principal</ion-card-subtitle>
+    <br>
+    <ion-card-content>
+      Estamos aquí para cuidar de ti. Nos enorgullece ofrecer el mejor cuidado de salud posible.
+    </ion-card-content>
+    <ion-card-content>
+      Elija una opción del menú
+    </ion-card-content>
   </div>
-
   <div class="card-container">
-
     <ion-card (click)="navigateToCitas()">
       <ion-card-header>
         <ion-card-title>Mis citas</ion-card-title>
+
       </ion-card-header>
       <ion-card-content>
-        ¿Necesitas programar una cita con nosotros? ¿Ya tiene una cita con nosotros? Haga clic aquí para comenzar.
+        <ion-item>
+          <ion-thumbnail slot="start">
+            <img src="assets/icon/consul.jpg" alt="Icono" class="icono" />
+          </ion-thumbnail>
+          ¿Necesitas programar una cita con nosotros? ¿Ya tienes una cita con nosotros? Haz clic aquí para comenzar.
+        </ion-item>
       </ion-card-content>
     </ion-card>
 
@@ -29,7 +40,43 @@
         <ion-card-title>Pacientes</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        ¿Desea acceder a la sección de pacientes? Haga clic aquí para ingresar tus datos como paciente.
+        <ion-item>
+          <ion-thumbnail slot="start">
+            <img src="assets/icon/citas.jpg" alt="Icono" class="icono" />
+          </ion-thumbnail>
+          ¿Deseas acceder a la sección de pacientes? Haz clic aquí para ingresar tus datos como paciente.
+        </ion-item>
+
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card (click)="navigateToDoctores()">
+      <ion-card-header>
+        <ion-card-title>Doctores</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-thumbnail slot="start">
+            <img src="assets/icon/doctores1.jpg" alt="Icono" class="icono" />
+          </ion-thumbnail>
+          Nuestros doctores a tu disposición.
+        </ion-item>
+
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card (click)="navigateToEspecialidades()">
+      <ion-card-header>
+        <ion-card-title>Especialidades</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+
+        <ion-item>
+          <ion-thumbnail slot="start">
+            <img src="assets/icon/especi.jpg" alt="Icono" class="icono" />
+          </ion-thumbnail>
+          Consulta todas las especialidades medicas y nuestros médicos especialistas.
+        </ion-item>
       </ion-card-content>
     </ion-card>
 
@@ -38,8 +85,18 @@
         <ion-card-title>Contáctanos</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        ¿Tiene preguntas o inquietudes? Rellena el formulario de contacto para consultarnos.
+        <ion-item>
+          <ion-thumbnail slot="start">
+            <img src="assets/icon/doctores.jpg" alt="Icono" class="icono" />
+          </ion-thumbnail>
+          ¿Tienes preguntas o inquietudes? Rellena el formulario de contacto para consultarnos.
+        </ion-item>
+
       </ion-card-content>
     </ion-card>
+
+    <ion-item>
+      <ion-button (click)="logout()" slot="end">Cerrar sesión</ion-button>
+    </ion-item>
   </div>
 </ion-content>

@@ -1,0 +1,57 @@
+@charset "UTF-8";
+ion-card {
+  margin: 20px;
+  height: flex;
+  /* Ajusta la altura según tus necesidades */
+}
+
+ion-card-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+ion-card-subtitle {
+  font-size: 18px;
+}
+
+ion-card-content {
+  margin-top: 10px;
+}
+
+.welcome-message {
+  padding: 20px;
+  text-align: center;
+}
+
+.card-container {
+  display: grid;
+  /* Cambia a un diseño flexible */
+  flex-direction: row;
+  /* Permite que los cards se envuelvan en una nueva línea */
+  justify-content: center;
+  /* Centra los cards horizontalmente */
+  align-items: center;
+  padding: 20px;
+}
+
+.card-container ion-card {
+  flex: 0 1 300px;
+  /* Ajusta el tamaño deseado para los cards */
+}
+
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.icono img {
+  width: 40px;
+  /* Ajusta el tamaño según tus preferencias */
+  height: 40px;
+  /* Ajusta el tamaño según tus preferencias */
+}

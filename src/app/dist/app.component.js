@@ -49,15 +49,17 @@ var AppComponent = /** @class */ (function () {
     function AppComponent(auth, router) {
         this.auth = auth;
         this.router = router;
-        // Pestañas laterales // ok = Correctas
-        this.appPages = [
-            { title: 'Inicio', url: '/home', icon: 'home' },
-            { title: 'Pacientes', url: '/pacientes', icon: 'people-circle' },
-            { title: 'Doctoras/es', url: '/doctores', icon: 'people' },
-            { title: 'Especialidades', url: '/specialties', icon: 'bandage' },
-            { title: 'Mis citas', url: '/citas', icon: 'calendar-number' },
-            { title: 'Contacto', url: '/contacto', icon: 'call' },
-        ];
+        // Pestañas laterales // 
+        this.appPages = this.authSetAppPages();
+        /*[
+          { title: 'Inicio', url: '/home', icon: 'home' },
+          { title: 'Pacientes', url: '/pacientes', icon: 'people-circle' },
+          { title: 'Doctores', url: '/doctores', icon: 'people' },
+          { title: 'Especialidades', url: '/specialties', icon: 'bandage' },
+          { title: 'Citas', url: '/citas', icon: 'calendar-number', },
+          { title: 'Contacto', url: '/contacto', icon: 'call' },
+      
+        ];*/
         // Usuario
         this.user$ = this.auth.authState$.pipe(// Trae el estado de la sesión
         operators_1.filter(function (state) { return state ? true : false; }));
@@ -65,11 +67,37 @@ var AppComponent = /** @class */ (function () {
     AppComponent.prototype.logout = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
+                localStorage.removeItem('ROL');
                 this.auth.logout();
                 this.router.navigate(['/login']);
                 return [2 /*return*/];
             });
         });
+    };
+    AppComponent.prototype.authSetAppPages = function () {
+        var rol = localStorage.getItem('ROL');
+        if (rol == 'PACIENTE') {
+            return [{ title: 'Inicio', url: '/home', icon: 'home' },
+                { title: 'Pacientes', url: '/pacientes', icon: 'people-circle' },
+                { title: 'Citas', url: '/citas', icon: 'calendar-number' },
+                { title: 'Especialidades', url: '/specialties', icon: 'bandage' },
+                { title: 'Contacto', url: '/contacto', icon: 'call' },
+            ];
+        }
+        else if (rol == 'DOCTOR') {
+            return [];
+        }
+        else if (rol == 'ADMIN') {
+            return [
+                { title: 'Inicio', url: '/home', icon: 'home' },
+                { title: 'Pacientes', url: '/pacientes', icon: 'people-circle' },
+                { title: 'Doctores', url: '/doctores', icon: 'people' },
+                { title: 'Especialidades', url: '/specialties', icon: 'bandage' },
+                { title: 'Citas', url: '/citas', icon: 'calendar-number' },
+                { title: 'Contacto', url: '/contacto', icon: 'call' },
+            ];
+        }
+        return [];
     };
     AppComponent = __decorate([
         core_1.Component({

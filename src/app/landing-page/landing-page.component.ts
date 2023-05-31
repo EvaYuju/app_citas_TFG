@@ -10,4 +10,10 @@ import { IonicModule } from '@ionic/angular';
 })
 export class LandingPageComponent {
   constructor() {}
+
+  selectedSegment: string = 'pacientes';
+
+  segmentChanged(event: CustomEvent) {
+    this.selectedSegment = event.detail.value;
+  }
 }

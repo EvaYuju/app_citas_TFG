@@ -20,12 +20,16 @@ export class DoctoresComponent implements OnInit {
     especialidad: '',
     telefono: '',
     correoElectronico: '',
-    horario: this.generarHorario(),
+    horario: this.generarHorario(this.horaInicio, this.horaFinal),
     //citas: ''
   };
 
-  mensaje: string = '';
+  //PARA AUTHENTICATION
+  rol: any;
 
+  mensaje: string = '';
+  horaInicio?: number;
+  horaFinal?: number;
   doctorsEncontrados: Doctor[] = [];
   doctorsEncontradosDNI: Doctor[] = [];
   doctorSeleccionado: Doctor | null = null;
@@ -43,6 +47,12 @@ export class DoctoresComponent implements OnInit {
 
   ngOnInit() {
     this.loadSpecialties();
+    this.rol = localStorage.getItem('ROL');
+  }
+
+  //PARA AUTHENTICATION
+  isAuthenticated(rol:string){
+    return this.rol == rol;
   }
 
   agregarDoctor() {
@@ -181,15 +191,15 @@ export class DoctoresComponent implements OnInit {
     }
   }
 
-  generarHorario() {
+  generarHorario(horaIni?: number, horaFin?: number) {
     const horario = [];
-    const horaInicio = new Date().setHours(8, 0, 0); // Establecer hora de inicio en 8:00 AM
-    const horaFin = new Date().setHours(15, 0, 0); // Establecer hora de fin en 3:00 PM
+    const horaInicio = new Date().setHours(horaIni? horaIni: 8, 0, 0); // Establecer hora de inicio en 8:00 AM
+    const horaFinal = new Date().setHours(horaFin? horaFin: 15, 0, 0); // Establecer hora de fin en 3:00 PM
 
     const tiempoIncremento = 30; // Incremento de tiempo en minutos
 
     let horaActual = horaInicio;
-    while (horaActual <= horaFin) {
+    while (horaActual <= horaFinal) {
       const hora = new Date(horaActual);
       const horaFormateada = this.formatoHora(hora);
       horario.push(horaFormateada);

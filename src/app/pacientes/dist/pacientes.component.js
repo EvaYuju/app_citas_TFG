@@ -40,6 +40,12 @@ var PacientesComponent = /** @class */ (function () {
         this.dniBuscar = ''; // Agrega esta línea para definir la propiedad dniBuscar
     }
     PacientesComponent.prototype.ngOnInit = function () {
+        //PARA AUTHENTICATION
+        this.rol = localStorage.getItem('ROL');
+    };
+    //PARA AUTHENTICATION
+    PacientesComponent.prototype.isAuthenticated = function (rol) {
+        return this.rol == rol;
     };
     PacientesComponent.prototype.agregarPaciente = function () {
         var _this = this;

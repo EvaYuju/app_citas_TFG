@@ -6,6 +6,8 @@ import { DoctorsService } from '../services/doctors.service';
 import { SpecialtiesService } from '../services/specialties.service';
 import { Especialidad } from '../models/specialties';
 import { Doctor } from '../models/doctor';
+import { UsuariosService } from '../services/usuarios.service';
+
 
 @Component({
   selector: 'app-citas',
@@ -21,7 +23,7 @@ export class CitasComponent implements OnInit {
     fecha: new Date(),
     motivo: '',
     estado: '',
-    comentario: ''
+    comentario: '',
   };
 
   doctors: Doctor[] = [];
@@ -34,14 +36,20 @@ export class CitasComponent implements OnInit {
   citaSeleccionada: Citas | null = null;
   especialidades: Especialidad[] = [];
   idBuscar: string = ''; // Agrega esta línea para definir la propiedad idBuscar
+  usuarioRol: string = ''; // Agrega esta línea para almacenar el rol del usuario
 
-  constructor(private citasService: CitasService, private doctorsService: DoctorsService, private specialtiesService: SpecialtiesService) {}
+  constructor(
+    private citasService: CitasService,
+    private doctorsService: DoctorsService,
+    private specialtiesService: SpecialtiesService,
+    private usuariosService: UsuariosService
+    ) {}
 
   ngOnInit() {
+    this.citaSeleccionada = this.cita;
     this.loadSpecialties();
+    
   }
-
-
 
   agregarCita() {
     if (!this.camposValidos()) {
@@ -107,7 +115,8 @@ export class CitasComponent implements OnInit {
   }
 
   buscarDoctorPorEspecialidad(especialidad: string) {
-    this.doctorsService.buscarDoctorPorEspecialidad(especialidad)
+    this.doctorsService
+      .buscarDoctorPorEspecialidad(especialidad)
       .then((doctors) => {
         this.doctors = doctors;
         if (doctors.length === 0) {
@@ -123,7 +132,7 @@ export class CitasComponent implements OnInit {
       });
   }
 
-  loadSpecialties(){
+  loadSpecialties() {
     this.specialtiesService.getAllSpecialties().then((listSpecialties) => {
       this.especialidades = listSpecialties;
     });
@@ -165,10 +174,10 @@ export class CitasComponent implements OnInit {
       pacienteId: '',
       doctorId: '',
       especialidad: '',
-      fecha: new Date('01-01-01'),
+      fecha: new Date(),
       motivo: '',
       estado: '',
-      comentario: ''
+      comentario: '',
     };
   }
 }

@@ -9,8 +9,8 @@ describe('CitasComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CitasComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [CitasComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CitasComponent);
