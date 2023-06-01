@@ -16,6 +16,7 @@ var citas_component_1 = require("./citas/citas.component");
 var specialties_component_1 = require("./specialties/specialties.component");
 var doctores_component_1 = require("./doctores/doctores.component");
 var landing_page_component_1 = require("./landing-page/landing-page.component");
+var mis_citas_component_1 = require("./mis-citas/mis-citas.component");
 var redirectUnauthorizedToLogin = function () { return auth_guard_1.redirectUnauthorizedTo(['login']); };
 var redirectLoggedInToHome = function () { return auth_guard_1.redirectLoggedInTo(['home']); };
 var routes = [
@@ -24,8 +25,9 @@ var routes = [
         redirectTo: 'landing-page',
         pathMatch: 'full'
     },
-    // Resto de las rutas...
-    // ...
+    {
+        path: 'mis-citas', component: mis_citas_component_1.MisCitasComponent
+    },
     {
         path: 'folder/:id',
         loadChildren: function () { return Promise.resolve().then(function () { return require('./folder/folder.module'); }).then(function (m) { return m.FolderPageModule; }); }
@@ -99,7 +101,7 @@ var AppRoutingModule = /** @class */ (function () {
             imports: [
                 common_1.CommonModule,
                 router_1.RouterModule.forRoot(routes, { preloadingStrategy: router_1.PreloadAllModules }),
-                //router_1.RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })
+                router_1.RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })
             ],
             exports: [router_1.RouterModule]
         })

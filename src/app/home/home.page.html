@@ -22,7 +22,7 @@
   <div class="card-container">
     <ion-card (click)="navigateToCitas()">
       <ion-card-header>
-        <ion-card-title>Mis citas</ion-card-title>
+        <ion-card-title>Pida cita</ion-card-title>
 
       </ion-card-header>
       <ion-card-content>
@@ -30,7 +30,22 @@
           <ion-thumbnail slot="start">
             <img src="assets/iconos_menu/consul.jpg" alt="Icono" class="icono" />
           </ion-thumbnail>
-          ¿Necesitas programar una cita con nosotros? ¿Ya tienes una cita con nosotros? Haz clic aquí para comenzar.
+          ¿Necesitas programar una cita con nosotros? Haz clic aquí para rellenar el formulario.
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card (click)="navigateToMisCitas()">
+      <ion-card-header>
+        <ion-card-title>Ver citas</ion-card-title>
+
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-thumbnail slot="start">
+            <img src="assets/iconos_menu/profs.jpg" alt="Icono" class="icono" />
+          </ion-thumbnail>
+          Consulte las citas aquí.
         </ion-item>
       </ion-card-content>
     </ion-card>
@@ -44,7 +59,7 @@
           <ion-thumbnail slot="start">
             <img src="assets/iconos_menu/citas.jpg" alt="Icono" class="icono" />
           </ion-thumbnail>
-          ¿Deseas acceder a la sección de pacientes? Haz clic aquí para ingresar tus datos como paciente.
+          ¿Deseas acceder a la sección de pacientes? Haz clic aquí para gestionar los pacientes.
         </ion-item>
 
       </ion-card-content>
@@ -59,7 +74,7 @@
           <ion-thumbnail slot="start">
             <img src="assets/iconos_menu/doctores1.jpg" alt="Icono" class="icono" />
           </ion-thumbnail>
-          Nuestros doctores a tu disposición.
+          Gestión de doctores.
         </ion-item>
 
       </ion-card-content>

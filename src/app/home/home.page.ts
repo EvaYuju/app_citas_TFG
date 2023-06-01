@@ -17,6 +17,11 @@ export class HomePage {
     this.navCtrl.navigateForward('citas');
   }
 
+  
+  navigateToMisCitas() {
+    this.navCtrl.navigateForward('mis-citas');
+  }
+
   navigateToContact() {
     this.navCtrl.navigateForward('contacto');
   }

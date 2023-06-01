@@ -25,12 +25,13 @@ var specialties_component_1 = require("./specialties/specialties.component");
 var doctores_component_1 = require("./doctores/doctores.component");
 var citas_component_1 = require("./citas/citas.component");
 var landing_page_component_1 = require("./landing-page/landing-page.component");
+var mis_citas_component_1 = require("./mis-citas/mis-citas.component");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         core_1.NgModule({
-            declarations: [app_component_1.AppComponent, pacientes_component_1.PacientesComponent, specialties_component_1.SpecialtiesComponent, doctores_component_1.DoctoresComponent, citas_component_1.CitasComponent, landing_page_component_1.LandingPageComponent],
+            declarations: [app_component_1.AppComponent, pacientes_component_1.PacientesComponent, specialties_component_1.SpecialtiesComponent, doctores_component_1.DoctoresComponent, citas_component_1.CitasComponent, landing_page_component_1.LandingPageComponent, mis_citas_component_1.MisCitasComponent],
             entryComponents: [],
             imports: [
                 platform_browser_1.BrowserModule,

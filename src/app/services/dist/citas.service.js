@@ -47,18 +47,9 @@ var core_1 = require("@angular/core");
 var firestore_1 = require("@angular/fire/firestore");
 var firestore_2 = require("firebase/firestore");
 var CitasService = /** @class */ (function () {
-    // Inyectamos Firestore en el constructor para poder trabajar con esa herramienta
     function CitasService(firestore) {
         this.firestore = firestore;
     }
-    /*//(recibe un paciente de tipo:)
-    addCita(cita: Citas) {
-      // Ref a la bd = metodo collection(importamos)(1ºparametro Sºfirestores, 2ºparam nombreColeccion)
-      const citaRef = collection(this.firestore, 'citas');
-  
-      // retornar la llamada a addDoc(params: la coleccion, lo que insertamos)
-      return addDoc(citaRef, cita);
-    }*/
     CitasService.prototype.addCita = function (cita) {
         return __awaiter(this, void 0, void 0, function () {
             var citaRef, docRef, citaId, error_1;
@@ -93,13 +84,51 @@ var CitasService = /** @class */ (function () {
         var q = firestore_1.query(citaRef, firestore_1.where('id', '==', id));
         return firestore_1.getDocs(q).then(function (snapshot) {
             if (!snapshot.empty) {
-                var citas_1 = []; // Cambio: Define el tipo de citas como Citas[]
+                var citas_1 = [];
                 snapshot.forEach(function (doc) {
                     var cita = doc.data();
                     cita.id = doc.id;
                     citas_1.push(cita);
                 });
                 return citas_1;
+            }
+            else {
+                return [];
+            }
+        });
+    };
+    // Agrega la función buscarCitasPorDNI para buscar citas por DNI
+    CitasService.prototype.buscarCitasPorDNI = function (dni) {
+        var citaRef = firestore_1.collection(this.firestore, 'citas');
+        var q = firestore_1.query(citaRef, firestore_1.where('dni', '==', dni));
+        return firestore_1.getDocs(q).then(function (snapshot) {
+            if (!snapshot.empty) {
+                var citas_2 = [];
+                snapshot.forEach(function (doc) {
+                    var cita = doc.data();
+                    cita.id = doc.id;
+                    citas_2.push(cita);
+                });
+                return citas_2;
+            }
+            else {
+                return [];
+            }
+        });
+    };
+    // *
+    CitasService.prototype.buscarCitasPorPacienteID = function (pacienteId) {
+        var citaRef = firestore_1.collection(this.firestore, 'citas');
+        var q = firestore_1.query(citaRef, firestore_1.where('pacienteId', '==', pacienteId));
+        return firestore_1.getDocs(q).then(function (snapshot) {
+            if (!snapshot.empty) {
+                var citas_3 = [];
+                snapshot.forEach(function (doc) {
+                    var cita = doc.data();
+                    cita.id = doc.id;
+                    citas_3.push(cita);
+                });
+                return citas_3;
             }
             else {
                 return [];

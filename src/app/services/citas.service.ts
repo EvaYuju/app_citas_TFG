@@ -1,16 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  Firestore,
-  collection,
-  addDoc,
-  query,
-  where,
-  getDocs,
-  doc,
-  updateDoc,
-  deleteDoc,
-} from '@angular/fire/firestore';
-//import { v4 as uuidv4 } from 'uuid';
+import { Firestore, collection, addDoc, query, where, getDocs, doc, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { Citas } from '../models/citas';
 import { setDoc } from 'firebase/firestore';
 
@@ -18,19 +7,9 @@ import { setDoc } from 'firebase/firestore';
   providedIn: 'root',
 })
 export class CitasService {
-  // Inyectamos Firestore en el constructor para poder trabajar con esa herramienta
   constructor(private firestore: Firestore) {}
 
-  /*//(recibe un paciente de tipo:)
-  addCita(cita: Citas) {
-    // Ref a la bd = metodo collection(importamos)(1ºparametro Sºfirestores, 2ºparam nombreColeccion)
-    const citaRef = collection(this.firestore, 'citas');
-
-    // retornar la llamada a addDoc(params: la coleccion, lo que insertamos)
-    return addDoc(citaRef, cita);
-  }*/
-
-   async addCita(cita: Citas) {
+  async addCita(cita: Citas) {
     try {
       const citaRef = collection(this.firestore, 'citas');
       const docRef = await addDoc(citaRef, cita);
@@ -53,7 +32,7 @@ export class CitasService {
     const q = query(citaRef, where('id', '==', id));
     return getDocs(q).then((snapshot) => {
       if (!snapshot.empty) {
-        const citas: Citas[] = []; // Cambio: Define el tipo de citas como Citas[]
+        const citas: Citas[] = [];
         snapshot.forEach((doc) => {
           const cita = doc.data() as Citas;
           cita.id = doc.id;
@@ -65,7 +44,43 @@ export class CitasService {
       }
     });
   }
-  
+
+  // Agrega la función buscarCitasPorDNI para buscar citas por DNI
+  buscarCitasPorDNI(dni: string) {
+    const citaRef = collection(this.firestore, 'citas');
+    const q = query(citaRef, where('dni', '==', dni));
+    return getDocs(q).then((snapshot) => {
+      if (!snapshot.empty) {
+        const citas: Citas[] = [];
+        snapshot.forEach((doc) => {
+          const cita = doc.data() as Citas;
+          cita.id = doc.id;
+          citas.push(cita);
+        });
+        return citas;
+      } else {
+        return [];
+      }
+    });
+  }
+  // *
+  buscarCitasPorPacienteID(pacienteId: string) {
+    const citaRef = collection(this.firestore, 'citas');
+    const q = query(citaRef, where('pacienteId', '==', pacienteId));
+    return getDocs(q).then((snapshot) => {
+      if (!snapshot.empty) {
+        const citas: Citas[] = [];
+        snapshot.forEach((doc) => {
+          const cita = doc.data() as Citas;
+          cita.id = doc.id;
+          citas.push(cita);
+        });
+        return citas;
+      } else {
+        return [];
+      }
+    });
+  }
 
   modificarCita(cita: Citas) {
     const citaRef = doc(this.firestore, 'citas', cita.id);

@@ -7,6 +7,7 @@ import { CitasComponent } from './citas/citas.component';
 import { SpecialtiesComponent } from './specialties/specialties.component';
 import { DoctoresComponent } from './doctores/doctores.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { MisCitasComponent } from './mis-citas/mis-citas.component';
 
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
@@ -18,8 +19,11 @@ const routes: Routes = [
     redirectTo: 'landing-page', // Actualiza el valor a 'landing-page'
     pathMatch: 'full'
   },
-  // Resto de las rutas...
-  // ...
+  
+  { 
+    path: 'mis-citas', component: MisCitasComponent 
+  },
+
   {
     path: 'folder/:id',
     loadChildren: () => import('./folder/folder.module').then( m => m.FolderPageModule)

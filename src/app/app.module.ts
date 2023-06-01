@@ -21,10 +21,11 @@ import { SpecialtiesComponent } from './specialties/specialties.component';
 import { DoctoresComponent } from './doctores/doctores.component';
 import { CitasComponent } from './citas/citas.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { MisCitasComponent } from './mis-citas/mis-citas.component';
 
 
 @NgModule({
-  declarations: [AppComponent, PacientesComponent, SpecialtiesComponent, DoctoresComponent, CitasComponent, LandingPageComponent],
+  declarations: [AppComponent, PacientesComponent, SpecialtiesComponent, DoctoresComponent, CitasComponent, LandingPageComponent, MisCitasComponent],
   entryComponents: [],
   imports: [
   BrowserModule,
