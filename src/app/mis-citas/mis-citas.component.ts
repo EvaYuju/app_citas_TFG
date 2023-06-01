@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Citas } from './../models/citas';
 import { CitasService } from '../services/citas.service';
- 
+
 
 @Component({
   selector: 'app-mis-citas',
@@ -13,10 +13,10 @@ export class MisCitasComponent implements OnInit {
   dni: string = '';
   pacienteId: string = '';
 
-  
-  constructor(private citasService: CitasService) {}
 
-  ngOnInit() {}
+  constructor(private citasService: CitasService) { }
+
+  ngOnInit() { }
 
   buscarCitasPorDNI() {
     if (this.dni !== '') {

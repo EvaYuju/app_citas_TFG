@@ -10,7 +10,8 @@
 
 <ion-content class="ion-padding">
   <div class="search-bar-container">
-    <ion-searchbar [(ngModel)]="pacienteId" (ionChange)="buscarCitasPorPacienteID()" placeholder="Escriba el DNI del paciente"></ion-searchbar>
+    <ion-searchbar [(ngModel)]="pacienteId" (ionChange)="buscarCitasPorPacienteID()"
+      placeholder="Escriba el DNI del paciente"></ion-searchbar>
   </div>
 
   <div class="citas-container" *ngIf="citasPaciente.length > 0">

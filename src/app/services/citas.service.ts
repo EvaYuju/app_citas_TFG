@@ -45,7 +45,7 @@ export class CitasService {
     });
   }
 
-  // Agrega la función buscarCitasPorDNI para buscar citas por DNI
+  // * Revisar y quitar si no se usa
   buscarCitasPorDNI(dni: string) {
     const citaRef = collection(this.firestore, 'citas');
     const q = query(citaRef, where('dni', '==', dni));
@@ -63,7 +63,7 @@ export class CitasService {
       }
     });
   }
-  // *
+  // * En uso para buscar citas por dni en citas
   buscarCitasPorPacienteID(pacienteId: string) {
     const citaRef = collection(this.firestore, 'citas');
     const q = query(citaRef, where('pacienteId', '==', pacienteId));

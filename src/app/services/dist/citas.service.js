@@ -97,7 +97,7 @@ var CitasService = /** @class */ (function () {
             }
         });
     };
-    // Agrega la función buscarCitasPorDNI para buscar citas por DNI
+    // * Revisar y quitar si no se usa
     CitasService.prototype.buscarCitasPorDNI = function (dni) {
         var citaRef = firestore_1.collection(this.firestore, 'citas');
         var q = firestore_1.query(citaRef, firestore_1.where('dni', '==', dni));
@@ -116,7 +116,7 @@ var CitasService = /** @class */ (function () {
             }
         });
     };
-    // *
+    // * En uso para buscar citas por dni en citas
     CitasService.prototype.buscarCitasPorPacienteID = function (pacienteId) {
         var citaRef = firestore_1.collection(this.firestore, 'citas');
         var q = firestore_1.query(citaRef, firestore_1.where('pacienteId', '==', pacienteId));

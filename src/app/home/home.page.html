@@ -15,15 +15,31 @@
     <ion-card-content>
       Estamos aquí para cuidar de ti. Nos enorgullece ofrecer el mejor cuidado de salud posible.
     </ion-card-content>
-    <ion-card-content>
-      Elija una opción del menú
-    </ion-card-content>
+
   </div>
   <div class="card-container">
+    <ion-label>
+      Elija una opción del menú
+    </ion-label>
+
+    <ion-card (click)="navigateToEspecialidades()">
+      <ion-card-header>
+        <ion-card-title>Especialidades</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+
+        <ion-item>
+          <ion-thumbnail slot="start">
+            <img src="assets/iconos_menu/especi.jpg" alt="Icono" class="icono" />
+          </ion-thumbnail>
+          Consulta todas las especialidades medicas y nuestros médicos especialistas.
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
     <ion-card (click)="navigateToCitas()">
       <ion-card-header>
         <ion-card-title>Pida cita</ion-card-title>
-
       </ion-card-header>
       <ion-card-content>
         <ion-item>
@@ -38,7 +54,6 @@
     <ion-card (click)="navigateToMisCitas()">
       <ion-card-header>
         <ion-card-title>Ver citas</ion-card-title>
-
       </ion-card-header>
       <ion-card-content>
         <ion-item>
@@ -61,7 +76,6 @@
           </ion-thumbnail>
           ¿Deseas acceder a la sección de pacientes? Haz clic aquí para gestionar los pacientes.
         </ion-item>
-
       </ion-card-content>
     </ion-card>
 
@@ -74,23 +88,7 @@
           <ion-thumbnail slot="start">
             <img src="assets/iconos_menu/doctores1.jpg" alt="Icono" class="icono" />
           </ion-thumbnail>
-          Gestión de doctores.
-        </ion-item>
-
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card (click)="navigateToEspecialidades()">
-      <ion-card-header>
-        <ion-card-title>Especialidades</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-
-        <ion-item>
-          <ion-thumbnail slot="start">
-            <img src="assets/iconos_menu/especi.jpg" alt="Icono" class="icono" />
-          </ion-thumbnail>
-          Consulta todas las especialidades medicas y nuestros médicos especialistas.
+          ¿Deseas acceder a la sección de pacientes? Haz clic aquí para gestionar los pacientes
         </ion-item>
       </ion-card-content>
     </ion-card>
