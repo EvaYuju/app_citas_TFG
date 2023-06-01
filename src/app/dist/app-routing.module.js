@@ -98,7 +98,8 @@ var AppRoutingModule = /** @class */ (function () {
             declarations: [],
             imports: [
                 common_1.CommonModule,
-                router_1.RouterModule.forRoot(routes, { preloadingStrategy: router_1.PreloadAllModules })
+                router_1.RouterModule.forRoot(routes, { preloadingStrategy: router_1.PreloadAllModules }),
+                //router_1.RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })
             ],
             exports: [router_1.RouterModule]
         })
