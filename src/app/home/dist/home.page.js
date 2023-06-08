@@ -73,7 +73,7 @@ var HomePage = /** @class */ (function () {
             return __generator(this, function (_a) {
                 localStorage.removeItem('ROL');
                 this.auth.logout();
-                this.router.navigate(['/login']);
+                this.router.navigate(['/landing-page']);
                 return [2 /*return*/];
             });
         });

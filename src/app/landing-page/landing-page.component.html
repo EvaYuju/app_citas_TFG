@@ -1,20 +1,36 @@
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500&display=swap"
+  rel="stylesheet"
+/>
 
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-button class="header-buttons" fill="clear" href="www.google.com"
-      >Calle Calatrava, 38, 41002 Sevilla</ion-button>
+      <ion-button
+        class="header-buttons"
+        fill="clear"
+        href="https://goo.gl/maps/MZXeykNCTdsmKbi59"
+        target="_blank"
+      >
+        <ion-icon name="location"></ion-icon>
+        <span class="button-text" style="font-family: 'Kanit', sans-serif"
+          >Calle Calatrava, 38, 41002 Sevilla</span
+        >
+      </ion-button>
     </ion-buttons>
+
     <ion-buttons slot="end">
-      <ion-button class="header-buttons" fill="clear" href="tel:+34954370550">+34 954 37 05 50</ion-button>
+      <ion-button class="header-buttons" fill="clear" href="tel:+34954370550">
+        <ion-icon name="call"></ion-icon>
+        <span class="button-text" style="font-family: 'Kanit', sans-serif"
+          >+34 954 37 05 50</span
+        >
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
-
 
 <ion-content>
   <div class="background-container">
@@ -44,35 +60,54 @@
     <div class="card-container">
       <ion-card class="custom-card">
         <ion-card-header>
-          <ion-label style="font-family: 'Kanit', sans-serif; font-weight: 400;" class="card-title">Inicio de sesión</ion-label>
-          <div style="height: 10px;"></div>
+          <ion-label
+            style="font-family: 'Kanit', sans-serif; font-weight: 400"
+            class="card-title"
+            >Inicio de sesión</ion-label
+          >
+          <div style="height: 10px"></div>
           <ion-segment value="pacientes">
-            <ion-segment-button value="pacientes">
+            <ion-segment-button
+              value="pacientes"
+              (click)="setValue('PACIENTE')"
+            >
               <ion-icon name="person"></ion-icon>
               <ion-label>Área Pacientes</ion-label>
             </ion-segment-button>
-            <ion-segment-button value="medicos">
+            <ion-segment-button value="medicos" (click)="setValue('MEDICO')">
               <ion-icon name="medkit"></ion-icon>
               <ion-label>Área Médicos</ion-label>
             </ion-segment-button>
           </ion-segment>
         </ion-card-header>
         <ion-card-content>
-          <ion-list *ngIf="selectedSegment === 'pacientes'">
-            <ion-item>
-              <ion-label position="floating">Correo electrónico</ion-label>
+          <ion-list *ngIf="selectedSegment === 'PACIENTE'">
+            <form [formGroup]="form" (ngSubmit)="login()">
+              <ion-item>
+                <ion-label position="floating">Correo electrónico</ion-label>
 
-              <ion-input type="email"></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label position="floating">Contraseña</ion-label>
-              <ion-input type="password"></ion-input>
-            </ion-item>
-            <div style="height: 20px;"></div>
-            <ion-item lines="none">
-              <ion-button expand="block" style="--background: #006195"
-                >Iniciar sesión</ion-button>
-            </ion-item>
+                <ion-input type="email" formControlName="email"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Contraseña</ion-label>
+                <ion-input
+                  type="password"
+                  formControlName="password"
+                ></ion-input>
+              </ion-item>
+              <ion-label *ngIf="showError" class="error-label">{{
+                errorText
+              }}</ion-label>
+              <div style="height: 20px"></div>
+              <ion-item lines="none">
+                <ion-button
+                  expand="block"
+                  style="--background: #006195"
+                  type="submit"
+                  >Iniciar sesión</ion-button
+                >
+              </ion-item>
+            </form>
             <ion-item lines="none">
               <ion-button
                 expand="block"
@@ -88,26 +123,38 @@
                 fill="clear"
                 color="medium"
                 size="small"
-                routerLink="/register"
+                [routerLink]="['/register']"
+                [queryParams]="{ type: 'PACIENTE' }"
                 >Registrarse</ion-button
               >
             </ion-item>
           </ion-list>
-          <ion-list *ngIf="selectedSegment === 'medicos'">
-            <ion-item>
-              <ion-label position="floating">Correo electrónico</ion-label>
-              <ion-input type="email"></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label position="floating">Contraseña</ion-label>
-              <ion-input type="password"></ion-input>
-            </ion-item>
-
-            <ion-item lines="none">
-              <ion-button expand="block" style="--background: #006195"
-                >Iniciar sesión</ion-button
-              >
-            </ion-item>
+          <ion-list *ngIf="selectedSegment === 'MEDICO'">
+            <form [formGroup]="form" (ngSubmit)="login()">
+              <ion-item>
+                <ion-label position="floating">Correo electrónico</ion-label>
+                <ion-input type="email" formControlName="email"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Contraseña</ion-label>
+                <ion-input
+                  type="password"
+                  formControlName="password"
+                ></ion-input>
+              </ion-item>
+              <ion-label *ngIf="showError" class="error-label">{{
+                errorText
+              }}</ion-label>
+              <div style="height: 20px"></div>
+              <ion-item lines="none">
+                <ion-button
+                  expand="block"
+                  style="--background: #006195"
+                  type="submit"
+                  >Iniciar sesión</ion-button
+                >
+              </ion-item>
+            </form>
             <ion-item lines="none">
               <ion-button
                 expand="block"
@@ -123,7 +170,8 @@
                 fill="clear"
                 color="medium"
                 size="small"
-                routerLink="/register"
+                [routerLink]="['/register']"
+                [queryParams]="{ type: 'MEDICO' }"
                 >Registrarse</ion-button
               >
             </ion-item>
@@ -131,5 +179,10 @@
         </ion-card-content>
       </ion-card>
     </div>
+  </div>
+  <div class="footer-container">
+    <p class="footer-text">
+      © 2023 Clínica SAFA. Todos los derechos reservados.
+    </p>
   </div>
 </ion-content>

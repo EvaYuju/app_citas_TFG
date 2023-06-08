@@ -10,7 +10,7 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent {
 
-  // Pestañas laterales // 
+  // Pestañas laterales //
   public appPages = this.authSetAppPages();
   /*[
     { title: 'Inicio', url: '/home', icon: 'home' },
@@ -31,12 +31,6 @@ user$ = this.auth.authState$.pipe( // Trae el estado de la sesión
     private auth: AuthService,
     private router: Router
   ) {}
-
-  async logout(){
-    localStorage.removeItem('ROL');
-    this.auth.logout();
-    this.router.navigate(['/login']);
-  }
 
   authSetAppPages(){
     const rol = localStorage.getItem('ROL');

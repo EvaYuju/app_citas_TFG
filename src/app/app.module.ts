@@ -14,7 +14,7 @@ import { environment } from '../environments/environment';
 import { provideAuth,getAuth } from '@angular/fire/auth';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // Importamos los componentes que usamos aquí
 import { PacientesComponent } from './pacientes/pacientes.component';
 import { SpecialtiesComponent } from './specialties/specialties.component';
@@ -34,7 +34,8 @@ import { MisCitasComponent } from './mis-citas/mis-citas.component';
   provideAuth(() => getAuth()), // Servicios que necesitamos para conectar base de datos-proyecto
   provideFirestore(() => getFirestore()),
   AuthGuardModule,
-  FormsModule
+  FormsModule,
+  ReactiveFormsModule,
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

@@ -28,7 +28,7 @@ export class HomePageModule {
   async logout(){
     localStorage.removeItem('ROL');
     this.auth.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/landing-page']);
   }
 
 }

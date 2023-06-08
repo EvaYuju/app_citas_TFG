@@ -9,8 +9,7 @@ import { DoctoresComponent } from './doctores/doctores.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { MisCitasComponent } from './mis-citas/mis-citas.component';
 
-
-const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['landing-page']);
 const redirectLoggedInToHome = () => redirectLoggedInTo(['home']);
 
 const routes: Routes = [
@@ -19,9 +18,9 @@ const routes: Routes = [
     redirectTo: 'landing-page', // Actualiza el valor a 'landing-page'
     pathMatch: 'full'
   },
-  
-  { 
-    path: 'mis-citas', component: MisCitasComponent 
+
+  {
+    path: 'mis-citas', component: MisCitasComponent
   },
 
   {
@@ -55,7 +54,7 @@ const routes: Routes = [
     path: 'citas',
     component: CitasComponent,
     canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin }
+    data: [{ authGuardPipe: redirectUnauthorizedToLogin }]
   },
   {
     path: 'pacientes',
