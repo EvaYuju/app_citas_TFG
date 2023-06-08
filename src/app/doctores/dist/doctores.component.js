@@ -32,7 +32,7 @@ var DoctoresComponent = /** @class */ (function () {
             especialidad: '',
             telefono: '',
             correoElectronico: '',
-            horario: this.generarHorario()
+            horario: this.generarHorario(this.horaInicio, this.horaFinal)
         };
         this.mensaje = '';
         this.doctorsEncontrados = [];
@@ -45,6 +45,11 @@ var DoctoresComponent = /** @class */ (function () {
     }
     DoctoresComponent.prototype.ngOnInit = function () {
         this.loadSpecialties();
+        this.rol = localStorage.getItem('ROL');
+    };
+    //PARA AUTHENTICATION
+    DoctoresComponent.prototype.isAuthenticated = function (rol) {
+        return this.rol == rol;
     };
     DoctoresComponent.prototype.agregarDoctor = function () {
         var _this = this;
@@ -93,13 +98,13 @@ var DoctoresComponent = /** @class */ (function () {
             .then(function (doctors) {
             _this.doctorsEncontrados = doctors;
             if (doctors.length === 0) {
-                _this.mensaje = 'No se encontraron pacientes con este DNI.';
+                _this.mensaje = 'No se encontraron doctores con este DNI.';
             }
             else {
                 _this.mensaje = '';
             }
         })["catch"](function (error) {
-            _this.mensaje = 'Error al buscar el paciente: ' + error;
+            _this.mensaje = 'Error al buscar el doctor: ' + error;
             _this.doctorsEncontradosDNI = [];
         });
     };
@@ -172,13 +177,13 @@ var DoctoresComponent = /** @class */ (function () {
             this.mensaje = '';
         }
     };
-    DoctoresComponent.prototype.generarHorario = function () {
+    DoctoresComponent.prototype.generarHorario = function (horaIni, horaFin) {
         var horario = [];
-        var horaInicio = new Date().setHours(8, 0, 0); // Establecer hora de inicio en 8:00 AM
-        var horaFin = new Date().setHours(15, 0, 0); // Establecer hora de fin en 3:00 PM
+        var horaInicio = new Date().setHours(horaIni ? horaIni : 8, 0, 0); // Establecer hora de inicio en 8:00 AM
+        var horaFinal = new Date().setHours(horaFin ? horaFin : 15, 0, 0); // Establecer hora de fin en 3:00 PM
         var tiempoIncremento = 30; // Incremento de tiempo en minutos
         var horaActual = horaInicio;
-        while (horaActual <= horaFin) {
+        while (horaActual <= horaFinal) {
             var hora = new Date(horaActual);
             var horaFormateada = this.formatoHora(hora);
             horario.push(horaFormateada);

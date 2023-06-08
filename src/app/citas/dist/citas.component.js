@@ -55,14 +55,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.CitasComponent = void 0;
 var core_1 = require("@angular/core");
+var firestore_1 = require("@angular/fire/firestore");
 var CitasComponent = /** @class */ (function () {
-    function CitasComponent(citasService, doctorsService, specialtiesService, usuariosService, alertController, pacientesService) {
+    function CitasComponent(citasService, doctorsService, specialtiesService, usuariosService, alertController, pacientesService, firestore, auth, authService) {
         this.citasService = citasService;
         this.doctorsService = doctorsService;
         this.specialtiesService = specialtiesService;
         this.usuariosService = usuariosService;
         this.alertController = alertController;
         this.pacientesService = pacientesService;
+        this.firestore = firestore;
+        this.auth = auth;
+        this.authService = authService;
         this.cita = {
             id: '',
             pacienteId: '',
@@ -91,6 +95,31 @@ var CitasComponent = /** @class */ (function () {
     CitasComponent.prototype.ngOnInit = function () {
         this.citaSeleccionada = this.cita;
         this.loadSpecialties();
+        this.obtenerUsuarioRol(); // Agrega esta línea para obtener el rol del usuario
+    };
+    CitasComponent.prototype.obtenerUsuarioRol = function () {
+        var _this = this;
+        this.authService.getUsuarioEmail().subscribe(function (correo) {
+            if (correo) {
+                _this.usuariosService.getUsuarioRol(correo).then(function (rol) {
+                    _this.usuarioRol = rol || '';
+                });
+            }
+        });
+    };
+    CitasComponent.prototype.getUsuarioRol = function (correo) {
+        var correoUsuario = firestore_1.collection(this.firestore, 'usuarios');
+        var q = firestore_1.query(correoUsuario, firestore_1.where('correo', '==', correo));
+        return firestore_1.getDocs(q).then(function (snapshot) {
+            var usuario = null;
+            if (!snapshot.empty) {
+                snapshot.forEach(function (doc) {
+                    var user = doc.data();
+                    usuario = user.rol;
+                });
+            }
+            return usuario;
+        });
     };
     CitasComponent.prototype.agregarCita = function () {
         return __awaiter(this, void 0, void 0, function () {

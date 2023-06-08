@@ -31,8 +31,7 @@ var PacientesComponent = /** @class */ (function () {
             fechaNacimiento: new Date(),
             direccion: '',
             telefono: '',
-            correoElectronico: '',
-            historialMedico: ''
+            correoElectronico: ''
         };
         this.mensaje = '';
         this.pacientesEncontrados = [];
@@ -130,8 +129,7 @@ var PacientesComponent = /** @class */ (function () {
             fechaNacimiento: new Date(),
             direccion: '',
             telefono: '',
-            correoElectronico: '',
-            historialMedico: ''
+            correoElectronico: ''
         };
     };
     PacientesComponent = __decorate([

@@ -1,3 +1,77 @@
+.header-buttons {
+  margin-right: 10px;
+}
+
+.button-text {
+  margin-left: 8px;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.footer-text {
+  color: #006195;
+  font-size: 14px;
+  text-align: center;
+  font-family: "Kanit", sans-serif;
+  font-weight: 400;
+}
+
+body {
+  overflow: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.header-buttons {
+  margin-top: 10px;
+}
+
+.card-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #006195;
+}
+
+.card-container {
+  width: 75%;
+  margin: 0 auto;
+}
+
+.custom-card {
+  height: auto;
+}
+
+.buttons-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.background-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.background-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .header-toolbar {
   --background: linear-gradient(to right, #002f6c, #0055b3, #002f6c);
   --ion-color-base: #ffffff;
@@ -29,4 +103,15 @@
 
 ion-button {
   margin-bottom: 10px;
+}
+
+.error-label {
+  color: red;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.scroll-content {
+  height: 100vh;
+  /* Establece la altura al 100% del viewport */
 }

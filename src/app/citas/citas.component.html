@@ -62,15 +62,11 @@
         </ion-select>
       </ion-item>
 
-
-
-
       <ion-item>
         <ion-label position="floating">Motivo</ion-label>
         <ion-input [(ngModel)]="cita.motivo"></ion-input>
       </ion-item>
 
-      <!--<ion-item *ngIf="usuarioRol === 'ADMIN' || usuarioRol === 'DOCTOR'"> pendiente-->
       <ion-item class="estado-item">
         <ion-label position="floating">Estado</ion-label>
           <ion-select [(ngModel)]="cita.estado">
@@ -108,7 +104,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card>
+  <ion-card *ngIf="usuarioRol === 'MEDICO'">
     <ion-card-header>
       <ion-card-title>Buscar Cita</ion-card-title>
     </ion-card-header>
@@ -137,7 +133,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngIf="citaSeleccionada">
+  <ion-card *ngIf="citaSeleccionada && usuarioRol === 'MEDICO'" >
     <ion-card-header>
       <ion-card-title>Modificar Cita</ion-card-title>
     </ion-card-header>

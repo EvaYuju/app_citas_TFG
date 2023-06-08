@@ -44,31 +44,66 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.AuthService = void 0;
 var core_1 = require("@angular/core");
+var operators_1 = require("rxjs/operators");
 var auth_1 = require("@angular/fire/auth");
 var AuthService = /** @class */ (function () {
-    function AuthService(afAuth) {
+    function AuthService(afAuth, usuarioService, pacienteService, doctorService) {
         this.afAuth = afAuth;
+        this.usuarioService = usuarioService;
+        this.pacienteService = pacienteService;
+        this.doctorService = doctorService;
         this.authState$ = auth_1.authState(this.afAuth); // Observador del usuario logueado
     }
-    AuthService.prototype.register = function (email, password) {
+    AuthService.prototype.getUsuarioEmail = function () {
+        return this.authState$.pipe(operators_1.map(function (user) { return (user && user.email) || null; }));
+    };
+    AuthService.prototype.register = function (password, rol, paciente, doctores) {
         return __awaiter(this, void 0, void 0, function () {
-            var user;
+            var user, user;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, auth_1.createUserWithEmailAndPassword(this.afAuth, email, password)];
+                    case 0:
+                        if (!(rol === 'PACIENTE' && paciente)) return [3 /*break*/, 3];
+                        this.usuarioService.registerUsuario(paciente.correoElectronico, rol);
+                        return [4 /*yield*/, auth_1.createUserWithEmailAndPassword(this.afAuth, paciente.correoElectronico, password)];
                     case 1:
                         user = _a.sent();
-                        return [4 /*yield*/, auth_1.signInWithEmailAndPassword(this.afAuth, email, password)];
+                        this.pacienteService.addPaciente(paciente);
+                        return [4 /*yield*/, auth_1.signInWithEmailAndPassword(this.afAuth, paciente.correoElectronico, password)];
                     case 2: return [2 /*return*/, _a.sent()];
+                    case 3:
+                        if (!(rol === 'MEDICO' && doctores)) return [3 /*break*/, 6];
+                        this.usuarioService.registerUsuario(doctores.correoElectronico, rol);
+                        return [4 /*yield*/, auth_1.createUserWithEmailAndPassword(this.afAuth, doctores.correoElectronico, password)];
+                    case 4:
+                        user = _a.sent();
+                        this.doctorService.addDoctor(doctores);
+                        return [4 /*yield*/, auth_1.signInWithEmailAndPassword(this.afAuth, doctores.correoElectronico, password)];
+                    case 5: return [2 /*return*/, _a.sent()];
+                    case 6: return [2 /*return*/];
                 }
             });
         });
     };
     ;
     AuthService.prototype.login = function (email, password) {
-        return auth_1.signInWithEmailAndPassword(this.afAuth, email, password);
+        return __awaiter(this, void 0, void 0, function () {
+            var rol;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.usuarioService.getUsuarioRol(email).then(function (snapshot) {
+                            return snapshot;
+                        })];
+                    case 1:
+                        rol = _a.sent();
+                        if (rol !== null) {
+                            localStorage.setItem('ROL', rol);
+                        }
+                        return [2 /*return*/, auth_1.signInWithEmailAndPassword(this.afAuth, email, password)];
+                }
+            });
+        });
     };
-    ;
     AuthService.prototype.logout = function () {
         return auth_1.signOut(this.afAuth);
     };

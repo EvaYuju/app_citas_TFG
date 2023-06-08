@@ -25,7 +25,7 @@ var UsuariosService = /** @class */ (function () {
         var usuariosRef = firestore_1.collection(this.firestore, 'usuarios');
         var q = firestore_1.query(usuariosRef, firestore_1.where('correo', '==', correo));
         return firestore_1.getDocs(q).then(function (snapshot) {
-            var usuario = '';
+            var usuario = null;
             if (!snapshot.empty) {
                 snapshot.forEach(function (doc) {
                     var user = doc.data();

@@ -8,5 +8,4 @@ export interface Pacientes {
   direccion: string;
   telefono: string;
   correoElectronico: string;
-  historialMedico: string;
 }

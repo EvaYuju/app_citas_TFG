@@ -32,8 +32,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="background-container">
+<ion-content class="scroll-content"> <!-- Scroll Down-->  <div class="background-container">
     <img src="assets/fondo6.jpg" alt="Fondo" class="background-image" />
   </div>
   <div class="landing-content">
@@ -142,9 +141,12 @@
                   formControlName="password"
                 ></ion-input>
               </ion-item>
+
               <ion-label *ngIf="showError" class="error-label">{{
                 errorText
               }}</ion-label>
+
+
               <div style="height: 20px"></div>
               <ion-item lines="none">
                 <ion-button

@@ -20,8 +20,6 @@ export class PacientesComponent implements OnInit{
     direccion: '',
     telefono: '',
     correoElectronico: '',
-    historialMedico: '',
-    //citas: ''
   };
   //PARA AUTHENTICATION
   rol: any;
@@ -136,7 +134,6 @@ export class PacientesComponent implements OnInit{
       direccion: '',
       telefono: '',
       correoElectronico: '',
-      historialMedico: '',
       //citas: ''
     };
   }

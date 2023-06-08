@@ -103,13 +103,13 @@ export class DoctoresComponent implements OnInit {
     .then((doctors) => {
     this.doctorsEncontrados = doctors;
     if (doctors.length === 0) {
-    this.mensaje = 'No se encontraron pacientes con este DNI.';
+    this.mensaje = 'No se encontraron doctores con este DNI.';
     } else {
     this.mensaje = '';
     }
     })
     .catch((error) => {
-    this.mensaje = 'Error al buscar el paciente: ' + error;
+    this.mensaje = 'Error al buscar el doctor: ' + error;
     this.doctorsEncontradosDNI = [];
     });
     }
@@ -165,7 +165,6 @@ export class DoctoresComponent implements OnInit {
       telefono: '',
       correoElectronico: '',
       horario: this.generarHorario(),
-      //citas: ''
     };
   }
 

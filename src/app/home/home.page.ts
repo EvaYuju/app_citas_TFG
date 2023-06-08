@@ -69,9 +69,9 @@ export class HomePage {
   logout() {
     localStorage.removeItem('ROL');
     this.auth.logout();
-    //window.location.reload();
+    window.location.reload();
     this.router.navigate(['/landing-page']);
-    //window.location.reload();
+    window.location.reload();
   }
 
   navigateToLogOut() {

@@ -13,6 +13,7 @@ import {
 
 import { Usuarios } from '../models/usuarios';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -29,18 +30,19 @@ export class UsuariosService {
    return addDoc(usuariosRef, usuario);
   }
 
-  getUsuarioRol(correo: string){
+  getUsuarioRol(correo: string): Promise<string | null> {
     const usuariosRef = collection(this.firestore, 'usuarios');
     const q = query(usuariosRef, where('correo', '==', correo));
     return getDocs(q).then((snapshot) => {
-      let usuario: string = '';
+      let usuario: string | null = null;
       if (!snapshot.empty) {
         snapshot.forEach((doc) => {
           const user = doc.data() as Usuarios;
           usuario = user.rol;
         });
       }
-        return usuario;
+      return usuario;
     });
   }
+
 }

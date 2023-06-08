@@ -9,6 +9,22 @@ import { Especialidad } from '../models/specialties';
 import { Doctor } from '../models/doctor';
 import { UsuariosService } from '../services/usuarios.service';
 import { PacientesService } from './../services/pacientes.service';
+import { Usuarios } from '../models/usuarios';
+import { AuthService } from './../services/auth.service';
+
+
+import {
+  Firestore,
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from '@angular/fire/firestore';
+
 
 import { AlertController } from '@ionic/angular';
 
@@ -55,14 +71,45 @@ export class CitasComponent implements OnInit {
     private specialtiesService: SpecialtiesService,
     private usuariosService: UsuariosService,
     private alertController: AlertController,
-    private pacientesService: PacientesService
+    private pacientesService: PacientesService,
+    private firestore: Firestore,
+    private auth: AuthService,
+    private authService: AuthService
+    
     ) {}
 
   ngOnInit() {
     this.citaSeleccionada = this.cita;
     this.loadSpecialties();
+    this.obtenerUsuarioRol(); // Agrega esta línea para obtener el rol del usuario
+
     
   }
+  obtenerUsuarioRol() {
+    this.authService.getUsuarioEmail().subscribe(correo => {
+      if (correo) {
+        this.usuariosService.getUsuarioRol(correo).then(rol => {
+          this.usuarioRol = rol || '';
+        });
+      }
+    });
+  }
+  
+  getUsuarioRol(correo: string): Promise<string | null> {
+    const correoUsuario = collection(this.firestore, 'usuarios');
+    const q = query(correoUsuario, where('correo', '==', correo));
+    return getDocs(q).then((snapshot) => {
+      let usuario: string | null = null;
+      if (!snapshot.empty) {
+        snapshot.forEach((doc) => {
+          const user = doc.data() as Usuarios;
+          usuario = user.rol;
+        });
+      }
+      return usuario;
+    });
+  }
+
 
   async agregarCita() {
     if (!this.camposValidos()) {
