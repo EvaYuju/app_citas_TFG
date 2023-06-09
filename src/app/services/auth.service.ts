@@ -13,6 +13,8 @@ import { Doctor } from '../models/doctor';
 })
 export class AuthService {
 
+
+
   authState$ = authState(this.afAuth); // Observador del usuario logueado
   constructor(
     private afAuth: Auth,
@@ -27,6 +29,11 @@ export class AuthService {
     );
   }
 
+  getCurrentUser() {
+    return this.authState$.pipe(
+      map(user => user && user.email || null)
+    );
+  }
   async register(password: string, rol: string, paciente?: Pacientes, doctores?: Doctor) {
     if(rol === 'PACIENTE' && paciente){
       this.usuarioService.registerUsuario(paciente.correoElectronico, rol);

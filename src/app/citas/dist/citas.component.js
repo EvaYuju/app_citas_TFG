@@ -91,40 +91,69 @@ var CitasComponent = /** @class */ (function () {
         this.usuarioRol = ''; // Agrega esta línea para almacenar el rol del usuario
         this.minDate = '';
         this.horariosDoctor = [];
+        this.usuarioPacienteDni = '';
+        this.dniUsuarioActual = '';
     }
     CitasComponent.prototype.ngOnInit = function () {
         this.citaSeleccionada = this.cita;
         this.loadSpecialties();
-        this.obtenerUsuarioRol(); // Agrega esta línea para obtener el rol del usuario
+        this.obtenerUsuarioRol(); // Obtener el rol del usuario
+        this.obtenerUsuarioDNI(); // Obtener el DNI del paciente logueado
     };
+    // ***
     CitasComponent.prototype.obtenerUsuarioRol = function () {
         var _this = this;
         this.authService.getUsuarioEmail().subscribe(function (correo) {
             if (correo) {
                 _this.usuariosService.getUsuarioRol(correo).then(function (rol) {
                     _this.usuarioRol = rol || '';
+                    // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+                    if (_this.usuarioRol === 'PACIENTE') {
+                        _this.pacientesService.getPacientePorCorreo(correo).then(function (paciente) {
+                            if (paciente) {
+                                _this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+                            }
+                        });
+                    }
                 });
             }
         });
     };
     CitasComponent.prototype.getUsuarioRol = function (correo) {
-        var correoUsuario = firestore_1.collection(this.firestore, 'usuarios');
-        var q = firestore_1.query(correoUsuario, firestore_1.where('correo', '==', correo));
-        return firestore_1.getDocs(q).then(function (snapshot) {
-            var usuario = null;
-            if (!snapshot.empty) {
-                snapshot.forEach(function (doc) {
-                    var user = doc.data();
-                    usuario = user.rol;
+        var _this = this;
+        return this.usuariosService.getUsuarioRol(correo).then(function (rol) {
+            _this.usuarioRol = rol || '';
+            // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+            if (_this.usuarioRol === 'PACIENTE') {
+                return _this.pacientesService.getPacientePorCorreo(correo).then(function (paciente) {
+                    if (paciente) {
+                        _this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+                    }
+                    return rol;
                 });
             }
-            return usuario;
+            else {
+                return rol;
+            }
+        });
+    };
+    CitasComponent.prototype.obtenerUsuarioDNI = function () {
+        var _this = this;
+        this.authService.getUsuarioEmail().subscribe(function (correo) {
+            if (correo) {
+                if (_this.usuarioRol === 'PACIENTE') {
+                    _this.pacientesService.getPacientePorCorreo(correo).then(function (paciente) {
+                        if (paciente) {
+                            _this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+                        }
+                    });
+                }
+            }
         });
     };
     CitasComponent.prototype.agregarCita = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var pacienteExists;
-            var _this = this;
+            var docRef, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -132,25 +161,24 @@ var CitasComponent = /** @class */ (function () {
                             this.mensaje = 'Por favor, completa todos los campos.';
                             return [2 /*return*/];
                         }
-                        return [4 /*yield*/, this.pacientesService.getPacientePorDNI(this.cita.pacienteId)];
-                    case 1:
-                        pacienteExists = _a.sent();
-                        if (!pacienteExists) {
-                            this.mensaje = 'El DNI del paciente no coincide con ningún paciente registrado.';
-                            return [2 /*return*/];
-                        }
                         // Obtener la hora seleccionada del componente ion-select y asignarla al campo 'hora'
                         this.cita.hora = this.cita.hora.substring(0, 5);
-                        this.citasService
-                            .addCita(this.cita)
-                            .then(function () {
-                            _this.mensajeID =
-                                'Cita agregada correctamente. ID de la cita: ' + _this.cita.id;
-                            _this.limpiarFormulario();
-                        })["catch"](function (error) {
-                            _this.mensaje = 'Error al agregar la cita: ' + error;
-                        });
-                        return [2 /*return*/];
+                        // Guardar el dniUsuarioActual en cita.pacienteId
+                        this.cita.pacienteId = this.dniUsuarioActual;
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, firestore_1.addDoc(firestore_1.collection(this.firestore, 'citas'), this.cita)];
+                    case 2:
+                        docRef = _a.sent();
+                        this.mensajeID = 'Cita agregada correctamente. ID de la cita: ' + docRef.id;
+                        this.limpiarFormulario();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_1 = _a.sent();
+                        this.mensaje = 'Error al agregar la cita: ' + error_1;
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
@@ -249,8 +277,9 @@ var CitasComponent = /** @class */ (function () {
         });
     };
     CitasComponent.prototype.camposValidos = function () {
-        return (this.cita.pacienteId &&
-            this.cita.doctorId &&
+        return (
+        //this.cita.pacienteId &&
+        this.cita.doctorId &&
             this.cita.especialidad &&
             this.cita.fecha &&
             this.cita.motivo &&

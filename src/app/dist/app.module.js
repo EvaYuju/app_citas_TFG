@@ -26,6 +26,7 @@ var doctores_component_1 = require("./doctores/doctores.component");
 var citas_component_1 = require("./citas/citas.component");
 var landing_page_component_1 = require("./landing-page/landing-page.component");
 var mis_citas_component_1 = require("./mis-citas/mis-citas.component");
+var pacientes_service_1 = require("./services/pacientes.service");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -42,9 +43,9 @@ var AppModule = /** @class */ (function () {
                 firestore_1.provideFirestore(function () { return firestore_1.getFirestore(); }),
                 auth_guard_1.AuthGuardModule,
                 forms_1.FormsModule,
-                forms_1.ReactiveFormsModule
+                forms_1.ReactiveFormsModule,
             ],
-            providers: [{ provide: router_1.RouteReuseStrategy, useClass: angular_1.IonicRouteStrategy }],
+            providers: [pacientes_service_1.PacientesService, { provide: router_1.RouteReuseStrategy, useClass: angular_1.IonicRouteStrategy }],
             bootstrap: [app_component_1.AppComponent]
         })
     ], AppModule);

@@ -63,6 +63,8 @@ export class CitasComponent implements OnInit {
   usuarioRol: string = ''; // Agrega esta línea para almacenar el rol del usuario
   minDate: string = '';
   horariosDoctor: string[] = [];
+  usuarioPacienteDni: string = '';
+  dniUsuarioActual: string = '';
 
 
   constructor(
@@ -81,34 +83,65 @@ export class CitasComponent implements OnInit {
   ngOnInit() {
     this.citaSeleccionada = this.cita;
     this.loadSpecialties();
-    this.obtenerUsuarioRol(); // Agrega esta línea para obtener el rol del usuario
-
+    this.obtenerUsuarioRol(); // Obtener el rol del usuario
+    this.obtenerUsuarioDNI(); // Obtener el DNI del paciente logueado
+    
+    
     
   }
+  // ***
   obtenerUsuarioRol() {
-    this.authService.getUsuarioEmail().subscribe(correo => {
+    this.authService.getUsuarioEmail().subscribe((correo) => {
       if (correo) {
-        this.usuariosService.getUsuarioRol(correo).then(rol => {
+        this.usuariosService.getUsuarioRol(correo).then((rol) => {
           this.usuarioRol = rol || '';
+  
+          // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+          if (this.usuarioRol === 'PACIENTE') {
+            this.pacientesService.getPacientePorCorreo(correo).then((paciente) => {
+              if (paciente) {
+                this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+
+              }
+            });
+          }
         });
       }
     });
   }
   
   getUsuarioRol(correo: string): Promise<string | null> {
-    const correoUsuario = collection(this.firestore, 'usuarios');
-    const q = query(correoUsuario, where('correo', '==', correo));
-    return getDocs(q).then((snapshot) => {
-      let usuario: string | null = null;
-      if (!snapshot.empty) {
-        snapshot.forEach((doc) => {
-          const user = doc.data() as Usuarios;
-          usuario = user.rol;
+    return this.usuariosService.getUsuarioRol(correo).then((rol) => {
+      this.usuarioRol = rol || '';
+      // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+      if (this.usuarioRol === 'PACIENTE') {
+        return this.pacientesService.getPacientePorCorreo(correo).then((paciente) => {
+          if (paciente) {
+            this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+          }
+          return rol;
         });
+      } else {
+        return rol;
       }
-      return usuario;
     });
   }
+  
+
+  obtenerUsuarioDNI() {
+    this.authService.getUsuarioEmail().subscribe((correo) => {
+      if (correo) {
+        if (this.usuarioRol === 'PACIENTE') {
+          this.pacientesService.getPacientePorCorreo(correo).then((paciente) => {
+            if (paciente) {
+              this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+            }
+          });
+        }
+      }
+    });
+  }
+  
 
 
   async agregarCita() {
@@ -116,32 +149,22 @@ export class CitasComponent implements OnInit {
       this.mensaje = 'Por favor, completa todos los campos.';
       return;
     }
-
-    // Check if the patient with the specified DNI exists
-    const pacienteExists = await this.pacientesService.getPacientePorDNI(
-      this.cita.pacienteId
-    );
-
-    if (!pacienteExists) {
-      this.mensaje = 'El DNI del paciente no coincide con ningún paciente registrado.';
-      return;
-    }
-
+  
     // Obtener la hora seleccionada del componente ion-select y asignarla al campo 'hora'
     this.cita.hora = this.cita.hora.substring(0, 5);
-
-    this.citasService
-      .addCita(this.cita)
-      .then(() => {
-        this.mensajeID =
-          'Cita agregada correctamente. ID de la cita: ' + this.cita.id;
-        this.limpiarFormulario();
-      })
-      .catch((error) => {
-        this.mensaje = 'Error al agregar la cita: ' + error;
-      });
-  }
+    // Guardar el dniUsuarioActual en cita.pacienteId
+    this.cita.pacienteId = this.dniUsuarioActual;
   
+    // Agregar la cita a Firestore
+  try {
+    const docRef = await addDoc(collection(this.firestore, 'citas'), this.cita);
+    this.mensajeID = 'Cita agregada correctamente. ID de la cita: ' + docRef.id;
+    this.limpiarFormulario();
+  } catch (error) {
+    this.mensaje = 'Error al agregar la cita: ' + error;
+  }
+  }
+    
 
   buscarCitaPorID(id: string) {
     this.citasService.buscarCitaPorID(id)
@@ -246,7 +269,7 @@ export class CitasComponent implements OnInit {
 
   camposValidos() {
     return (
-      this.cita.pacienteId &&
+      //this.cita.pacienteId &&
       this.cita.doctorId &&
       this.cita.especialidad &&
       this.cita.fecha &&

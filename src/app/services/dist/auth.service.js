@@ -57,6 +57,9 @@ var AuthService = /** @class */ (function () {
     AuthService.prototype.getUsuarioEmail = function () {
         return this.authState$.pipe(operators_1.map(function (user) { return (user && user.email) || null; }));
     };
+    AuthService.prototype.getCurrentUser = function () {
+        return this.authState$.pipe(operators_1.map(function (user) { return user && user.email || null; }));
+    };
     AuthService.prototype.register = function (password, rol, paciente, doctores) {
         return __awaiter(this, void 0, void 0, function () {
             var user, user;

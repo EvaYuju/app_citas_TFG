@@ -30,6 +30,21 @@ var PacientesService = /** @class */ (function () {
         return firestore_1.getDocs(q)
             .then(function (snapshot) { return !snapshot.empty; });
     };
+    PacientesService.prototype.getPacientePorCorreo = function (correo) {
+        var pacienteRef = firestore_1.collection(this.firestore, 'pacientes');
+        var q = firestore_1.query(pacienteRef, firestore_1.where('correoElectronico', '==', correo));
+        return firestore_1.getDocs(q)
+            .then(function (snapshot) {
+            if (!snapshot.empty) {
+                var paciente = snapshot.docs[0].data();
+                paciente.id = snapshot.docs[0].id;
+                return paciente;
+            }
+            else {
+                return null;
+            }
+        });
+    };
     PacientesService.prototype.buscarPacientePorDNI = function (dni) {
         var pacienteRef = firestore_1.collection(this.firestore, 'pacientes');
         var q = firestore_1.query(pacienteRef, firestore_1.where('dni', '==', dni));

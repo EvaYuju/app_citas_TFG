@@ -28,6 +28,23 @@ export class PacientesService {
     return getDocs(q)
       .then((snapshot) => !snapshot.empty);
   }
+
+  getPacientePorCorreo(correo: string) {
+    const pacienteRef = collection(this.firestore, 'pacientes');
+    const q = query(pacienteRef, where('correoElectronico', '==', correo));
+    return getDocs(q)
+      .then((snapshot) => {
+        if (!snapshot.empty) {
+          const paciente = snapshot.docs[0].data() as Pacientes;
+          paciente.id = snapshot.docs[0].id;
+          return paciente;
+        } else {
+          return null;
+        }
+      });
+  }
+  
+  
   buscarPacientePorDNI(dni: string) {
     const pacienteRef = collection(this.firestore, 'pacientes');
     const q = query(pacienteRef, where('dni', '==', dni));

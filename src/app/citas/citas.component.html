@@ -13,14 +13,24 @@
   <ion-card>
 
     <ion-card-header>
-      <ion-card-title>Agregar cita</ion-card-title>
+      <ion-card-title>
+        <ng-container *ngIf="usuarioRol === 'MEDICO'">Agregar cita</ng-container>
+    <ng-container *ngIf="usuarioRol === 'PACIENTE'">Solicitar cita</ng-container>
+      </ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
-      <ion-item>
-        <ion-label position="floating">Paciente</ion-label>
+      <ion-item *ngIf="usuarioRol === 'MEDICO'">
+        <ion-label placeholder="DNI del paciente" position="floating">DNI Paciente</ion-label>
+
         <ion-input [(ngModel)]="cita.pacienteId"></ion-input>
       </ion-item>
+      <ion-item *ngIf="usuarioRol === 'PACIENTE'">
+        <ion-label position="floating">DNI</ion-label>
+
+        <ion-input type="text" [(ngModel)]="dniUsuarioActual" disabled></ion-input>
+      </ion-item>
+      
 
       <!---->
       <ion-item>
@@ -69,13 +79,14 @@
 
       <ion-item class="estado-item">
         <ion-label position="floating">Estado</ion-label>
-          <ion-select [(ngModel)]="cita.estado">
-            <ion-select-option value="pendiente">Pendiente</ion-select-option>
-            <ion-select-option value="confirmada" disabled>Confirmada</ion-select-option>
-            <ion-select-option value="denegada" disabled>Denegada</ion-select-option>
-          </ion-select>
-
+        <ion-select [(ngModel)]="cita.estado">
+          <ion-select-option value="pendiente" *ngIf="usuarioRol === 'PACIENTE'">Pendiente</ion-select-option>
+          <ion-select-option value="pendiente" *ngIf="usuarioRol === 'MEDICO'">Pendiente</ion-select-option>
+          <ion-select-option value="confirmada" *ngIf="usuarioRol === 'MEDICO'">Confirmada</ion-select-option>
+          <ion-select-option value="denegada" *ngIf="usuarioRol === 'MEDICO'">Denegada</ion-select-option>
+        </ion-select>
       </ion-item>
+      
 
 
 
