@@ -87,7 +87,7 @@
     </ion-card-content>
   </div>
   <div class="card-container">
-    <ion-card (click)="navigateToEspecialidades()">
+    <ion-card (click)="navigateToEspecialidades()" *ngIf="usuarioRol === 'PACIENTE'">
       <ion-card-header>
         <ion-card-title
           style="font-family: 'Kanit', sans-serif; font-weight: 400"
@@ -103,7 +103,7 @@
               class="icono"
             />
           </ion-thumbnail>
-          Consulta todas las especialidades medicas y nuestros médicos
+          Consulta todas las especialidades médicas y nuestros doctores
           especialistas.
         </ion-item>
       </ion-card-content>
@@ -111,10 +111,11 @@
 
     <ion-card (click)="navigateToCitas()">
       <ion-card-header>
-        <ion-card-title
-          style="font-family: 'Kanit', sans-serif; font-weight: 400"
-          >Pida cita</ion-card-title
-        >
+        <ion-card-title style="font-family: 'Kanit', sans-serif; font-weight: 400">
+          <ng-container *ngIf="usuarioRol === 'MEDICO'">Citas</ng-container>
+      <ng-container *ngIf="usuarioRol === 'PACIENTE'">Solicitar cita</ng-container>
+    </ion-card-title>
+    
       </ion-card-header>
       <ion-card-content>
         <ion-item lines="none">
@@ -125,8 +126,14 @@
               class="icono"
             />
           </ion-thumbnail>
-          ¿Necesitas programar una cita con nosotros? Haz clic aquí para
-          rellenar el formulario.
+          <ng-container *ngIf="usuarioRol === 'MEDICO'">
+            Crear, modificar y borrar citas de los pacientes.
+          </ng-container>
+          <ng-container *ngIf="usuarioRol === 'PACIENTE'">
+            ¿Necesitas programar una cita con nosotros? Haz clic aquí para
+            rellenar el formulario.  
+          </ng-container>
+  
         </ion-item>
       </ion-card-content>
     </ion-card>
@@ -143,12 +150,17 @@
           <ion-thumbnail slot="start">
             <img src="assets/iconos_menu/profs.jpg" alt="Icono" class="icono" />
           </ion-thumbnail>
-          Consulte las citas aquí.
+          <ng-container *ngIf="usuarioRol === 'MEDICO'">
+            Consulte y  gestione el estado las citas de los pacientes.
+          </ng-container>
+          <ng-container *ngIf="usuarioRol === 'PACIENTE'">
+            Consulte sus citas y el estadoaquí .
+          </ng-container>
         </ion-item>
       </ion-card-content>
     </ion-card>
 
-    <ion-card (click)="navigateToPacientes()">
+    <ion-card (click)="navigateToPacientes()" *ngIf="usuarioRol === 'MEDICO'">
       <ion-card-header>
         <ion-card-title
           style="font-family: 'Kanit', sans-serif; font-weight: 400"
@@ -166,7 +178,7 @@
       </ion-card-content>
     </ion-card>
 
-    <ion-card (click)="navigateToDoctores()">
+    <ion-card (click)="navigateToDoctores()" *ngIf="usuarioRol === 'MEDICO'">
       <ion-card-header>
         <ion-card-title
           style="font-family: 'Kanit', sans-serif; font-weight: 400"
@@ -182,13 +194,13 @@
               class="icono"
             />
           </ion-thumbnail>
-          ¿Deseas acceder a la sección de pacientes? Haz clic aquí para
-          gestionar los pacientes
+          ¿Deseas acceder a la sección de doctores? Haz clic aquí para
+          gestionar los doctores.
         </ion-item>
       </ion-card-content>
     </ion-card>
 
-    <ion-card (click)="navigateToContact()">
+    <ion-card (click)="navigateToContact()" *ngIf="usuarioRol === 'PACIENTE'">
       <ion-card-header>
         <ion-card-title
           style="font-family: 'Kanit', sans-serif; font-weight: 400"

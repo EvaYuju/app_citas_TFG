@@ -3,6 +3,10 @@ import { NavController } from '@ionic/angular';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
+import { UsuariosService } from '../services/usuarios.service';
+import { PacientesService } from './../services/pacientes.service';
+import { Usuarios } from '../models/usuarios';
+
 
 @Component({
   selector: 'app-home',
@@ -14,10 +18,17 @@ export class HomePage {
     private navCtrl: NavController,
     private auth: AuthService,
     private router: Router,
-    private menuController: MenuController
-  ) {}
+    private menuController: MenuController,
+    private pacientesService: PacientesService,
+    private authService: AuthService,
+    private usuariosService: UsuariosService
+  ) {   
+    this.obtenerUsuarioRol();
+  }
 
   isMenuOpen: boolean = false;
+  usuarioRol: string = ''; // Agrega esta línea para almacenar el rol del usuario
+  dniUsuarioActual: string = '';
 
   @HostListener('document:click', ['$event'])
   handleClick(event: MouseEvent) {
@@ -27,6 +38,26 @@ export class HomePage {
       this.menuController.close();
       this.isMenuOpen = false;
     }
+  }
+
+  obtenerUsuarioRol() {
+    this.authService.getUsuarioEmail().subscribe((correo) => {
+      if (correo) {
+        this.usuariosService.getUsuarioRol(correo).then((rol) => {
+          this.usuarioRol = rol || '';
+  
+          // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+          if (this.usuarioRol === 'PACIENTE') {
+            this.pacientesService.getPacientePorCorreo(correo).then((paciente) => {
+              if (paciente) {
+                this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+
+              }
+            });
+          }
+        });
+      }
+    });
   }
 
   toggleMenu() {
@@ -71,7 +102,7 @@ export class HomePage {
     this.auth.logout();
     window.location.reload();
     this.router.navigate(['/landing-page']);
-    window.location.reload();
+    //window.location.reload();
   }
 
   navigateToLogOut() {

@@ -86,8 +86,6 @@ export class CitasComponent implements OnInit {
     this.obtenerUsuarioRol(); // Obtener el rol del usuario
     this.obtenerUsuarioDNI(); // Obtener el DNI del paciente logueado
     
-    
-    
   }
   // ***
   obtenerUsuarioRol() {

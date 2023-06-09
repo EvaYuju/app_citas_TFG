@@ -4,7 +4,8 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
-    <ion-title style="font-family: 'Kanit', sans-serif; font-weight: 400">Citas</ion-title>
+    <ion-title style="font-family: 'Kanit', sans-serif; font-weight: 400">
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -16,6 +17,8 @@
       <ion-card-title>
         <ng-container *ngIf="usuarioRol === 'MEDICO'">Agregar cita</ng-container>
     <ng-container *ngIf="usuarioRol === 'PACIENTE'">Solicitar cita</ng-container>
+    <ion-card-subtitle>Rellene el formulario de cita</ion-card-subtitle>
+
       </ion-card-title>
     </ion-card-header>
 
