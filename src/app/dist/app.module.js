@@ -43,7 +43,7 @@ var AppModule = /** @class */ (function () {
                 firestore_1.provideFirestore(function () { return firestore_1.getFirestore(); }),
                 auth_guard_1.AuthGuardModule,
                 forms_1.FormsModule,
-                forms_1.ReactiveFormsModule,
+                forms_1.ReactiveFormsModule
             ],
             providers: [pacientes_service_1.PacientesService, { provide: router_1.RouteReuseStrategy, useClass: angular_1.IonicRouteStrategy }],
             bootstrap: [app_component_1.AppComponent]

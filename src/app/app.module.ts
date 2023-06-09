@@ -37,7 +37,7 @@ import { PacientesService } from './services/pacientes.service';
   provideFirestore(() => getFirestore()),
   AuthGuardModule,
   FormsModule,
-  ReactiveFormsModule,
+  ReactiveFormsModule
   ],
   providers: [ PacientesService, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

@@ -17,7 +17,7 @@ var specialties_component_1 = require("./specialties/specialties.component");
 var doctores_component_1 = require("./doctores/doctores.component");
 var landing_page_component_1 = require("./landing-page/landing-page.component");
 var mis_citas_component_1 = require("./mis-citas/mis-citas.component");
-var redirectUnauthorizedToLogin = function () { return auth_guard_1.redirectUnauthorizedTo(['login']); };
+var redirectUnauthorizedToLogin = function () { return auth_guard_1.redirectUnauthorizedTo(['landing-page']); };
 var redirectLoggedInToHome = function () { return auth_guard_1.redirectLoggedInTo(['home']); };
 var routes = [
     {
@@ -59,7 +59,8 @@ var routes = [
         path: 'citas',
         component: citas_component_1.CitasComponent,
         canActivate: [auth_guard_1.AuthGuard],
-        data: { authGuardPipe: redirectUnauthorizedToLogin }
+        data: [{ authGuardPipe: redirectUnauthorizedToLogin },
+            { authGuardPipe: redirectUnauthorizedToLogin }]
     },
     {
         path: 'pacientes',

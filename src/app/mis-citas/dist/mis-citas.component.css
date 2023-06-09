@@ -11,3 +11,42 @@
   color: gray;
   margin-top: 16px;
 }
+
+.cita-confirmada {
+  background-color: #96e696;
+}
+
+.cita-pendiente {
+  background-color: #ffff90;
+}
+
+.cita-denegada {
+  background-color: #ee4d4d;
+}
+
+.custom-item {
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.custom-label {
+  color: #3a3535;
+  font-size: 18px;
+  text-align: center;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.custom-button {
+  --background: #ff0000;
+  --color: #ffffff;
+  --border-radius: 8px;
+}

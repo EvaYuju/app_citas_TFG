@@ -11,19 +11,35 @@
 
 <ion-content class="ion-padding">
   <div class="search-bar-container">
-    <ion-searchbar [(ngModel)]="pacienteId" (ionChange)="buscarCitasPorPacienteID()"
-      placeholder="Escriba el DNI del paciente"></ion-searchbar>
+    <ion-searchbar [(ngModel)]="pacienteId" (ionChange)="buscarCitasPorPacienteID()" placeholder="Escriba el DNI del paciente"></ion-searchbar>
+    <ion-button shape="round" (click)="buscarCitasPorPacienteID()">Buscar Citas</ion-button>
   </div>
 
   <div class="citas-container" *ngIf="citasPaciente.length > 0">
     <ion-list>
-      <ion-item *ngFor="let cita of citasPaciente">
-        <ion-label>
-          <h2>{{ cita.fecha | date }}</h2>
+      <ion-button shape="round" fill="outline" (click)="ordenarCitasPorEstado()">Ordenar por Estado</ion-button>
+      <ion-item *ngFor="let cita of citasPaciente" class="custom-item">
+        <ion-label [ngStyle]="{ 'margin-right': '10px' }">
+          <h1>Cita: {{ cita.especialidad }}</h1>
+          <h2>Fecha:{{ cita.fecha | date }}</h2>
           <p>Hora: {{ cita.hora }}</p>
           <p>Motivo: {{ cita.motivo }}</p>
           <p>Estado: {{ cita.estado }}</p>
+          <ion-item [ngStyle]="{ 'width': '260px' }">
+            <ion-label class="custom-label" [ngStyle]="{ 'background-color': getColorByEstado(cita.estado), 'margin-right': '10px' }">Estado: {{ cita.estado }}</ion-label>
+          </ion-item>
         </ion-label>
+       
+        <ion-item class="estado-item"> <!--solo médicos-->
+          <ion-label position="floating">Cambiar estado</ion-label>
+          <ion-select [(ngModel)]="nuevoEstado" (ionChange)="modificarEstadoCita(cita)">
+            <ion-select-option value="pendiente">Pendiente</ion-select-option>
+            <ion-select-option value="confirmada">Confirmada</ion-select-option>
+            <ion-select-option value="denegada">Denegada</ion-select-option>
+          </ion-select>
+          
+        </ion-item>
+
       </ion-item>
     </ion-list>
   </div>

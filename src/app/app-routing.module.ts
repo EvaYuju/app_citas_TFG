@@ -54,8 +54,8 @@ const routes: Routes = [
     path: 'citas',
     component: CitasComponent,
     canActivate: [AuthGuard],
-    data: [{ authGuardPipe: redirectUnauthorizedToLogin }]
-  },
+    data: [{ authGuardPipe: redirectUnauthorizedToLogin },
+      { authGuardPipe: redirectUnauthorizedToLogin }]  },
   {
     path: 'pacientes',
     component: PacientesComponent,

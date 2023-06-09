@@ -55,4 +55,14 @@ user$ = this.auth.authState$.pipe( // Trae el estado de la sesión
     }
     return [];
   }
+
+    /*
+  logout(){
+    localStorage.removeItem('ROL');
+    this.auth.logout();
+    this.router.navigate(['/landing-page']);
+  }
+  */
+
+  
 }
