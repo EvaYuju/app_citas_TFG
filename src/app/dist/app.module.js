@@ -27,6 +27,9 @@ var citas_component_1 = require("./citas/citas.component");
 var landing_page_component_1 = require("./landing-page/landing-page.component");
 var mis_citas_component_1 = require("./mis-citas/mis-citas.component");
 var pacientes_service_1 = require("./services/pacientes.service");
+var citas_service_1 = require("./services/citas.service");
+var usuarios_service_1 = require("./services/usuarios.service");
+var auth_service_1 = require("./services/auth.service");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -45,7 +48,12 @@ var AppModule = /** @class */ (function () {
                 forms_1.FormsModule,
                 forms_1.ReactiveFormsModule
             ],
-            providers: [pacientes_service_1.PacientesService, { provide: router_1.RouteReuseStrategy, useClass: angular_1.IonicRouteStrategy }],
+            providers: [
+                citas_service_1.CitasService,
+                usuarios_service_1.UsuariosService,
+                pacientes_service_1.PacientesService,
+                auth_service_1.AuthService, { provide: router_1.RouteReuseStrategy, useClass: angular_1.IonicRouteStrategy }
+            ],
             bootstrap: [app_component_1.AppComponent]
         })
     ], AppModule);

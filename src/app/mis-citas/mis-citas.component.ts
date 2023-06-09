@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Citas } from './../models/citas';
 import { CitasService } from '../services/citas.service';
+import { UsuariosService } from '../services/usuarios.service';
+import { PacientesService } from './../services/pacientes.service';
+import { Usuarios } from '../models/usuarios';
+import { AuthService } from './../services/auth.service';
+import { take } from 'rxjs/operators';
 
 
 @Component({
@@ -12,13 +17,108 @@ export class MisCitasComponent implements OnInit {
   citasPaciente: Citas[] = [];
   dni: string = '';
   pacienteId: string = '';
-  nuevoEstado: string = '';
+  nuevoEstado: string = ''; // Almacenar el cambio del estado
+  usuarioRol: string = ''; // Agrega esta línea para almacenar el rol del usuario
+  usuarioPacienteDni: string = '';
+  dniUsuarioActual: string = '';
 
-  constructor(private citasService: CitasService) { }
+  constructor(
+    private citasService: CitasService,
+    private usuariosService: UsuariosService,
+    private pacientesService: PacientesService,
+    private authService: AuthService
+    ) { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.obtenerUsuarioRol().then(() => {
+      this.obtenerUsuarioDNI().then(() => {
+        this.buscarCitas();
+      });
+    });
 
+  }
+
+  // ROL PACIENTE 
+  obtenerUsuarioDNI() {
+    return this.authService.getUsuarioEmail().pipe(take(1)).toPromise().then((correo) => {
+      if (correo) {
+        if (this.usuarioRol === 'PACIENTE') {
+          return this.pacientesService.getPacientePorCorreo(correo).then((paciente) => {
+            if (paciente) {
+              this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+            }
+            return null; // Add a return statement here
+          });
+        }
+      }
+      return null; // Add a return statement here
+    });
+  }
+  
+  obtenerUsuarioRol() {
+    return this.authService.getUsuarioEmail().pipe(take(1)).toPromise().then((correo) => {
+      if (correo) {
+        return this.usuariosService.getUsuarioRol(correo).then((rol) => {
+          this.usuarioRol = rol || '';
+  
+          // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+          if (this.usuarioRol === 'PACIENTE') {
+            return this.pacientesService.getPacientePorCorreo(correo).then((paciente) => {
+              if (paciente) {
+                this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+              }
+              return rol;
+            });
+          } else {
+            return rol;
+          }
+        });
+      }
+      return null; // Add a return statement here
+    });
+  }
+  
+
+  
+  
+  
+  
+  
+  
+
+  getUsuarioRol(correo: string): Promise<string | null> {
+    return this.usuariosService.getUsuarioRol(correo).then((rol) => {
+      this.usuarioRol = rol || '';
+      // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+      if (this.usuarioRol === 'PACIENTE') {
+        return this.pacientesService.getPacientePorCorreo(correo).then((paciente) => {
+          if (paciente) {
+            this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+          }
+          return rol;
+        });
+      } else {
+        return rol;
+      }
+    });
+  }
+
+  buscarCitas() {
+    if (this.dniUsuarioActual !== '') {
+      this.citasService.buscarCitasPorPacienteID(this.dniUsuarioActual).then((citas) => {
+        this.citasPaciente = citas;
+        console.log("Citas del paciente:", this.citasPaciente);
+
+      });
+    } else {
+      this.citasPaciente = [];
+    }
+  }
+
+  // ROL MEDICO 
   buscarCitasPorDNI() {
+    console.log("Buscar citas se ha ejecutado correctamente.MED");
+
     if (this.dni !== '') {
       this.citasService.buscarCitasPorDNI(this.dni).then((citas) => {
         this.citasPaciente = citas;
@@ -28,15 +128,19 @@ export class MisCitasComponent implements OnInit {
     }
   }
 
-  buscarCitasPorPacienteID() {
+  buscarCitasPorPacienteID() { 
     if (this.pacienteId !== '') {
       this.citasService.buscarCitasPorPacienteID(this.pacienteId).then((citas) => {
         this.citasPaciente = citas;
+                console.log("Citas del paciente:", this.citasPaciente);
+
       });
     } else {
       this.citasPaciente = [];
     }
   }
+
+  // Métodos comúnes
 
   getColorByEstado(estado: string): string {
     switch (estado) {

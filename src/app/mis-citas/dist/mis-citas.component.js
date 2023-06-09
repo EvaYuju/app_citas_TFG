@@ -8,17 +8,103 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 exports.MisCitasComponent = void 0;
 var core_1 = require("@angular/core");
+var operators_1 = require("rxjs/operators");
 var MisCitasComponent = /** @class */ (function () {
-    function MisCitasComponent(citasService) {
+    function MisCitasComponent(citasService, usuariosService, pacientesService, authService) {
         this.citasService = citasService;
+        this.usuariosService = usuariosService;
+        this.pacientesService = pacientesService;
+        this.authService = authService;
         this.citasPaciente = [];
         this.dni = '';
         this.pacienteId = '';
-        this.nuevoEstado = '';
+        this.nuevoEstado = ''; // Almacenar el cambio del estado
+        this.usuarioRol = ''; // Agrega esta línea para almacenar el rol del usuario
+        this.usuarioPacienteDni = '';
+        this.dniUsuarioActual = '';
     }
-    MisCitasComponent.prototype.ngOnInit = function () { };
+    MisCitasComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.obtenerUsuarioRol().then(function () {
+            _this.obtenerUsuarioDNI().then(function () {
+                _this.buscarCitas();
+            });
+        });
+    };
+    // ROL PACIENTE 
+    MisCitasComponent.prototype.obtenerUsuarioDNI = function () {
+        var _this = this;
+        return this.authService.getUsuarioEmail().pipe(operators_1.take(1)).toPromise().then(function (correo) {
+            if (correo) {
+                if (_this.usuarioRol === 'PACIENTE') {
+                    return _this.pacientesService.getPacientePorCorreo(correo).then(function (paciente) {
+                        if (paciente) {
+                            _this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+                        }
+                        return null; // Add a return statement here
+                    });
+                }
+            }
+            return null; // Add a return statement here
+        });
+    };
+    MisCitasComponent.prototype.obtenerUsuarioRol = function () {
+        var _this = this;
+        return this.authService.getUsuarioEmail().pipe(operators_1.take(1)).toPromise().then(function (correo) {
+            if (correo) {
+                return _this.usuariosService.getUsuarioRol(correo).then(function (rol) {
+                    _this.usuarioRol = rol || '';
+                    // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+                    if (_this.usuarioRol === 'PACIENTE') {
+                        return _this.pacientesService.getPacientePorCorreo(correo).then(function (paciente) {
+                            if (paciente) {
+                                _this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+                            }
+                            return rol;
+                        });
+                    }
+                    else {
+                        return rol;
+                    }
+                });
+            }
+            return null; // Add a return statement here
+        });
+    };
+    MisCitasComponent.prototype.getUsuarioRol = function (correo) {
+        var _this = this;
+        return this.usuariosService.getUsuarioRol(correo).then(function (rol) {
+            _this.usuarioRol = rol || '';
+            // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+            if (_this.usuarioRol === 'PACIENTE') {
+                return _this.pacientesService.getPacientePorCorreo(correo).then(function (paciente) {
+                    if (paciente) {
+                        _this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+                    }
+                    return rol;
+                });
+            }
+            else {
+                return rol;
+            }
+        });
+    };
+    MisCitasComponent.prototype.buscarCitas = function () {
+        var _this = this;
+        if (this.dniUsuarioActual !== '') {
+            this.citasService.buscarCitasPorPacienteID(this.dniUsuarioActual).then(function (citas) {
+                _this.citasPaciente = citas;
+                console.log("Citas del paciente:", _this.citasPaciente);
+            });
+        }
+        else {
+            this.citasPaciente = [];
+        }
+    };
+    // ROL MEDICO 
     MisCitasComponent.prototype.buscarCitasPorDNI = function () {
         var _this = this;
+        console.log("Buscar citas se ha ejecutado correctamente.MED");
         if (this.dni !== '') {
             this.citasService.buscarCitasPorDNI(this.dni).then(function (citas) {
                 _this.citasPaciente = citas;
@@ -33,12 +119,14 @@ var MisCitasComponent = /** @class */ (function () {
         if (this.pacienteId !== '') {
             this.citasService.buscarCitasPorPacienteID(this.pacienteId).then(function (citas) {
                 _this.citasPaciente = citas;
+                console.log("Citas del paciente:", _this.citasPaciente);
             });
         }
         else {
             this.citasPaciente = [];
         }
     };
+    // Métodos comúnes
     MisCitasComponent.prototype.getColorByEstado = function (estado) {
         switch (estado) {
             case 'confirmada':

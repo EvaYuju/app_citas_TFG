@@ -23,7 +23,9 @@ import { CitasComponent } from './citas/citas.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { MisCitasComponent } from './mis-citas/mis-citas.component';
 import { PacientesService } from './services/pacientes.service';
-
+import { CitasService } from './services/citas.service';
+import { UsuariosService } from './services/usuarios.service';
+import { AuthService } from './services/auth.service';
 
 
 @NgModule({
@@ -39,7 +41,11 @@ import { PacientesService } from './services/pacientes.service';
   FormsModule,
   ReactiveFormsModule
   ],
-  providers: [ PacientesService, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [ 
+    CitasService,
+    UsuariosService,
+    PacientesService,
+    AuthService, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 
 })

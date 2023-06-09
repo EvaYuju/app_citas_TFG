@@ -103,7 +103,7 @@
               class="icono"
             />
           </ion-thumbnail>
-          Consulta todas las especialidades médicas y nuestros doctores
+          Consulta todas las especialidades médicas que ofrecemos y nuestros doctores
           especialistas.
         </ion-item>
       </ion-card-content>
@@ -130,7 +130,7 @@
             Crear, modificar y borrar citas de los pacientes.
           </ng-container>
           <ng-container *ngIf="usuarioRol === 'PACIENTE'">
-            ¿Necesitas programar una cita con nosotros? Haz clic aquí para
+            ¿Quieres programar una cita con nosotros? Haz clic aquí para
             rellenar el formulario.  
           </ng-container>
   
@@ -141,9 +141,14 @@
     <ion-card (click)="navigateToMisCitas()">
       <ion-card-header>
         <ion-card-title
-          style="font-family: 'Kanit', sans-serif; font-weight: 400"
-          >Ver citas</ion-card-title
-        >
+          style="font-family: 'Kanit', sans-serif; font-weight: 400">
+          <ng-container *ngIf="usuarioRol === 'MEDICO'">
+            Ver citas
+          </ng-container>
+          <ng-container *ngIf="usuarioRol === 'PACIENTE'">
+            Mis citas  
+          </ng-container>
+          </ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <ion-item lines="none">
@@ -154,7 +159,7 @@
             Consulte y  gestione el estado las citas de los pacientes.
           </ng-container>
           <ng-container *ngIf="usuarioRol === 'PACIENTE'">
-            Consulte sus citas y el estadoaquí .
+            Aquí puede consultar sus citas y ver si están pendientes, confirmadas o denegadas.
           </ng-container>
         </ion-item>
       </ion-card-content>
