@@ -158,7 +158,7 @@ var CitasComponent = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         if (!this.camposValidos()) {
-                            this.mensaje = 'Por favor, completa todos los campos.';
+                            this.mensaje = 'Por favor, complete todos los campos.';
                             return [2 /*return*/];
                         }
                         // Obtener la hora seleccionada del componente ion-select y asignarla al campo 'hora'

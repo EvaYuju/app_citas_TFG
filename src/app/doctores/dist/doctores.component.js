@@ -35,6 +35,7 @@ var DoctoresComponent = /** @class */ (function () {
             horario: this.generarHorario(this.horaInicio, this.horaFinal)
         };
         this.mensaje = '';
+        this.mensajeBusq = '';
         this.doctorsEncontrados = [];
         this.doctorsEncontradosDNI = [];
         this.doctorSeleccionado = null;
@@ -81,14 +82,14 @@ var DoctoresComponent = /** @class */ (function () {
             .then(function (doctors) {
             _this.doctorsEncontrados = doctors;
             if (doctors.length === 0) {
-                _this.mensaje = 'No se encontraron doctores con esta especialidad.';
+                _this.mensajeBusq = 'No se encontraron doctores con esta especialidad.';
                 _this.limpiarFormulario();
             }
             else {
-                _this.mensaje = '';
+                _this.mensajeBusq = '';
             }
         })["catch"](function (error) {
-            _this.mensaje = 'Error al buscar el doctor: ' + error;
+            _this.mensajeBusq = 'Error al buscar el doctor: ' + error;
             _this.doctorsEncontrados = [];
         });
     };
@@ -98,13 +99,13 @@ var DoctoresComponent = /** @class */ (function () {
             .then(function (doctors) {
             _this.doctorsEncontrados = doctors;
             if (doctors.length === 0) {
-                _this.mensaje = 'No se encontraron doctores con este DNI.';
+                _this.mensajeBusq = 'No se encontraron doctores con este DNI.';
             }
             else {
-                _this.mensaje = '';
+                _this.mensajeBusq = '';
             }
         })["catch"](function (error) {
-            _this.mensaje = 'Error al buscar el doctor: ' + error;
+            _this.mensajeBusq = 'Error al buscar el doctor: ' + error;
             _this.doctorsEncontradosDNI = [];
         });
     };

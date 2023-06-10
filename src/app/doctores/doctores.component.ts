@@ -28,6 +28,8 @@ export class DoctoresComponent implements OnInit {
   rol: any;
 
   mensaje: string = '';
+  mensajeBusq: string = '';
+
   horaInicio?: number;
   horaFinal?: number;
   doctorsEncontrados: Doctor[] = [];
@@ -86,14 +88,14 @@ export class DoctoresComponent implements OnInit {
       .then((doctors) => {
         this.doctorsEncontrados = doctors;
         if (doctors.length === 0) {
-          this.mensaje = 'No se encontraron doctores con esta especialidad.';
+          this.mensajeBusq = 'No se encontraron doctores con esta especialidad.';
           this.limpiarFormulario();
         } else {
-          this.mensaje = '';
+          this.mensajeBusq = '';
         }
       })
       .catch((error) => {
-        this.mensaje = 'Error al buscar el doctor: ' + error;
+        this.mensajeBusq = 'Error al buscar el doctor: ' + error;
         this.doctorsEncontrados = [];
       });
   }
@@ -103,13 +105,13 @@ export class DoctoresComponent implements OnInit {
     .then((doctors) => {
     this.doctorsEncontrados = doctors;
     if (doctors.length === 0) {
-    this.mensaje = 'No se encontraron doctores con este DNI.';
+    this.mensajeBusq = 'No se encontraron doctores con este DNI.';
     } else {
-    this.mensaje = '';
+    this.mensajeBusq = '';
     }
     })
     .catch((error) => {
-    this.mensaje = 'Error al buscar el doctor: ' + error;
+    this.mensajeBusq = 'Error al buscar el doctor: ' + error;
     this.doctorsEncontradosDNI = [];
     });
     }

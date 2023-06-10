@@ -18,8 +18,8 @@
     <ion-card-header>
       <ion-card-title>
         <ng-container *ngIf="usuarioRol === 'MEDICO'">Agregar cita</ng-container>
-    <ng-container *ngIf="usuarioRol === 'PACIENTE'">Solicitar cita</ng-container>
-    <ion-card-subtitle>Rellene el formulario de cita</ion-card-subtitle>
+    <ng-container *ngIf="usuarioRol === 'PACIENTE'">Formulario de solicitud de cita</ng-container>
+    <ion-card-subtitle>Rellene todos los campos para solicitar cita</ion-card-subtitle>
 
       </ion-card-title>
     </ion-card-header>
@@ -57,8 +57,8 @@
         {{ mensajeDoc }}
       </div>
       <!-- Doctores encontrados -->
-      <ion-item>
-        <ion-label position="floating">Doctor</ion-label>
+      <ion-item *ngIf="doctors.length > 0">
+        <ion-label position="floating">Elija un doctor de esta especialidad</ion-label>
         <ion-select [(ngModel)]="cita.doctorId">
           <ion-select-option *ngFor="let doctor of doctors" [value]="doctor.nombre">{{ doctor.nombre }}
           </ion-select-option>
@@ -87,20 +87,17 @@
         <ion-select [(ngModel)]="cita.estado">
           <ion-select-option value="pendiente" *ngIf="usuarioRol === 'PACIENTE'">Pendiente</ion-select-option>
           <ion-select-option value="pendiente" *ngIf="usuarioRol === 'MEDICO'">Pendiente</ion-select-option>
-          <ion-select-option value="confirmada" *ngIf="usuarioRol === 'MEDICO'">Confirmada</ion-select-option>
-          <ion-select-option value="denegada" *ngIf="usuarioRol === 'MEDICO'">Denegada</ion-select-option>
+          <ion-select-option value="confirmada" *ngIf="usuarioRol === 'MEDICO'">Confirmar</ion-select-option>
+          <ion-select-option value="denegada" *ngIf="usuarioRol === 'MEDICO'">Rechazar</ion-select-option>
         </ion-select>
       </ion-item>
-      
-
-
-
+    
       <ion-item>
         <ion-label position="floating">Comentario</ion-label>
         <ion-input type="email" [(ngModel)]="cita.comentario"></ion-input>
       </ion-item>
     </ion-card-content>
-    <ion-button expand="full" (click)="agregarCita()">Agregar Cita</ion-button>
+    <ion-button expand="full" (click)="agregarCita()">Pedir cita</ion-button>
   </ion-card>
 
   <ion-card color="primary">
@@ -182,7 +179,6 @@
         <ion-label position="floating">motivo</ion-label>
         <ion-input [(ngModel)]="citaSeleccionada.motivo"></ion-input>
       </ion-item>
-      <!--<ion-item *ngIf="usuarioRol === 'ADMIN' || usuarioRol === 'DOCTOR'"> pendiente-->
       <ion-item>
         <ion-label position="floating">Estado</ion-label>
         <ion-item class="estado-item">

@@ -144,7 +144,7 @@ export class CitasComponent implements OnInit {
 
   async agregarCita() {
     if (!this.camposValidos()) {
-      this.mensaje = 'Por favor, completa todos los campos.';
+      this.mensaje = 'Por favor, complete todos los campos.';
       return;
     }
   
