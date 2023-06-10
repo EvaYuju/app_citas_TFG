@@ -5,6 +5,8 @@
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
     <ion-title style="font-family: 'Kanit', sans-serif; font-weight: 400">
+      <ng-container *ngIf="usuarioRol === 'MEDICO'">Agregar cita</ng-container>
+    <ng-container *ngIf="usuarioRol === 'PACIENTE'">Solicitar cita</ng-container>
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -64,12 +66,12 @@
       </ion-item>
 
       <ion-item>
-        <ion-label position="floating">Fecha</ion-label>
+        <ion-label position="floating">Escoja una fecha</ion-label>
         <ion-input type="date" [(ngModel)]="cita.fecha"></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label>Horario</ion-label>
+        <ion-label>Elija un horario</ion-label>
         <ion-select [(ngModel)]="cita.hora">
           <ion-select-option *ngFor="let horario of horariosDoctor" [value]="horario">{{ horario }}</ion-select-option>
         </ion-select>

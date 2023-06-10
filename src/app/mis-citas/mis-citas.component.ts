@@ -21,6 +21,8 @@ export class MisCitasComponent implements OnInit {
   usuarioRol: string = ''; // Agrega esta línea para almacenar el rol del usuario
   usuarioPacienteDni: string = '';
   dniUsuarioActual: string = '';
+  //cita: Citas;
+
 
   constructor(
     private citasService: CitasService,
@@ -77,13 +79,6 @@ export class MisCitasComponent implements OnInit {
       return null; // Add a return statement here
     });
   }
-  
-
-  
-  
-  
-  
-  
   
 
   getUsuarioRol(correo: string): Promise<string | null> {
@@ -184,14 +179,16 @@ export class MisCitasComponent implements OnInit {
   }
 
   modificarEstadoCita(cita: Citas) {
-    cita.estado = this.nuevoEstado;
-    this.citasService.modificarCita(cita)
-      .then(() => {
-        console.log('Estado de la cita modificado exitosamente');
-      })
-      .catch((error) => {
-        console.error('Error al modificar el estado de la cita:', error);
-      });
+    if (cita) {
+      cita.estado = this.nuevoEstado;
+      this.citasService
+        .modificarCita(cita)
+        .then(() => {
+          console.log('Estado de la cita modificado exitosamente');
+        })
+        .catch((error) => {
+          console.error('Error al modificar el estado de la cita:', error);
+        });
+    }
   }
-  
 }

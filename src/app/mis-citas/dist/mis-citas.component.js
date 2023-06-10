@@ -10,6 +10,7 @@ exports.MisCitasComponent = void 0;
 var core_1 = require("@angular/core");
 var operators_1 = require("rxjs/operators");
 var MisCitasComponent = /** @class */ (function () {
+    //cita: Citas;
     function MisCitasComponent(citasService, usuariosService, pacientesService, authService) {
         this.citasService = citasService;
         this.usuariosService = usuariosService;
@@ -168,13 +169,16 @@ var MisCitasComponent = /** @class */ (function () {
         }
     };
     MisCitasComponent.prototype.modificarEstadoCita = function (cita) {
-        cita.estado = this.nuevoEstado;
-        this.citasService.modificarCita(cita)
-            .then(function () {
-            console.log('Estado de la cita modificado exitosamente');
-        })["catch"](function (error) {
-            console.error('Error al modificar el estado de la cita:', error);
-        });
+        if (cita) {
+            cita.estado = this.nuevoEstado;
+            this.citasService
+                .modificarCita(cita)
+                .then(function () {
+                console.log('Estado de la cita modificado exitosamente');
+            })["catch"](function (error) {
+                console.error('Error al modificar el estado de la cita:', error);
+            });
+        }
     };
     MisCitasComponent = __decorate([
         core_1.Component({
