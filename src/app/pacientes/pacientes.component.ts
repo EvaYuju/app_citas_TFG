@@ -1,3 +1,4 @@
+import { CommonModule, DatePipe } from '@angular/common';
 import { Pacientes } from './../models/pacientes';
 import { Component, OnInit } from '@angular/core';
 import { PacientesService } from '../services/pacientes.service';
@@ -29,13 +30,18 @@ export class PacientesComponent implements OnInit{
   pacienteSeleccionado: Pacientes | null = null;
 
   dniBuscar: string = ''; // Agrega esta línea para definir la propiedad dniBuscar
+  minDate: string = '';
 
 
   constructor(private pacientesService: PacientesService) { }
 
   ngOnInit() {
     //PARA AUTHENTICATION
+    this.pacienteSeleccionado = this.paciente;
     this.rol = localStorage.getItem('ROL');
+
+    const currentDate = new Date();
+    this.minDate = this.getFormattedDate(currentDate);
   }
   //PARA AUTHENTICATION
   isAuthenticated(rol:string){
@@ -44,7 +50,7 @@ export class PacientesComponent implements OnInit{
 
   agregarPaciente() {
     if (!this.camposValidos()) {
-      this.mensaje = 'Por favor, completa todos los campos.';
+      this.mensaje = 'Por favor, complete todos los campos.';
       return;
     }
 
@@ -101,7 +107,7 @@ export class PacientesComponent implements OnInit{
     }
     }
 
-    borrarPaciente(id: string) {
+  borrarPaciente(id: string) {
     this.pacientesService.borrarPaciente(id)
     .then(() => {
     this.mensaje = 'Paciente eliminado correctamente.';
@@ -110,7 +116,16 @@ export class PacientesComponent implements OnInit{
     .catch((error) => {
     this.mensaje = 'Error al eliminar el paciente: ' + error;
     });
-    }
+  }
+
+  getFormattedDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    const hours = ('0' + date.getHours()).slice(-2);
+    const minutes = ('0' + date.getMinutes()).slice(-2);
+    return `${year}-${month}-${day}T${hours}:${minutes}:00.000Z`;
+  }
 
   camposValidos() {
     return (

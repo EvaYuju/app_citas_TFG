@@ -169,7 +169,11 @@
       </ion-item>
       <ion-item>
         <ion-label position="floating">Fecha</ion-label>
-        <ion-input type="date" [(ngModel)]="citaSeleccionada.fecha" [value]="citaSeleccionada.fecha | date:'yyyy-MM-dd'"></ion-input>
+        <ion-input 
+        type="date" 
+        [(ngModel)]="citaSeleccionada.fecha" 
+        [value]="citaSeleccionada.fecha | date:'yyyy-MM-dd'">
+      </ion-input>
       </ion-item>
       <ion-item>
         <ion-label position="floating">Hora</ion-label>

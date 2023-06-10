@@ -131,9 +131,10 @@
       <ion-item>
         <ion-label position="floating">Fecha de Nacimiento</ion-label>
         <ion-input
-          type="date"
-          [(ngModel)]="pacienteSeleccionado.fechaNacimiento"
-        ></ion-input>
+          type="date" 
+          [(ngModel)]="pacienteSeleccionado.fechaNacimiento" 
+          [value]="pacienteSeleccionado.fechaNacimiento | date:'yyyy-MM-dd'">
+        </ion-input>
       </ion-item>
       <ion-item>
         <ion-label position="floating">Dirección</ion-label>

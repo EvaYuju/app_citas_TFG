@@ -37,10 +37,14 @@ var PacientesComponent = /** @class */ (function () {
         this.pacientesEncontrados = [];
         this.pacienteSeleccionado = null;
         this.dniBuscar = ''; // Agrega esta línea para definir la propiedad dniBuscar
+        this.minDate = '';
     }
     PacientesComponent.prototype.ngOnInit = function () {
         //PARA AUTHENTICATION
+        this.pacienteSeleccionado = this.paciente;
         this.rol = localStorage.getItem('ROL');
+        var currentDate = new Date();
+        this.minDate = this.getFormattedDate(currentDate);
     };
     //PARA AUTHENTICATION
     PacientesComponent.prototype.isAuthenticated = function (rol) {
@@ -49,7 +53,7 @@ var PacientesComponent = /** @class */ (function () {
     PacientesComponent.prototype.agregarPaciente = function () {
         var _this = this;
         if (!this.camposValidos()) {
-            this.mensaje = 'Por favor, completa todos los campos.';
+            this.mensaje = 'Por favor, complete todos los campos.';
             return;
         }
         this.pacientesService.getPacientePorDNI(this.paciente.dni)
@@ -110,6 +114,14 @@ var PacientesComponent = /** @class */ (function () {
         })["catch"](function (error) {
             _this.mensaje = 'Error al eliminar el paciente: ' + error;
         });
+    };
+    PacientesComponent.prototype.getFormattedDate = function (date) {
+        var year = date.getFullYear();
+        var month = ('0' + (date.getMonth() + 1)).slice(-2);
+        var day = ('0' + date.getDate()).slice(-2);
+        var hours = ('0' + date.getHours()).slice(-2);
+        var minutes = ('0' + date.getMinutes()).slice(-2);
+        return year + "-" + month + "-" + day + "T" + hours + ":" + minutes + ":00.000Z";
     };
     PacientesComponent.prototype.camposValidos = function () {
         return (this.paciente.dni &&
