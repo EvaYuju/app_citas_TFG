@@ -151,9 +151,43 @@ var CitasComponent = /** @class */ (function () {
             }
         });
     };
-    CitasComponent.prototype.agregarCita = function () {
+    CitasComponent.prototype.agregarCitaD = function () {
         return __awaiter(this, void 0, void 0, function () {
             var docRef, error_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!this.camposValidos()) {
+                            this.mensaje = 'Por favor, complete todos los campos.';
+                            return [2 /*return*/];
+                        }
+                        // Obtener la hora seleccionada del componente ion-select y asignarla al campo 'hora'
+                        this.cita.hora = this.cita.hora.substring(0, 5);
+                        if (this.usuarioRol !== 'MEDICO') {
+                            this.mensaje = 'Acceso no autorizado. Solo los médicos pueden agregar citas.';
+                            return [2 /*return*/];
+                        }
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, firestore_1.addDoc(firestore_1.collection(this.firestore, 'citas'), this.cita)];
+                    case 2:
+                        docRef = _a.sent();
+                        this.mensajeID = 'Cita agregada correctamente. ID de la cita: ' + docRef.id;
+                        this.limpiarFormulario();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_1 = _a.sent();
+                        this.mensaje = 'Error al agregar la cita: ' + error_1;
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    CitasComponent.prototype.agregarCitaP = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var docRef, error_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -175,8 +209,8 @@ var CitasComponent = /** @class */ (function () {
                         this.limpiarFormulario();
                         return [3 /*break*/, 4];
                     case 3:
-                        error_1 = _a.sent();
-                        this.mensaje = 'Error al agregar la cita: ' + error_1;
+                        error_2 = _a.sent();
+                        this.mensaje = 'Error al agregar la cita: ' + error_2;
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/];
                 }

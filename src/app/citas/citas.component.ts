@@ -142,7 +142,34 @@ export class CitasComponent implements OnInit {
   
 
 
-  async agregarCita() {
+  async agregarCitaD() {
+    if (!this.camposValidos()) {
+      this.mensaje = 'Por favor, complete todos los campos.';
+      return;
+    }
+  
+    // Obtener la hora seleccionada del componente ion-select y asignarla al campo 'hora'
+    this.cita.hora = this.cita.hora.substring(0, 5);
+    
+    if (this.usuarioRol !== 'MEDICO') {
+      this.mensaje = 'Acceso no autorizado. Solo los médicos pueden agregar citas.';
+      return;
+    }
+  
+    // Guardar el dniUsuarioActual en cita.medicoId
+    //this.cita.pacienteId = this.dniUsuarioActual;
+  
+    // Agregar la cita a Firestore
+    try {
+      const docRef = await addDoc(collection(this.firestore, 'citas'), this.cita);
+      this.mensajeID = 'Cita agregada correctamente. ID de la cita: ' + docRef.id;
+      this.limpiarFormulario();
+    } catch (error) {
+      this.mensaje = 'Error al agregar la cita: ' + error;
+    }
+  }
+
+  async agregarCitaP() {
     if (!this.camposValidos()) {
       this.mensaje = 'Por favor, complete todos los campos.';
       return;
@@ -162,7 +189,7 @@ export class CitasComponent implements OnInit {
     this.mensaje = 'Error al agregar la cita: ' + error;
   }
   }
-    
+  
 
   buscarCitaPorID(id: string) {
     this.citasService.buscarCitaPorID(id)

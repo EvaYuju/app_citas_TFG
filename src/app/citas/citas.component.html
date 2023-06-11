@@ -14,13 +14,11 @@
 <ion-content>
 
   <ion-card>
-
     <ion-card-header>
       <ion-card-title>
         <ng-container *ngIf="usuarioRol === 'MEDICO'">Agregar cita</ng-container>
     <ng-container *ngIf="usuarioRol === 'PACIENTE'">Formulario de solicitud de cita</ng-container>
-    <ion-card-subtitle>Rellene todos los campos para solicitar cita</ion-card-subtitle>
-
+    <ion-card-subtitle>Rellene todos los campos para solicitar una cita</ion-card-subtitle>
       </ion-card-title>
     </ion-card-header>
 
@@ -97,7 +95,9 @@
         <ion-input type="email" [(ngModel)]="cita.comentario"></ion-input>
       </ion-item>
     </ion-card-content>
-    <ion-button expand="full" (click)="agregarCita()">Pedir cita</ion-button>
+    <ion-button expand="full" (click)="agregarCitaD()" *ngIf="usuarioRol === 'MEDICO'">Pedir cita</ion-button>
+    <ion-button expand="full" (click)="agregarCitaP()" *ngIf="usuarioRol === 'PACIENTE'">Pedir cita</ion-button>
+
   </ion-card>
 
   <ion-card color="primary">
