@@ -6,7 +6,7 @@
     </ion-buttons>
     <ion-title style="font-family: 'Kanit', sans-serif; font-weight: 400">
       <ng-container *ngIf="usuarioRol === 'MEDICO'">Buscar citas </ng-container>
-    <ng-container *ngIf="usuarioRol === 'PACIENTE'">Solicitar cita</ng-container>
+    <ng-container *ngIf="usuarioRol === 'PACIENTE'">Mis citas</ng-container>
     </ion-title>
     <ion-button slot="end" shape="round" fill="outline" (click)="ordenarCitasPorEstado()" *ngIf="citasPaciente.length">Ordenar citas por estado</ion-button>
 
@@ -58,7 +58,7 @@
         <ion-label class="custom-label" [ngStyle]="{ 'background-color': getColorByEstado(cita.estado), 'margin-right': '10px' }">Estado: {{ cita.estado }}</ion-label>
       </ion-item>
     </ion-label>
-       
+
         <ion-item class="estado-item">
           <ion-label position="floating">Cambiar estado</ion-label>
           <ion-select [(ngModel)]="nuevoEstado" (ionChange)="modificarEstadoCita(cita)">
@@ -78,5 +78,5 @@
   <div class="no-citas" *ngIf="citasPaciente.length === 0 && usuarioRol === 'PACIENTE'">
     <p>No tienes citas programadas.</p>
   </div>
-  
+
 </ion-content>

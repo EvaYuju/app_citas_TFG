@@ -115,7 +115,7 @@
           <ng-container *ngIf="usuarioRol === 'MEDICO'">Citas</ng-container>
       <ng-container *ngIf="usuarioRol === 'PACIENTE'">Solicitar cita</ng-container>
     </ion-card-title>
-    
+
       </ion-card-header>
       <ion-card-content>
         <ion-item lines="none">
@@ -131,9 +131,9 @@
           </ng-container>
           <ng-container *ngIf="usuarioRol === 'PACIENTE'">
             ¿Quieres programar una cita con nosotros? Haz clic aquí para
-            rellenar el formulario.  
+            rellenar el formulario.
           </ng-container>
-  
+
         </ion-item>
       </ion-card-content>
     </ion-card>
@@ -146,7 +146,7 @@
             Ver citas
           </ng-container>
           <ng-container *ngIf="usuarioRol === 'PACIENTE'">
-            Mis citas  
+            Mis citas
           </ng-container>
           </ion-card-title>
       </ion-card-header>
@@ -205,11 +205,16 @@
       </ion-card-content>
     </ion-card>
 
-    <ion-card (click)="navigateToContact()" *ngIf="usuarioRol === 'PACIENTE'">
+    <ion-card (click)="navigateToContact()">
       <ion-card-header>
         <ion-card-title
           style="font-family: 'Kanit', sans-serif; font-weight: 400"
-          >Contáctanos</ion-card-title
+          ><ng-container *ngIf="usuarioRol === 'MEDICO'">
+            Ver mensajes
+          </ng-container>
+          <ng-container *ngIf="usuarioRol === 'PACIENTE'">
+            Contáctenos
+          </ng-container></ion-card-title
         >
       </ion-card-header>
       <ion-card-content>
@@ -221,8 +226,14 @@
               class="icono"
             />
           </ion-thumbnail>
-          ¿Tienes preguntas o inquietudes? Rellena el formulario de contacto
-          para consultarnos.
+          <ng-container *ngIf="usuarioRol === 'MEDICO'">
+            Leer mensajes de cuestiones de los pacientes.
+          </ng-container>
+          <ng-container *ngIf="usuarioRol === 'PACIENTE'">
+            ¿Tienes preguntas o inquietudes? Rellena el formulario de contacto
+            para consultarnos cualquier duda y le responderemos lo antes posible con un correo o a su telefono de contacto.
+          </ng-container>
+
         </ion-item>
       </ion-card-content>
     </ion-card>

@@ -1,20 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Firestore, collection, addDoc, query, where, getDocs } from '@angular/fire/firestore';
+import { getFirestore, collection, addDoc, getDocs } from 'firebase/firestore';
 import { Mensaje } from '../models/mensaje';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContactoService {
+  private firestore = getFirestore();
 
-  constructor(private firestore: Firestore) {
-  }
+  constructor() {}
 
   guardarConsulta(consulta: Mensaje): Promise<void> {
-    const pacienteDni = consulta.pacienteDni;
-    return this.verificarExistenciaPaciente(pacienteDni)
-      .then(() => this.agregarConsulta(consulta))
+    consulta.id = this.generarIdMensaje(); // Asignar el ID automáticamente
+    return this.agregarConsulta(consulta)
       .catch((error) => {
         throw new Error(`Error al guardar la consulta: ${error}`);
       });
@@ -37,20 +36,9 @@ export class ContactoService {
     });
   }
 
-  private verificarExistenciaPaciente(dni: string): Promise<void> {
-    const pacientesRef = collection(this.firestore, 'pacientes');
-    const pacienteQuery = query(pacientesRef, where('dni', '==', dni));
-    return getDocs(pacienteQuery)
-      .then((snapshot) => {
-        if (snapshot.empty) {
-          throw new Error(`No se encontró un paciente con DNI ${dni}`);
-        }
-      });
-  }
-
   private agregarConsulta(consulta: Mensaje): Promise<any> {
     const consultasRef = collection(this.firestore, 'consultas');
-    return addDoc(consultasRef, consulta)
+    return addDoc(consultasRef, { ...consulta }) // Enviar los datos como un objeto plano
       .then((docRef) => {
         console.log("Documento agregado con ID: ", docRef.id);
       })
@@ -59,4 +47,8 @@ export class ContactoService {
       });
   }
 
+  private generarIdMensaje(): string {
+    // Generar un ID único para el mensaje
+    return Math.random().toString(36).substring(2, 10);
+  }
 }

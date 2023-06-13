@@ -20,16 +20,14 @@ exports.__esModule = true;
 exports.ContactoService = void 0;
 var core_1 = require("@angular/core");
 var rxjs_1 = require("rxjs");
-var firestore_1 = require("@angular/fire/firestore");
+var firestore_1 = require("firebase/firestore");
 var ContactoService = /** @class */ (function () {
-    function ContactoService(firestore) {
-        this.firestore = firestore;
+    function ContactoService() {
+        this.firestore = firestore_1.getFirestore();
     }
     ContactoService.prototype.guardarConsulta = function (consulta) {
-        var _this = this;
-        var pacienteDni = consulta.pacienteDni;
-        return this.verificarExistenciaPaciente(pacienteDni)
-            .then(function () { return _this.agregarConsulta(consulta); })["catch"](function (error) {
+        consulta.id = this.generarIdMensaje(); // Asignar el ID automáticamente
+        return this.agregarConsulta(consulta)["catch"](function (error) {
             throw new Error("Error al guardar la consulta: " + error);
         });
     };
@@ -48,24 +46,18 @@ var ContactoService = /** @class */ (function () {
             });
         });
     };
-    ContactoService.prototype.verificarExistenciaPaciente = function (dni) {
-        var pacientesRef = firestore_1.collection(this.firestore, 'pacientes');
-        var pacienteQuery = firestore_1.query(pacientesRef, firestore_1.where('dni', '==', dni));
-        return firestore_1.getDocs(pacienteQuery)
-            .then(function (snapshot) {
-            if (snapshot.empty) {
-                throw new Error("No se encontr\u00F3 un paciente con DNI " + dni);
-            }
-        });
-    };
     ContactoService.prototype.agregarConsulta = function (consulta) {
         var consultasRef = firestore_1.collection(this.firestore, 'consultas');
-        return firestore_1.addDoc(consultasRef, consulta)
+        return firestore_1.addDoc(consultasRef, __assign({}, consulta)) // Enviar los datos como un objeto plano
             .then(function (docRef) {
             console.log("Documento agregado con ID: ", docRef.id);
         })["catch"](function (error) {
             throw new Error("Error al agregar la consulta: " + error);
         });
+    };
+    ContactoService.prototype.generarIdMensaje = function () {
+        // Generar un ID único para el mensaje
+        return Math.random().toString(36).substring(2, 10);
     };
     ContactoService = __decorate([
         core_1.Injectable({

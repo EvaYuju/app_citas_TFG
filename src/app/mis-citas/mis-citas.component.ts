@@ -21,6 +21,8 @@ export class MisCitasComponent implements OnInit {
   usuarioRol: string = ''; // Agrega esta línea para almacenar el rol del usuario
   usuarioPacienteDni: string = '';
   dniUsuarioActual: string = '';
+  nombreUsuarioActual: string = ''; // pendiente hacer y en todas
+
   //cita: Citas;
 
 
@@ -31,7 +33,7 @@ export class MisCitasComponent implements OnInit {
     private authService: AuthService
     ) { }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.obtenerUsuarioRol().then(() => {
       this.obtenerUsuarioDNI().then(() => {
         this.buscarCitas();
@@ -40,7 +42,7 @@ export class MisCitasComponent implements OnInit {
 
   }
 
-  // ROL PACIENTE 
+  // ROL PACIENTE
   obtenerUsuarioDNI() {
     return this.authService.getUsuarioEmail().pipe(take(1)).toPromise().then((correo) => {
       if (correo) {
@@ -56,14 +58,14 @@ export class MisCitasComponent implements OnInit {
       return null; // Add a return statement here
     });
   }
-  
+
   obtenerUsuarioRol() {
     return this.authService.getUsuarioEmail().pipe(take(1)).toPromise().then((correo) => {
       if (correo) {
         return this.usuariosService.getUsuarioRol(correo).then((rol) => {
           this.usuarioRol = rol || '';
-  
-          // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+
+          // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado
           if (this.usuarioRol === 'PACIENTE') {
             return this.pacientesService.getPacientePorCorreo(correo).then((paciente) => {
               if (paciente) {
@@ -79,12 +81,12 @@ export class MisCitasComponent implements OnInit {
       return null; // Add a return statement here
     });
   }
-  
+
 
   getUsuarioRol(correo: string): Promise<string | null> {
     return this.usuariosService.getUsuarioRol(correo).then((rol) => {
       this.usuarioRol = rol || '';
-      // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+      // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado
       if (this.usuarioRol === 'PACIENTE') {
         return this.pacientesService.getPacientePorCorreo(correo).then((paciente) => {
           if (paciente) {
@@ -110,7 +112,7 @@ export class MisCitasComponent implements OnInit {
     }
   }
 
-  // ROL MEDICO 
+  // ROL MEDICO
   buscarCitasPorDNI() {
     console.log("Buscar citas se ha ejecutado correctamente.MED");
 
@@ -123,7 +125,7 @@ export class MisCitasComponent implements OnInit {
     }
   }
 
-  buscarCitasPorPacienteID() { 
+  buscarCitasPorPacienteID() {
     if (this.pacienteId !== '') {
       this.citasService.buscarCitasPorPacienteID(this.pacienteId).then((citas) => {
         this.citasPaciente = citas;

@@ -23,6 +23,7 @@ var MisCitasComponent = /** @class */ (function () {
         this.usuarioRol = ''; // Agrega esta línea para almacenar el rol del usuario
         this.usuarioPacienteDni = '';
         this.dniUsuarioActual = '';
+        this.nombreUsuarioActual = ''; // pendiente hacer y en todas
     }
     MisCitasComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -32,7 +33,7 @@ var MisCitasComponent = /** @class */ (function () {
             });
         });
     };
-    // ROL PACIENTE 
+    // ROL PACIENTE
     MisCitasComponent.prototype.obtenerUsuarioDNI = function () {
         var _this = this;
         return this.authService.getUsuarioEmail().pipe(operators_1.take(1)).toPromise().then(function (correo) {
@@ -55,7 +56,7 @@ var MisCitasComponent = /** @class */ (function () {
             if (correo) {
                 return _this.usuariosService.getUsuarioRol(correo).then(function (rol) {
                     _this.usuarioRol = rol || '';
-                    // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+                    // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado
                     if (_this.usuarioRol === 'PACIENTE') {
                         return _this.pacientesService.getPacientePorCorreo(correo).then(function (paciente) {
                             if (paciente) {
@@ -76,7 +77,7 @@ var MisCitasComponent = /** @class */ (function () {
         var _this = this;
         return this.usuariosService.getUsuarioRol(correo).then(function (rol) {
             _this.usuarioRol = rol || '';
-            // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+            // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado
             if (_this.usuarioRol === 'PACIENTE') {
                 return _this.pacientesService.getPacientePorCorreo(correo).then(function (paciente) {
                     if (paciente) {
@@ -102,7 +103,7 @@ var MisCitasComponent = /** @class */ (function () {
             this.citasPaciente = [];
         }
     };
-    // ROL MEDICO 
+    // ROL MEDICO
     MisCitasComponent.prototype.buscarCitasPorDNI = function () {
         var _this = this;
         console.log("Buscar citas se ha ejecutado correctamente.MED");
