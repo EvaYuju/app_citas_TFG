@@ -82,7 +82,7 @@ var AuthService = /** @class */ (function () {
                         user = _a.sent();
                         this.doctorService.addDoctor(doctores);
                         return [4 /*yield*/, auth_1.signInWithEmailAndPassword(this.afAuth, doctores.correoElectronico, password)];
-                    case 5: return [2 /*return*/, _a.sent()];
+                    case 5: return [2 /*return*/, _a.sent()]; // Linea que inicia sesion 
                     case 6: return [2 /*return*/];
                 }
             });

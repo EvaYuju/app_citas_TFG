@@ -44,7 +44,7 @@ export class AuthService {
       this.usuarioService.registerUsuario(doctores.correoElectronico, rol);
       const user = await createUserWithEmailAndPassword(this.afAuth, doctores.correoElectronico, password);
       this.doctorService.addDoctor(doctores);
-      return await signInWithEmailAndPassword(this.afAuth, doctores.correoElectronico, password);
+      return await signInWithEmailAndPassword(this.afAuth, doctores.correoElectronico, password); // Linea que inicia sesion 
     }
     return;
     };
