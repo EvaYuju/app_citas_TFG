@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { getFirestore, collection, addDoc, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, getDocs, query, orderBy, deleteDoc, doc } from 'firebase/firestore';
 import { Mensaje } from '../models/mensaje';
 
 @Injectable({
@@ -12,8 +12,10 @@ export class ContactoService {
   constructor() {}
 
   guardarConsulta(consulta: Mensaje): Promise<void> {
-    consulta.id = this.generarIdMensaje(); // Asignar el ID automáticamente
     return this.agregarConsulta(consulta)
+      .then(() => {
+        console.log("Consulta guardada con ID: ", consulta.id);
+      })
       .catch((error) => {
         throw new Error(`Error al guardar la consulta: ${error}`);
       });
@@ -21,8 +23,9 @@ export class ContactoService {
 
   obtenerConsultas(): Observable<any[]> {
     const consultasRef = collection(this.firestore, 'consultas');
+    const consultasQuery = query(consultasRef, orderBy('fechaConsulta'));
     return new Observable((observer) => {
-      getDocs(consultasRef)
+      getDocs(consultasQuery)
         .then((querySnapshot) => {
           const consultas: any[] = [];
           querySnapshot.forEach((doc) => {
@@ -36,19 +39,20 @@ export class ContactoService {
     });
   }
 
-  private agregarConsulta(consulta: Mensaje): Promise<any> {
-    const consultasRef = collection(this.firestore, 'consultas');
-    return addDoc(consultasRef, { ...consulta }) // Enviar los datos como un objeto plano
-      .then((docRef) => {
-        console.log("Documento agregado con ID: ", docRef.id);
-      })
-      .catch((error) => {
-        throw new Error(`Error al agregar la consulta: ${error}`);
-      });
+  private async agregarConsulta(consulta: Mensaje): Promise<any> {
+    try {
+      const consultasRef = collection(this.firestore, 'consultas');
+      const docRef = await addDoc(consultasRef, consulta);
+      consulta.id = docRef.id; // Asignar el ID generado automáticamente al objeto consulta
+      return docRef;
+    } catch (error) {
+      throw new Error(`Error al agregar la consulta: ${error}`);
+    }
   }
 
-  private generarIdMensaje(): string {
-    // Generar un ID único para el mensaje
-    return Math.random().toString(36).substring(2, 10);
+  borrarConsulta(id: string) {
+    const consultaRef = doc(this.firestore, 'consultas', id);
+    console.log(id)
+    return deleteDoc(consultaRef);
   }
 }

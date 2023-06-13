@@ -20,7 +20,7 @@
             <form (ngSubmit)="submitForm()">
               <ion-item>
                 <ion-label>Fecha de Consulta</ion-label>
-                <ion-input type="text" value="{{ contactForm.fechaConsulta | date: 'dd/MM/yyyy' }}" disabled>
+                <ion-input type="text" value="{{ contactForm.fechaConsulta | date: 'dd/MM/yyyy' }}" >
                 </ion-input>
               </ion-item>
 
@@ -52,7 +52,7 @@
           </ion-card-content>
         </ion-card>
 
-
+        
       </ion-col>
     </ion-row>
     <!-- Agregar este elemento para mostrar el mensaje -->
@@ -66,5 +66,30 @@
         </ion-row>
       </ion-card-content>
     </ion-card>
+
+     <!-- Mostrar mensajes ordenados por fecha -->
+     <div *ngIf="usuarioRol === 'MEDICO'">
+      <ion-card *ngFor="let consulta of consultas" >
+        <ion-card-header>
+          <ion-card-title>{{ consulta.fechaConsulta.toDate() | date:'medium' }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <!-- Mostrar otros datos del mensaje -->
+          <p>DNI: {{ consulta.pacienteDni }}</p>
+          <p>Teléfono del Paciente: {{ consulta.telefonoPaciente }}</p>
+          <p>Correo electrónico del Paciente: {{ consulta.emailPaciente }}</p>
+          <p>Mensaje: {{ consulta.textoMensaje }}</p>
+        </ion-card-content>
+        <ion-row>
+          <ion-col>
+            <!-- Agregar botón de borrado
+            <ion-button color="danger" (click)="borrarConsulta(consulta.id)">Eliminar</ion-button> -->
+          </ion-col>
+        </ion-row>
+      </ion-card>
+    
+     </div>
+  
   </ion-grid>
+
 </ion-content>

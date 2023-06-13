@@ -33,11 +33,9 @@ export class ContactoPage {
   };
   mensaje: string | null = null;
   mensajeID: string | null = null;
-
-
+  consultas: any[] = []; // Variable para almacenar los mensajes
   //authService: any;
-
-  usuarioRol: string = '';
+  usuarioRol: string = ''; 
   dniUsuarioActual: string = '';
   tlfUsuarioActual: string = '';
   correoUsuarioActual: string = '';
@@ -51,16 +49,26 @@ export class ContactoPage {
     private authService: AuthService
 
     ) {
-
+      
     }
 
     ngOnInit() {
+      
       this.obtenerUsuarioRol(); // Obtener el rol del usuario
       //this.obtenerDatosUsuario();
       this.usuarioRol = '';
       this.dniUsuarioActual = '';
       this.tlfUsuarioActual = '';
       this.correoUsuarioActual = '';
+      // Llamar al método para obtener los mensajes ordenados por fecha
+    this.contactoService.obtenerConsultas().subscribe(
+      (consultas) => {
+        this.consultas = consultas;
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
       }
 
   submitForm() {
@@ -90,8 +98,8 @@ export class ContactoPage {
       if (correo) {
         this.usuariosService.getUsuarioRol(correo).then((rol) => {
           this.usuarioRol = rol || '';
-
-          // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado
+  
+          // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
           if (this.usuarioRol === 'PACIENTE') {
             this.pacientesService.getPacientePorCorreo(correo).then((paciente) => {
               if (paciente) {
@@ -107,11 +115,11 @@ export class ContactoPage {
       }
     });
   }
-
+  
   getUsuarioRol(correo: string): Promise<string | null> {
     return this.usuariosService.getUsuarioRol(correo).then((rol) => {
       this.usuarioRol = rol || '';
-      // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado
+      // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
       if (this.usuarioRol === 'PACIENTE') {
         return this.pacientesService.getPacientePorCorreo(correo).then((paciente) => {
           if (paciente) {
@@ -135,7 +143,7 @@ export class ContactoPage {
             this.dniUsuarioActual = paciente.dni;
             this.tlfUsuarioActual = paciente.telefono;
             this.correoUsuarioActual = paciente.correoElectronico;
-
+  
             // Asignar los valores después de obtener los datos del paciente
             this.contactForm.telefonoPaciente = this.tlfUsuarioActual;
             this.contactForm.emailPaciente = this.correoUsuarioActual;
@@ -146,6 +154,14 @@ export class ContactoPage {
     });
   }
 
-
+  borrarConsulta(id: string) {
+    this.contactoService.borrarConsulta(id)
+      .then(() => {
+        console.log('Consulta eliminada correctamente');
+      })
+      .catch((error) => {
+        console.error('Error al eliminar la consulta:', error);
+      });
+  }
 
 }

@@ -25,6 +25,7 @@ var ContactoPage = /** @class */ (function () {
         };
         this.mensaje = null;
         this.mensajeID = null;
+        this.consultas = []; // Variable para almacenar los mensajes
         //authService: any;
         this.usuarioRol = '';
         this.dniUsuarioActual = '';
@@ -32,12 +33,19 @@ var ContactoPage = /** @class */ (function () {
         this.correoUsuarioActual = '';
     }
     ContactoPage.prototype.ngOnInit = function () {
+        var _this = this;
         this.obtenerUsuarioRol(); // Obtener el rol del usuario
         //this.obtenerDatosUsuario();
         this.usuarioRol = '';
         this.dniUsuarioActual = '';
         this.tlfUsuarioActual = '';
         this.correoUsuarioActual = '';
+        // Llamar al método para obtener los mensajes ordenados por fecha
+        this.contactoService.obtenerConsultas().subscribe(function (consultas) {
+            _this.consultas = consultas;
+        }, function (error) {
+            console.error(error);
+        });
     };
     ContactoPage.prototype.submitForm = function () {
         var _this = this;
@@ -65,7 +73,7 @@ var ContactoPage = /** @class */ (function () {
             if (correo) {
                 _this.usuariosService.getUsuarioRol(correo).then(function (rol) {
                     _this.usuarioRol = rol || '';
-                    // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado
+                    // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
                     if (_this.usuarioRol === 'PACIENTE') {
                         _this.pacientesService.getPacientePorCorreo(correo).then(function (paciente) {
                             if (paciente) {
@@ -84,7 +92,7 @@ var ContactoPage = /** @class */ (function () {
         var _this = this;
         return this.usuariosService.getUsuarioRol(correo).then(function (rol) {
             _this.usuarioRol = rol || '';
-            // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado
+            // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
             if (_this.usuarioRol === 'PACIENTE') {
                 return _this.pacientesService.getPacientePorCorreo(correo).then(function (paciente) {
                     if (paciente) {
@@ -116,6 +124,14 @@ var ContactoPage = /** @class */ (function () {
                     }
                 });
             }
+        });
+    };
+    ContactoPage.prototype.borrarConsulta = function (id) {
+        this.contactoService.borrarConsulta(id)
+            .then(function () {
+            console.log('Consulta eliminada correctamente');
+        })["catch"](function (error) {
+            console.error('Error al eliminar la consulta:', error);
         });
     };
     ContactoPage = __decorate([

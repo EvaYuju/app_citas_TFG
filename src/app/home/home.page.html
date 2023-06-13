@@ -184,7 +184,13 @@
       <ion-card-header>
         <ion-card-title
           style="font-family: 'Kanit', sans-serif; font-weight: 400"
-          >Contáctanos</ion-card-title
+          >
+          <ng-container *ngIf="usuarioRol === 'MEDICO'">
+            Mensajería
+          </ng-container>
+          <ng-container *ngIf="usuarioRol === 'PACIENTE'">
+            Contacto
+          </ng-container></ion-card-title
         >
       </ion-card-header>
       <ion-card-content>
@@ -196,8 +202,13 @@
               class="icono"
             />
           </ion-thumbnail>
-          ¿Tienes preguntas o inquietudes? Rellena el formulario de contacto
-          para consultarnos.
+          <ng-container *ngIf="usuarioRol === 'MEDICO'">
+            Consulte los mensajes de los pacientes.
+          </ng-container>
+          <ng-container *ngIf="usuarioRol === 'PACIENTE'">
+            ¿Tienes preguntas o inquietudes? Rellena el formulario de contacto
+            para consultarnos.          </ng-container>
+   
         </ion-item>
       </ion-card-content>
     </ion-card>
