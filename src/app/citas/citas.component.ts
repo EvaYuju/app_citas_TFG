@@ -151,15 +151,6 @@ export class CitasComponent implements OnInit {
       return;
     }
 
-      // Check if the patient with the specified DNI exists
-      const pacienteExists = await this.pacientesService.getPacientePorDNI(
-        this.cita.pacienteId
-      );
-  
-      if (!pacienteExists) {
-        this.mensaje = 'El DNI del paciente no coincide con ningún paciente registrado.';
-        return;
-      }
     // Obtener la hora seleccionada del componente ion-select y asignarla al campo 'hora'
     this.cita.hora = this.cita.hora.substring(0, 5);
 
@@ -197,25 +188,6 @@ export class CitasComponent implements OnInit {
         this.citasEncontradas = [];
       });
   }
-
-  buscarCitasPorEspecialidad(especialidad: string) {
-  const citaRef = collection(this.firestore, 'citas');
-  const q = query(citaRef, where('especialidad', '==', especialidad));
-  return getDocs(q).then((snapshot) => {
-    if (!snapshot.empty) {
-      const citas: Citas[] = [];
-      snapshot.forEach((doc) => {
-        const cita = doc.data() as Citas;
-        cita.id = doc.id;
-        citas.push(cita);
-      });
-      return citas;
-    } else {
-      return [];
-    }
-  });
-}
-
 
   seleccionarCita(cita: Citas) {
     this.citaSeleccionada = { ...cita };

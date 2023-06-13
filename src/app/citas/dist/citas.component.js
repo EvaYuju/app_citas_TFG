@@ -166,7 +166,7 @@ var CitasComponent = /** @class */ (function () {
     };
     CitasComponent.prototype.agregarCita = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var pacienteExists, docRef, error_1;
+            var docRef, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -174,33 +174,26 @@ var CitasComponent = /** @class */ (function () {
                             this.mensaje = 'Por favor, complete todos los campos.';
                             return [2 /*return*/];
                         }
-                        return [4 /*yield*/, this.pacientesService.getPacientePorDNI(this.cita.pacienteId)];
-                    case 1:
-                        pacienteExists = _a.sent();
-                        if (!pacienteExists) {
-                            this.mensaje = 'El DNI del paciente no coincide con ningún paciente registrado.';
-                            return [2 /*return*/];
-                        }
                         // Obtener la hora seleccionada del componente ion-select y asignarla al campo 'hora'
                         this.cita.hora = this.cita.hora.substring(0, 5);
                         if (this.usuarioRol === 'PACIENTE') {
                             this.cita.pacienteId = this.dniUsuarioActual;
                         }
-                        _a.label = 2;
-                    case 2:
-                        _a.trys.push([2, 4, , 5]);
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
                         return [4 /*yield*/, firestore_1.addDoc(firestore_1.collection(this.firestore, 'citas'), this.cita)];
-                    case 3:
+                    case 2:
                         docRef = _a.sent();
                         this.mensajeID =
                             'Cita agregada correctamente. ID de la cita: ' + docRef.id;
                         this.limpiarFormulario();
-                        return [3 /*break*/, 5];
-                    case 4:
+                        return [3 /*break*/, 4];
+                    case 3:
                         error_1 = _a.sent();
                         this.mensaje = 'Error al agregar la cita: ' + error_1;
-                        return [3 /*break*/, 5];
-                    case 5: return [2 /*return*/];
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
@@ -220,24 +213,6 @@ var CitasComponent = /** @class */ (function () {
         })["catch"](function (error) {
             _this.mensaje = 'Error al buscar la cita: ' + error;
             _this.citasEncontradas = [];
-        });
-    };
-    CitasComponent.prototype.buscarCitasPorEspecialidad = function (especialidad) {
-        var citaRef = firestore_1.collection(this.firestore, 'citas');
-        var q = firestore_1.query(citaRef, firestore_1.where('especialidad', '==', especialidad));
-        return firestore_1.getDocs(q).then(function (snapshot) {
-            if (!snapshot.empty) {
-                var citas_1 = [];
-                snapshot.forEach(function (doc) {
-                    var cita = doc.data();
-                    cita.id = doc.id;
-                    citas_1.push(cita);
-                });
-                return citas_1;
-            }
-            else {
-                return [];
-            }
         });
     };
     CitasComponent.prototype.seleccionarCita = function (cita) {
