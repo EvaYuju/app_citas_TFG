@@ -55,10 +55,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.CitasComponent = void 0;
 var core_1 = require("@angular/core");
-// prueba
 var firestore_1 = require("@angular/fire/firestore");
 var CitasComponent = /** @class */ (function () {
-    function CitasComponent(citasService, doctorsService, specialtiesService, usuariosService, alertController, pacientesService, firestore, auth, authService) {
+    function CitasComponent(citasService, doctorsService, specialtiesService, usuariosService, alertController, pacientesService, firestore, auth, authService, datepipe) {
         this.citasService = citasService;
         this.doctorsService = doctorsService;
         this.specialtiesService = specialtiesService;
@@ -68,6 +67,7 @@ var CitasComponent = /** @class */ (function () {
         this.firestore = firestore;
         this.auth = auth;
         this.authService = authService;
+        this.datepipe = datepipe;
         this.cita = {
             id: '',
             pacienteId: '',
@@ -79,10 +79,16 @@ var CitasComponent = /** @class */ (function () {
             estado: '',
             comentario: ''
         };
+        this.isWeekday = function (dateString) {
+            var date = new Date(dateString);
+            var utcDay = date.getUTCDay();
+            return utcDay !== 0 && utcDay !== 6;
+        };
         this.doctors = [];
         this.mensaje = '';
         this.mensajeID = '';
         this.mensajeDoc = '';
+        this.mostrarHoras = false;
         this.specialtyBuscar = '';
         this.doctorSeleccionado = null;
         this.citasEncontradas = [];
@@ -94,7 +100,6 @@ var CitasComponent = /** @class */ (function () {
         this.horariosDoctor = [];
         this.usuarioPacienteDni = '';
         this.dniUsuarioActual = '';
-        this.estadoCitaDef = '';
     }
     CitasComponent.prototype.ngOnInit = function () {
         this.citaSeleccionada = this.cita;
@@ -111,7 +116,9 @@ var CitasComponent = /** @class */ (function () {
                     _this.usuarioRol = rol || '';
                     // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado
                     if (_this.usuarioRol === 'PACIENTE') {
-                        _this.pacientesService.getPacientePorCorreo(correo).then(function (paciente) {
+                        _this.pacientesService
+                            .getPacientePorCorreo(correo)
+                            .then(function (paciente) {
                             if (paciente) {
                                 _this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
                             }
@@ -127,7 +134,9 @@ var CitasComponent = /** @class */ (function () {
             _this.usuarioRol = rol || '';
             // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado
             if (_this.usuarioRol === 'PACIENTE') {
-                return _this.pacientesService.getPacientePorCorreo(correo).then(function (paciente) {
+                return _this.pacientesService
+                    .getPacientePorCorreo(correo)
+                    .then(function (paciente) {
                     if (paciente) {
                         _this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
                     }
@@ -144,7 +153,9 @@ var CitasComponent = /** @class */ (function () {
         this.authService.getUsuarioEmail().subscribe(function (correo) {
             if (correo) {
                 if (_this.usuarioRol === 'PACIENTE') {
-                    _this.pacientesService.getPacientePorCorreo(correo).then(function (paciente) {
+                    _this.pacientesService
+                        .getPacientePorCorreo(correo)
+                        .then(function (paciente) {
                         if (paciente) {
                             _this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
                         }
@@ -153,7 +164,7 @@ var CitasComponent = /** @class */ (function () {
             }
         });
     };
-    CitasComponent.prototype.agregarCitaD = function () {
+    CitasComponent.prototype.agregarCita = function () {
         return __awaiter(this, void 0, void 0, function () {
             var docRef, error_1;
             return __generator(this, function (_a) {
@@ -165,9 +176,8 @@ var CitasComponent = /** @class */ (function () {
                         }
                         // Obtener la hora seleccionada del componente ion-select y asignarla al campo 'hora'
                         this.cita.hora = this.cita.hora.substring(0, 5);
-                        if (this.usuarioRol !== 'MEDICO') {
-                            this.mensaje = 'Acceso no autorizado. Solo los médicos pueden agregar citas.';
-                            return [2 /*return*/];
+                        if (this.usuarioRol === 'PACIENTE') {
+                            this.cita.pacienteId = this.dniUsuarioActual;
                         }
                         _a.label = 1;
                     case 1:
@@ -175,7 +185,8 @@ var CitasComponent = /** @class */ (function () {
                         return [4 /*yield*/, firestore_1.addDoc(firestore_1.collection(this.firestore, 'citas'), this.cita)];
                     case 2:
                         docRef = _a.sent();
-                        this.mensajeID = 'Cita agregada correctamente. ID de la cita: ' + docRef.id;
+                        this.mensajeID =
+                            'Cita agregada correctamente. ID de la cita: ' + docRef.id;
                         this.limpiarFormulario();
                         return [3 /*break*/, 4];
                     case 3:
@@ -187,43 +198,10 @@ var CitasComponent = /** @class */ (function () {
             });
         });
     };
-    CitasComponent.prototype.agregarCitaP = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var docRef, error_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!this.camposValidos()) {
-                            this.mensaje = 'Por favor, complete todos los campos.';
-                            return [2 /*return*/];
-                        }
-                        // Establecer el estado de la cita como "pendiente"
-                        this.cita.estado = 'pendiente';
-                        // Obtener la hora seleccionada del componente ion-select y asignarla al campo 'hora'
-                        this.cita.hora = this.cita.hora.substring(0, 5);
-                        // Guardar el dniUsuarioActual en cita.pacienteId
-                        this.cita.pacienteId = this.dniUsuarioActual;
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, firestore_1.addDoc(firestore_1.collection(this.firestore, 'citas'), this.cita)];
-                    case 2:
-                        docRef = _a.sent();
-                        this.mensajeID = 'Cita agregada correctamente. ID de la cita: ' + docRef.id;
-                        this.limpiarFormulario();
-                        return [3 /*break*/, 4];
-                    case 3:
-                        error_2 = _a.sent();
-                        this.mensaje = 'Error al agregar la cita: ' + error_2;
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
     CitasComponent.prototype.buscarCitaPorID = function (id) {
         var _this = this;
-        this.citasService.buscarCitaPorID(id)
+        this.citasService
+            .buscarCitaPorID(id)
             .then(function (citas) {
             _this.citasEncontradas = citas;
             if (citas.length === 0) {
@@ -253,6 +231,29 @@ var CitasComponent = /** @class */ (function () {
             });
         }
     };
+    CitasComponent.prototype.filtarHorariosDoctor = function (doctor, fecha) {
+        var _this = this;
+        var horasCitas = [];
+        var date = this.datepipe.transform(fecha, 'yyyy-MM-dd');
+        if (date) {
+            this.citasService
+                .buscarCitasPorDoctorDNI(doctor.nombre, date)
+                .then(function (citas) {
+                citas.forEach(function (cita) {
+                    var hora = _this.datepipe.transform(cita.fecha, 'yyyy-MM-dd');
+                    if (hora) {
+                        horasCitas.push(hora);
+                    }
+                });
+                horasCitas = doctor.horario.filter(function (el) { return !horasCitas.includes(el); });
+            })["catch"](function (error) {
+                console.log('Error: ' + error);
+            });
+            console.log(horasCitas);
+            return horasCitas;
+        }
+        return [];
+    };
     CitasComponent.prototype.buscarDoctorPorEspecialidad = function (especialidad) {
         var _this = this;
         this.doctorsService
@@ -266,6 +267,7 @@ var CitasComponent = /** @class */ (function () {
             else {
                 _this.mensajeDoc = '';
                 _this.horariosDoctor = doctors[0].horario;
+                doctors[0].horario;
             }
         })["catch"](function (error) {
             _this.mensajeDoc = 'Error al buscar el doctor: ' + error;
@@ -280,6 +282,7 @@ var CitasComponent = /** @class */ (function () {
     };
     CitasComponent.prototype.seleccionarDoctor = function (doctor) {
         this.doctorSeleccionado = __assign({}, doctor);
+        this.doctorSeleccionado.horario = this.filtarHorariosDoctor(this.doctorSeleccionado, new Date());
         this.loadDoctorSchedule();
     };
     CitasComponent.prototype.loadDoctorSchedule = function () {
@@ -319,9 +322,23 @@ var CitasComponent = /** @class */ (function () {
         //this.cita.pacienteId &&
         this.cita.doctorId &&
             this.cita.especialidad &&
-            //this.cita.fecha &&
-            //      this.cita.estado
-            this.cita.motivo);
+            this.cita.fecha &&
+            this.cita.motivo &&
+            this.cita.estado);
+    };
+    CitasComponent.prototype.showTimes = function () {
+        this.mostrarHoras = !this.mostrarHoras;
+        if (!this.mostrarHoras) {
+            this.borrarHoras();
+        }
+    };
+    CitasComponent.prototype.borrarHoras = function () {
+        console.log('borrar horas');
+        var horas = this.horariosDoctor;
+        this.horariosDoctor = [];
+        this.horariosDoctor = horas;
+        this.horariosDoctor;
+        this.cita.hora = '';
     };
     CitasComponent.prototype.limpiarFormulario = function () {
         this.cita = {

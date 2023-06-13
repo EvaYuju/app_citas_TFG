@@ -30,7 +30,7 @@ export class RegisterPage implements OnInit {
     private auth: AuthService,
     private acRoute: ActivatedRoute,
     private router: Router,
-    private pacientesService: PacientesService, 
+    private pacientesService: PacientesService,
     private doctorsService: DoctorsService
   ) { }
 
@@ -121,27 +121,27 @@ export class RegisterPage implements OnInit {
 
       const dni = this.formMedico.get('dni')?.value;
       if (this.formMedico.valid && dni) {
-      const { email, password, nombre, apellidos, nColegiado, especialidad, telefono } = this.formMedico.getRawValue();
-  
+      const { email, password, nombre, apellidos, nColegiado, telefono, especialidad } = this.formMedico.getRawValue();
+
       // Verificar si el DNI ya existe
       const dniExists = await this.doctorsService.getDoctorPorDni(dni);
       if (dniExists) {
         this.formMedico.get('dni')?.setErrors({ dniExists: true });
         return;
       }
-  
+
       this.medico = {
         id: '',
         nombre: nombre ? nombre : '',
         apellidos: apellidos ? apellidos : '',
-        dni: dni,
+        dni: dni?dni:'',
         nColegiado: nColegiado ? nColegiado : '',
         especialidad: especialidad ? especialidad : '',
         telefono: telefono ? telefono : '',
         correoElectronico: email ? email : '',
         horario: this.generarHorario(8, 15)
       };
-  
+
       if (email !== null && password !== null) {
         // Comprobar que email y password no son null
         this.auth.register(password, 'MEDICO', undefined, this.medico)
@@ -158,7 +158,7 @@ export class RegisterPage implements OnInit {
       this.formMedico.markAsTouched();
     }
   }
-  
+
   loadSpecialties(){
     this.specialtiesService.getAllSpecialties().then((listSpecialties) => {
       this.especialidades = listSpecialties;

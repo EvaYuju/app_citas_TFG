@@ -22,7 +22,7 @@ export class HomePage {
     private pacientesService: PacientesService,
     private authService: AuthService,
     private usuariosService: UsuariosService
-  ) {   
+  ) {
     this.obtenerUsuarioRol();
   }
 
@@ -45,8 +45,8 @@ export class HomePage {
       if (correo) {
         this.usuariosService.getUsuarioRol(correo).then((rol) => {
           this.usuarioRol = rol || '';
-  
-          // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+
+          // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado
           if (this.usuarioRol === 'PACIENTE') {
             this.pacientesService.getPacientePorCorreo(correo).then((paciente) => {
               if (paciente) {
@@ -101,8 +101,6 @@ export class HomePage {
     localStorage.removeItem('ROL');
     this.auth.logout();
     window.location.reload();
-    this.router.navigate(['/landing-page']);
-    //window.location.reload();
   }
 
   navigateToLogOut() {

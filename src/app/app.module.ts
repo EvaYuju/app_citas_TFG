@@ -26,6 +26,7 @@ import { PacientesService } from './services/pacientes.service';
 import { CitasService } from './services/citas.service';
 import { UsuariosService } from './services/usuarios.service';
 import { AuthService } from './services/auth.service';
+import { DatePipe } from '@angular/common';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { AuthService } from './services/auth.service';
   FormsModule,
   ReactiveFormsModule
   ],
-  providers: [ 
+  providers: [
+    DatePipe,
     CitasService,
     UsuariosService,
     PacientesService,

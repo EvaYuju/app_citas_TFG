@@ -160,14 +160,14 @@ var RegisterPage = /** @class */ (function () {
     RegisterPage.prototype.registerMedico = function () {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
-            var dni, _c, email, password, nombre, apellidos, nColegiado, especialidad, telefono, dniExists;
+            var dni, _c, email, password, nombre, apellidos, nColegiado, telefono, especialidad, dniExists;
             var _this = this;
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
                         dni = (_a = this.formMedico.get('dni')) === null || _a === void 0 ? void 0 : _a.value;
                         if (!(this.formMedico.valid && dni)) return [3 /*break*/, 2];
-                        _c = this.formMedico.getRawValue(), email = _c.email, password = _c.password, nombre = _c.nombre, apellidos = _c.apellidos, nColegiado = _c.nColegiado, especialidad = _c.especialidad, telefono = _c.telefono;
+                        _c = this.formMedico.getRawValue(), email = _c.email, password = _c.password, nombre = _c.nombre, apellidos = _c.apellidos, nColegiado = _c.nColegiado, telefono = _c.telefono, especialidad = _c.especialidad;
                         return [4 /*yield*/, this.doctorsService.getDoctorPorDni(dni)];
                     case 1:
                         dniExists = _d.sent();
@@ -179,7 +179,7 @@ var RegisterPage = /** @class */ (function () {
                             id: '',
                             nombre: nombre ? nombre : '',
                             apellidos: apellidos ? apellidos : '',
-                            dni: dni,
+                            dni: dni ? dni : '',
                             nColegiado: nColegiado ? nColegiado : '',
                             especialidad: especialidad ? especialidad : '',
                             telefono: telefono ? telefono : '',

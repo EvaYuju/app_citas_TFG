@@ -35,7 +35,7 @@ var HomePage = /** @class */ (function () {
             if (correo) {
                 _this.usuariosService.getUsuarioRol(correo).then(function (rol) {
                     _this.usuarioRol = rol || '';
-                    // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+                    // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado
                     if (_this.usuarioRol === 'PACIENTE') {
                         _this.pacientesService.getPacientePorCorreo(correo).then(function (paciente) {
                             if (paciente) {
@@ -81,8 +81,6 @@ var HomePage = /** @class */ (function () {
         localStorage.removeItem('ROL');
         this.auth.logout();
         window.location.reload();
-        this.router.navigate(['/landing-page']);
-        //window.location.reload();
     };
     HomePage.prototype.navigateToLogOut = function () {
         this.logout();

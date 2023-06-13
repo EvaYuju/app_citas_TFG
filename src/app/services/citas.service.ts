@@ -82,6 +82,25 @@ export class CitasService {
     });
   }
 
+  buscarCitasPorDoctorDNI(doctorId: string, fecha: string) {
+    const citaRef = collection(this.firestore, 'citas');
+    const q = query(citaRef, where('doctorId', '==', doctorId), where('fecha', '==', fecha));
+    return getDocs(q).then((snapshot) => {
+      if (!snapshot.empty) {
+        const citas: Citas[] = [];
+        snapshot.forEach((doc) => {
+          const cita = doc.data() as Citas;
+          cita.id = doc.id;
+          citas.push(cita);
+        });
+        return citas;
+      } else {
+        return [];
+      }
+    });
+  }
+
+
   modificarCita(cita: Citas) {
     const citaRef = doc(this.firestore, 'citas', cita.id);
     return setDoc(citaRef, cita);

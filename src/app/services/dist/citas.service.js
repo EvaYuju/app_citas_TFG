@@ -135,6 +135,24 @@ var CitasService = /** @class */ (function () {
             }
         });
     };
+    CitasService.prototype.buscarCitasPorDoctorDNI = function (doctorId, fecha) {
+        var citaRef = firestore_1.collection(this.firestore, 'citas');
+        var q = firestore_1.query(citaRef, firestore_1.where('doctorId', '==', doctorId), firestore_1.where('fecha', '==', fecha));
+        return firestore_1.getDocs(q).then(function (snapshot) {
+            if (!snapshot.empty) {
+                var citas_4 = [];
+                snapshot.forEach(function (doc) {
+                    var cita = doc.data();
+                    cita.id = doc.id;
+                    citas_4.push(cita);
+                });
+                return citas_4;
+            }
+            else {
+                return [];
+            }
+        });
+    };
     CitasService.prototype.modificarCita = function (cita) {
         var citaRef = firestore_1.doc(this.firestore, 'citas', cita.id);
         return firestore_2.setDoc(citaRef, cita);

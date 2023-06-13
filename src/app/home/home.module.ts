@@ -25,10 +25,11 @@ export class HomePageModule {
     private router: Router
   ) {}
 
-  async logout(){
+  /*async logout(){
     localStorage.removeItem('ROL');
     this.auth.logout();
     this.router.navigate(['/landing-page']);
   }
+  */
 
 }

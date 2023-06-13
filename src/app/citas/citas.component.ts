@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { Citas } from './../models/citas';
 import { CitasService } from '../services/citas.service';
@@ -12,7 +12,6 @@ import { PacientesService } from './../services/pacientes.service';
 import { Usuarios } from '../models/usuarios';
 import { AuthService } from './../services/auth.service';
 
-// prueba
 import {
   Firestore,
   collection,
@@ -25,9 +24,7 @@ import {
   deleteDoc,
 } from '@angular/fire/firestore';
 
-
 import { AlertController } from '@ionic/angular';
-
 
 @Component({
   selector: 'app-citas',
@@ -47,12 +44,18 @@ export class CitasComponent implements OnInit {
     comentario: '',
   };
 
+  isWeekday = (dateString: string) => {
+    const date = new Date(dateString);
+    const utcDay = date.getUTCDay();
+    return utcDay !== 0 && utcDay !== 6;
+  };
+
   doctors: Doctor[] = [];
 
   mensaje: string = '';
   mensajeID: string = '';
   mensajeDoc: string = '';
-
+  mostrarHoras: boolean = false;
 
   specialtyBuscar: string = '';
   doctorSeleccionado: Doctor | null = null;
@@ -65,8 +68,6 @@ export class CitasComponent implements OnInit {
   horariosDoctor: string[] = [];
   usuarioPacienteDni: string = '';
   dniUsuarioActual: string = '';
-  estadoCitaDef: string = '';
-
 
   constructor(
     private citasService: CitasService,
@@ -77,16 +78,15 @@ export class CitasComponent implements OnInit {
     private pacientesService: PacientesService,
     private firestore: Firestore,
     private auth: AuthService,
-    private authService: AuthService
-
-    ) {}
+    private authService: AuthService,
+    private datepipe: DatePipe
+  ) {}
 
   ngOnInit() {
     this.citaSeleccionada = this.cita;
     this.loadSpecialties();
     this.obtenerUsuarioRol(); // Obtener el rol del usuario
     this.obtenerUsuarioDNI(); // Obtener el DNI del paciente logueado
-
   }
   // ***
   obtenerUsuarioRol() {
@@ -97,12 +97,13 @@ export class CitasComponent implements OnInit {
 
           // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado
           if (this.usuarioRol === 'PACIENTE') {
-            this.pacientesService.getPacientePorCorreo(correo).then((paciente) => {
-              if (paciente) {
-                this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
-
-              }
-            });
+            this.pacientesService
+              .getPacientePorCorreo(correo)
+              .then((paciente) => {
+                if (paciente) {
+                  this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+                }
+              });
           }
         });
       }
@@ -114,36 +115,37 @@ export class CitasComponent implements OnInit {
       this.usuarioRol = rol || '';
       // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado
       if (this.usuarioRol === 'PACIENTE') {
-        return this.pacientesService.getPacientePorCorreo(correo).then((paciente) => {
-          if (paciente) {
-            this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
-          }
-          return rol;
-        });
+        return this.pacientesService
+          .getPacientePorCorreo(correo)
+          .then((paciente) => {
+            if (paciente) {
+              this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+            }
+            return rol;
+          });
       } else {
         return rol;
       }
     });
   }
 
-
   obtenerUsuarioDNI() {
     this.authService.getUsuarioEmail().subscribe((correo) => {
       if (correo) {
         if (this.usuarioRol === 'PACIENTE') {
-          this.pacientesService.getPacientePorCorreo(correo).then((paciente) => {
-            if (paciente) {
-              this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
-            }
-          });
+          this.pacientesService
+            .getPacientePorCorreo(correo)
+            .then((paciente) => {
+              if (paciente) {
+                this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+              }
+            });
         }
       }
     });
   }
 
-
-
-  async agregarCitaD() {
+  async agregarCita() {
     if (!this.camposValidos()) {
       this.mensaje = 'Por favor, complete todos los campos.';
       return;
@@ -152,49 +154,27 @@ export class CitasComponent implements OnInit {
     // Obtener la hora seleccionada del componente ion-select y asignarla al campo 'hora'
     this.cita.hora = this.cita.hora.substring(0, 5);
 
-    if (this.usuarioRol !== 'MEDICO') {
-      this.mensaje = 'Acceso no autorizado. Solo los médicos pueden agregar citas.';
-      return;
+    if (this.usuarioRol === 'PACIENTE') {
+      this.cita.pacienteId = this.dniUsuarioActual;
     }
-
-    // Guardar el dniUsuarioActual en cita.medicoId
-    //this.cita.pacienteId = this.dniUsuarioActual;
 
     // Agregar la cita a Firestore
     try {
-      const docRef = await addDoc(collection(this.firestore, 'citas'), this.cita);
-      this.mensajeID = 'Cita agregada correctamente. ID de la cita: ' + docRef.id;
+      const docRef = await addDoc(
+        collection(this.firestore, 'citas'),
+        this.cita
+      );
+      this.mensajeID =
+        'Cita agregada correctamente. ID de la cita: ' + docRef.id;
       this.limpiarFormulario();
     } catch (error) {
       this.mensaje = 'Error al agregar la cita: ' + error;
     }
   }
 
-  async agregarCitaP() {
-    if (!this.camposValidos()) {
-      this.mensaje = 'Por favor, complete todos los campos.';
-      return;
-    }
-    // Establecer el estado de la cita como "pendiente"
-    this.cita.estado = 'pendiente';
-    // Obtener la hora seleccionada del componente ion-select y asignarla al campo 'hora'
-    this.cita.hora = this.cita.hora.substring(0, 5);
-    // Guardar el dniUsuarioActual en cita.pacienteId
-    this.cita.pacienteId = this.dniUsuarioActual;
-
-    // Agregar la cita a Firestore
-  try {
-    const docRef = await addDoc(collection(this.firestore, 'citas'), this.cita);
-    this.mensajeID = 'Cita agregada correctamente. ID de la cita: ' + docRef.id;
-    this.limpiarFormulario();
-  } catch (error) {
-    this.mensaje = 'Error al agregar la cita: ' + error;
-  }
-  }
-
-
   buscarCitaPorID(id: string) {
-    this.citasService.buscarCitaPorID(id)
+    this.citasService
+      .buscarCitaPorID(id)
       .then((citas) => {
         this.citasEncontradas = citas;
         if (citas.length === 0) {
@@ -227,6 +207,30 @@ export class CitasComponent implements OnInit {
     }
   }
 
+  filtarHorariosDoctor(doctor: Doctor, fecha: Date) {
+    let horasCitas: string[] = [];
+    let date = this.datepipe.transform(fecha, 'yyyy-MM-dd');
+    if (date) {
+      this.citasService
+        .buscarCitasPorDoctorDNI(doctor.nombre, date)
+        .then((citas) => {
+          citas.forEach((cita) => {
+            let hora = this.datepipe.transform(cita.fecha, 'yyyy-MM-dd');
+            if (hora) {
+              horasCitas.push(hora);
+            }
+          });
+          horasCitas = doctor.horario.filter((el) => !horasCitas.includes(el));
+        })
+        .catch((error) => {
+          console.log('Error: ' + error);
+        });
+      console.log(horasCitas);
+      return horasCitas;
+    }
+    return [];
+  }
+
   buscarDoctorPorEspecialidad(especialidad: string) {
     this.doctorsService
       .buscarDoctorPorEspecialidad(especialidad)
@@ -238,6 +242,7 @@ export class CitasComponent implements OnInit {
         } else {
           this.mensajeDoc = '';
           this.horariosDoctor = doctors[0].horario;
+          doctors[0].horario;
         }
       })
       .catch((error) => {
@@ -254,6 +259,10 @@ export class CitasComponent implements OnInit {
 
   seleccionarDoctor(doctor: Doctor) {
     this.doctorSeleccionado = { ...doctor };
+    this.doctorSeleccionado.horario = this.filtarHorariosDoctor(
+      this.doctorSeleccionado,
+      new Date()
+    );
     this.loadDoctorSchedule();
   }
   loadDoctorSchedule() {
@@ -266,10 +275,9 @@ export class CitasComponent implements OnInit {
     }
   }
   // Aquí se obtiene el horario del doctor seleccionado y se establece como fecha mínima permitida
-      // para la selección en el componente ion-datetime.
-      // Asegúrate de que el horario del doctor sea un array de strings que representen las horas disponibles.
-      // Por ejemplo, ['09:00', '10:00', '11:00', ...].
-
+  // para la selección en el componente ion-datetime.
+  // Asegúrate de que el horario del doctor sea un array de strings que representen las horas disponibles.
+  // Por ejemplo, ['09:00', '10:00', '11:00', ...].
 
   getFormattedDate(date: Date): string {
     const year = date.getFullYear();
@@ -299,11 +307,26 @@ export class CitasComponent implements OnInit {
       //this.cita.pacienteId &&
       this.cita.doctorId &&
       this.cita.especialidad &&
-      //this.cita.fecha &&
-      //      this.cita.estado
-      this.cita.motivo 
-
+      this.cita.fecha &&
+      this.cita.motivo &&
+      this.cita.estado
     );
+  }
+
+  showTimes() {
+    this.mostrarHoras = !this.mostrarHoras;
+    if (!this.mostrarHoras) {
+      this.borrarHoras();
+    }
+  }
+
+  borrarHoras() {
+    console.log('borrar horas');
+    let horas = this.horariosDoctor;
+    this.horariosDoctor = [];
+    this.horariosDoctor = horas;
+    this.horariosDoctor;
+    this.cita.hora = '';
   }
 
   limpiarFormulario() {

@@ -8,7 +8,6 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
     <ion-title>
       <div class="logo-container">
@@ -48,30 +47,6 @@
 </style>
 
 <ion-content >
-  <ion-menu
-  (click)="toggleMenu()"
-    side="start"
-    menuId="main-menu"
-    contentId="main-content"
-    type="overlay"
-    swipeGesture="true"
-  >
-    <ion-content (click)="toggleMenu()">
-      <ion-list>
-        <ion-menu-toggle auto-hide="false">
-          <ion-item>
-            <ion-label>Página 1</ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>Página 2</ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>Página 3</ion-label>
-          </ion-item>
-        </ion-menu-toggle>
-      </ion-list>
-    </ion-content>
-  </ion-menu>
 
   <ion-router-outlet id="main-content"></ion-router-outlet>
 
@@ -209,12 +184,7 @@
       <ion-card-header>
         <ion-card-title
           style="font-family: 'Kanit', sans-serif; font-weight: 400"
-          ><ng-container *ngIf="usuarioRol === 'MEDICO'">
-            Ver mensajes
-          </ng-container>
-          <ng-container *ngIf="usuarioRol === 'PACIENTE'">
-            Contáctenos
-          </ng-container></ion-card-title
+          >Contáctanos</ion-card-title
         >
       </ion-card-header>
       <ion-card-content>
@@ -226,14 +196,8 @@
               class="icono"
             />
           </ion-thumbnail>
-          <ng-container *ngIf="usuarioRol === 'MEDICO'">
-            Leer mensajes de cuestiones de los pacientes.
-          </ng-container>
-          <ng-container *ngIf="usuarioRol === 'PACIENTE'">
-            ¿Tienes preguntas o inquietudes? Rellena el formulario de contacto
-            para consultarnos cualquier duda y le responderemos lo antes posible con un correo o a su telefono de contacto.
-          </ng-container>
-
+          ¿Tienes preguntas o inquietudes? Rellena el formulario de contacto
+          para consultarnos.
         </ion-item>
       </ion-card-content>
     </ion-card>

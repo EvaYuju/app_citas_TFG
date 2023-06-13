@@ -30,6 +30,7 @@ var pacientes_service_1 = require("./services/pacientes.service");
 var citas_service_1 = require("./services/citas.service");
 var usuarios_service_1 = require("./services/usuarios.service");
 var auth_service_1 = require("./services/auth.service");
+var common_1 = require("@angular/common");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -49,6 +50,7 @@ var AppModule = /** @class */ (function () {
                 forms_1.ReactiveFormsModule
             ],
             providers: [
+                common_1.DatePipe,
                 citas_service_1.CitasService,
                 usuarios_service_1.UsuariosService,
                 pacientes_service_1.PacientesService,
