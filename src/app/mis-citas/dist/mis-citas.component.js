@@ -9,12 +9,15 @@ exports.__esModule = true;
 exports.MisCitasComponent = void 0;
 var core_1 = require("@angular/core");
 var operators_1 = require("rxjs/operators");
+var firestore_1 = require("@angular/fire/firestore");
 var MisCitasComponent = /** @class */ (function () {
     //cita: Citas;
-    function MisCitasComponent(citasService, usuariosService, pacientesService, authService) {
+    function MisCitasComponent(citasService, usuariosService, pacientesService, firestore, specialtiesService, authService) {
         this.citasService = citasService;
         this.usuariosService = usuariosService;
         this.pacientesService = pacientesService;
+        this.firestore = firestore;
+        this.specialtiesService = specialtiesService;
         this.authService = authService;
         this.citasPaciente = [];
         this.dni = '';
@@ -24,9 +27,24 @@ var MisCitasComponent = /** @class */ (function () {
         this.usuarioPacienteDni = '';
         this.dniUsuarioActual = '';
         this.nombreUsuarioActual = ''; // pendiente hacer y en todas
+        this.citasEncontradasEspecialidad = [];
+        this.especialidades = [];
+        this.specialtyBuscar = '';
+        this.cita = {
+            id: '',
+            pacienteId: '',
+            doctorId: '',
+            especialidad: '',
+            fecha: new Date(),
+            hora: '',
+            motivo: '',
+            estado: '',
+            comentario: ''
+        };
     }
     MisCitasComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.loadSpecialties();
         this.obtenerUsuarioRol().then(function () {
             _this.obtenerUsuarioDNI().then(function () {
                 _this.buscarCitas();
@@ -127,6 +145,31 @@ var MisCitasComponent = /** @class */ (function () {
         else {
             this.citasPaciente = [];
         }
+    };
+    MisCitasComponent.prototype.buscarCitasPorEspecialidad = function (especialidad) {
+        var _this = this;
+        var citaRef = firestore_1.collection(this.firestore, 'citas');
+        var q = firestore_1.query(citaRef, firestore_1.where('especialidad', '==', especialidad));
+        return firestore_1.getDocs(q).then(function (snapshot) {
+            if (!snapshot.empty) {
+                var citas_1 = [];
+                snapshot.forEach(function (doc) {
+                    var cita = doc.data();
+                    cita.id = doc.id;
+                    citas_1.push(cita);
+                });
+                _this.citasPaciente = citas_1; // Asignar las citas encontradas a this.citasPaciente
+            }
+            else {
+                _this.citasPaciente = []; // Si no se encontraron citas, asignar un array vacío
+            }
+        });
+    };
+    MisCitasComponent.prototype.loadSpecialties = function () {
+        var _this = this;
+        this.specialtiesService.getAllSpecialties().then(function (listSpecialties) {
+            _this.especialidades = listSpecialties;
+        });
     };
     // Métodos comúnes
     MisCitasComponent.prototype.getColorByEstado = function (estado) {

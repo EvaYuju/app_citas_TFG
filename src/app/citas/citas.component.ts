@@ -198,6 +198,25 @@ export class CitasComponent implements OnInit {
       });
   }
 
+  buscarCitasPorEspecialidad(especialidad: string) {
+  const citaRef = collection(this.firestore, 'citas');
+  const q = query(citaRef, where('especialidad', '==', especialidad));
+  return getDocs(q).then((snapshot) => {
+    if (!snapshot.empty) {
+      const citas: Citas[] = [];
+      snapshot.forEach((doc) => {
+        const cita = doc.data() as Citas;
+        cita.id = doc.id;
+        citas.push(cita);
+      });
+      return citas;
+    } else {
+      return [];
+    }
+  });
+}
+
+
   seleccionarCita(cita: Citas) {
     this.citaSeleccionada = { ...cita };
   }

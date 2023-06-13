@@ -3,9 +3,23 @@ import { Citas } from './../models/citas';
 import { CitasService } from '../services/citas.service';
 import { UsuariosService } from '../services/usuarios.service';
 import { PacientesService } from './../services/pacientes.service';
+import { SpecialtiesService } from '../services/specialties.service';
+import { Especialidad } from '../models/specialties';
 import { Usuarios } from '../models/usuarios';
 import { AuthService } from './../services/auth.service';
 import { take } from 'rxjs/operators';
+
+import {
+  Firestore,
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from '@angular/fire/firestore';
 
 
 @Component({
@@ -22,6 +36,21 @@ export class MisCitasComponent implements OnInit {
   usuarioPacienteDni: string = '';
   dniUsuarioActual: string = '';
   nombreUsuarioActual: string = ''; // pendiente hacer y en todas
+  citasEncontradasEspecialidad: Citas[] = [];
+  especialidades: Especialidad[] = [];
+  specialtyBuscar: string = '';
+
+  cita: Citas = {
+    id: '',
+    pacienteId: '',
+    doctorId: '',
+    especialidad: '',
+    fecha: new Date(),
+    hora: '',
+    motivo: '',
+    estado: '',
+    comentario: '',
+  };
 
   //cita: Citas;
 
@@ -30,10 +59,13 @@ export class MisCitasComponent implements OnInit {
     private citasService: CitasService,
     private usuariosService: UsuariosService,
     private pacientesService: PacientesService,
+    private firestore: Firestore,
+    private specialtiesService: SpecialtiesService,
     private authService: AuthService
     ) { }
 
   ngOnInit() {
+    this.loadSpecialties();
     this.obtenerUsuarioRol().then(() => {
       this.obtenerUsuarioDNI().then(() => {
         this.buscarCitas();
@@ -136,6 +168,30 @@ export class MisCitasComponent implements OnInit {
       this.citasPaciente = [];
     }
   }
+
+  buscarCitasPorEspecialidad(especialidad: string) {
+    const citaRef = collection(this.firestore, 'citas');
+    const q = query(citaRef, where('especialidad', '==', especialidad));
+    return getDocs(q).then((snapshot) => {
+      if (!snapshot.empty) {
+        const citas: Citas[] = [];
+        snapshot.forEach((doc) => {
+          const cita = doc.data() as Citas;
+          cita.id = doc.id;
+          citas.push(cita);
+        });
+        this.citasPaciente = citas; // Asignar las citas encontradas a this.citasPaciente
+      } else {
+        this.citasPaciente = []; // Si no se encontraron citas, asignar un array vacío
+      }
+    });
+  }
+  loadSpecialties() {
+    this.specialtiesService.getAllSpecialties().then((listSpecialties) => {
+      this.especialidades = listSpecialties;
+    });
+  }
+  
 
   // Métodos comúnes
 

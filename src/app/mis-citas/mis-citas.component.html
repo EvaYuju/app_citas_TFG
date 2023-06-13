@@ -14,12 +14,35 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <ion-card-header>
+    <ion-card-title>
+      <ng-container *ngIf="usuarioRol === 'MEDICO'"
+        >Buscador de citas</ng-container
+      >
+      <ng-container *ngIf="usuarioRol === 'PACIENTE'"
+        >Aquí apareceran sus citas y el estado en el que se encuentran</ng-container
+      >
+      <ion-card-subtitle
+        >Busque las citas de un paciente por su DNI o directamente desde la especialidad que desee</ion-card-subtitle
+      >
+    </ion-card-title>
+  </ion-card-header>
 
   <!-- Código para médico -->
   <div class="search-bar-container" *ngIf="usuarioRol === 'MEDICO'">
     <ion-searchbar [(ngModel)]="pacienteId" (ionChange)="buscarCitasPorPacienteID()" placeholder="Escriba el DNI del paciente"></ion-searchbar>
     <ion-button shape="round" (click)="buscarCitasPorPacienteID()">Buscar Citas</ion-button>
-  </div>
+
+  <ion-item>
+    <ion-label position="floating">Buscar por especialidad</ion-label>
+    <ion-select placeholder="Especialidad" [(ngModel)]="cita.especialidad" (ngModelChange)="buscarCitasPorEspecialidad(cita.especialidad)">
+      <ion-select-option *ngFor="let especialidad of especialidades" [value]="especialidad.nombre">
+        {{ especialidad.nombre }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-button shape="round" (click)="buscarCitasPorEspecialidad(specialtyBuscar)">Buscar Citas</ion-button>
+</div>
 
   <!-- Código para paciente -->
   <div class="search-bar-container" *ngIf="usuarioRol === 'PACIENTE'">
@@ -73,7 +96,7 @@
   </div>
 
   <div class="no-citas" *ngIf="citasPaciente.length === 0 && usuarioRol === 'MEDICO'">
-    <p>No tienes citas programadas.</p>
+    <p>Sin resultados.</p>
   </div>
   <div class="no-citas" *ngIf="citasPaciente.length === 0 && usuarioRol === 'PACIENTE'">
     <p>No tienes citas programadas.</p>

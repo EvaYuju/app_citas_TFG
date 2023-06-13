@@ -79,9 +79,9 @@ var CitasService = /** @class */ (function () {
         var q = firestore_1.query(citaRef, firestore_1.where('id', '==', id));
         return firestore_1.getDocs(q).then(function (snapshot) { return !snapshot.empty; });
     };
-    CitasService.prototype.buscarCitaPorID = function (id) {
+    CitasService.prototype.getCitasPorEspecialidad = function (especialidad) {
         var citaRef = firestore_1.collection(this.firestore, 'citas');
-        var q = firestore_1.query(citaRef, firestore_1.where('id', '==', id));
+        var q = firestore_1.query(citaRef, firestore_1.where('especialidad', '==', especialidad));
         return firestore_1.getDocs(q).then(function (snapshot) {
             if (!snapshot.empty) {
                 var citas_1 = [];
@@ -97,10 +97,9 @@ var CitasService = /** @class */ (function () {
             }
         });
     };
-    // * Revisar y quitar si no se usa
-    CitasService.prototype.buscarCitasPorDNI = function (dni) {
+    CitasService.prototype.buscarCitaPorID = function (id) {
         var citaRef = firestore_1.collection(this.firestore, 'citas');
-        var q = firestore_1.query(citaRef, firestore_1.where('dni', '==', dni));
+        var q = firestore_1.query(citaRef, firestore_1.where('id', '==', id));
         return firestore_1.getDocs(q).then(function (snapshot) {
             if (!snapshot.empty) {
                 var citas_2 = [];
@@ -116,10 +115,10 @@ var CitasService = /** @class */ (function () {
             }
         });
     };
-    // * En uso para buscar citas por dni en citas
-    CitasService.prototype.buscarCitasPorPacienteID = function (pacienteId) {
+    // * Revisar y quitar si no se usa
+    CitasService.prototype.buscarCitasPorDNI = function (dni) {
         var citaRef = firestore_1.collection(this.firestore, 'citas');
-        var q = firestore_1.query(citaRef, firestore_1.where('pacienteId', '==', pacienteId));
+        var q = firestore_1.query(citaRef, firestore_1.where('dni', '==', dni));
         return firestore_1.getDocs(q).then(function (snapshot) {
             if (!snapshot.empty) {
                 var citas_3 = [];
@@ -135,9 +134,10 @@ var CitasService = /** @class */ (function () {
             }
         });
     };
-    CitasService.prototype.buscarCitasPorDoctorDNI = function (doctorId, fecha) {
+    // * En uso para buscar citas por dni en citas
+    CitasService.prototype.buscarCitasPorPacienteID = function (pacienteId) {
         var citaRef = firestore_1.collection(this.firestore, 'citas');
-        var q = firestore_1.query(citaRef, firestore_1.where('doctorId', '==', doctorId), firestore_1.where('fecha', '==', fecha));
+        var q = firestore_1.query(citaRef, firestore_1.where('pacienteId', '==', pacienteId));
         return firestore_1.getDocs(q).then(function (snapshot) {
             if (!snapshot.empty) {
                 var citas_4 = [];
@@ -147,6 +147,24 @@ var CitasService = /** @class */ (function () {
                     citas_4.push(cita);
                 });
                 return citas_4;
+            }
+            else {
+                return [];
+            }
+        });
+    };
+    CitasService.prototype.buscarCitasPorDoctorDNI = function (doctorId, fecha) {
+        var citaRef = firestore_1.collection(this.firestore, 'citas');
+        var q = firestore_1.query(citaRef, firestore_1.where('doctorId', '==', doctorId), firestore_1.where('fecha', '==', fecha));
+        return firestore_1.getDocs(q).then(function (snapshot) {
+            if (!snapshot.empty) {
+                var citas_5 = [];
+                snapshot.forEach(function (doc) {
+                    var cita = doc.data();
+                    cita.id = doc.id;
+                    citas_5.push(cita);
+                });
+                return citas_5;
             }
             else {
                 return [];

@@ -222,6 +222,24 @@ var CitasComponent = /** @class */ (function () {
             _this.citasEncontradas = [];
         });
     };
+    CitasComponent.prototype.buscarCitasPorEspecialidad = function (especialidad) {
+        var citaRef = firestore_1.collection(this.firestore, 'citas');
+        var q = firestore_1.query(citaRef, firestore_1.where('especialidad', '==', especialidad));
+        return firestore_1.getDocs(q).then(function (snapshot) {
+            if (!snapshot.empty) {
+                var citas_1 = [];
+                snapshot.forEach(function (doc) {
+                    var cita = doc.data();
+                    cita.id = doc.id;
+                    citas_1.push(cita);
+                });
+                return citas_1;
+            }
+            else {
+                return [];
+            }
+        });
+    };
     CitasComponent.prototype.seleccionarCita = function (cita) {
         this.citaSeleccionada = __assign({}, cita);
     };
