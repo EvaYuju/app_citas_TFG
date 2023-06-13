@@ -33,7 +33,7 @@
 
         <ion-input type="text" [(ngModel)]="dniUsuarioActual" disabled></ion-input>
       </ion-item>
-      
+
 
       <!---->
       <ion-item>
@@ -80,16 +80,21 @@
         <ion-input [(ngModel)]="cita.motivo"></ion-input>
       </ion-item>
 
-      <ion-item class="estado-item">
+      <ion-item *ngIf="usuarioRol === 'PACIENTE'">
+        <ion-label placeholder="Estado cita" position="floating">Estado cita: Pendiente</ion-label>
+        <ion-input type="text" [(ngModel)]="cita.estado" placeholder="Pendiente" disabled></ion-input>
+      </ion-item>
+
+
+      <ion-item class="estado-item" *ngIf="usuarioRol === 'MEDICO'">
         <ion-label position="floating">Estado</ion-label>
         <ion-select [(ngModel)]="cita.estado">
-          <ion-select-option value="pendiente" *ngIf="usuarioRol === 'PACIENTE'">Pendiente</ion-select-option>
           <ion-select-option value="pendiente" *ngIf="usuarioRol === 'MEDICO'">Pendiente</ion-select-option>
           <ion-select-option value="confirmada" *ngIf="usuarioRol === 'MEDICO'">Confirmar</ion-select-option>
           <ion-select-option value="denegada" *ngIf="usuarioRol === 'MEDICO'">Rechazar</ion-select-option>
         </ion-select>
       </ion-item>
-    
+
       <ion-item>
         <ion-label position="floating">Comentario</ion-label>
         <ion-input type="email" [(ngModel)]="cita.comentario"></ion-input>
@@ -169,9 +174,9 @@
       </ion-item>
       <ion-item>
         <ion-label position="floating">Fecha</ion-label>
-        <ion-input 
-        type="date" 
-        [(ngModel)]="citaSeleccionada.fecha" 
+        <ion-input
+        type="date"
+        [(ngModel)]="citaSeleccionada.fecha"
         [value]="citaSeleccionada.fecha | date:'yyyy-MM-dd'">
       </ion-input>
       </ion-item>

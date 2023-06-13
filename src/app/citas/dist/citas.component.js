@@ -94,6 +94,7 @@ var CitasComponent = /** @class */ (function () {
         this.horariosDoctor = [];
         this.usuarioPacienteDni = '';
         this.dniUsuarioActual = '';
+        this.estadoCitaDef = '';
     }
     CitasComponent.prototype.ngOnInit = function () {
         this.citaSeleccionada = this.cita;
@@ -196,6 +197,8 @@ var CitasComponent = /** @class */ (function () {
                             this.mensaje = 'Por favor, complete todos los campos.';
                             return [2 /*return*/];
                         }
+                        // Establecer el estado de la cita como "pendiente"
+                        this.cita.estado = 'pendiente';
                         // Obtener la hora seleccionada del componente ion-select y asignarla al campo 'hora'
                         this.cita.hora = this.cita.hora.substring(0, 5);
                         // Guardar el dniUsuarioActual en cita.pacienteId
@@ -316,9 +319,9 @@ var CitasComponent = /** @class */ (function () {
         //this.cita.pacienteId &&
         this.cita.doctorId &&
             this.cita.especialidad &&
-            this.cita.fecha &&
-            this.cita.motivo &&
-            this.cita.estado);
+            //this.cita.fecha &&
+            //      this.cita.estado
+            this.cita.motivo);
     };
     CitasComponent.prototype.limpiarFormulario = function () {
         this.cita = {

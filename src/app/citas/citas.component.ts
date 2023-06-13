@@ -65,6 +65,7 @@ export class CitasComponent implements OnInit {
   horariosDoctor: string[] = [];
   usuarioPacienteDni: string = '';
   dniUsuarioActual: string = '';
+  estadoCitaDef: string = '';
 
 
   constructor(
@@ -174,7 +175,8 @@ export class CitasComponent implements OnInit {
       this.mensaje = 'Por favor, complete todos los campos.';
       return;
     }
-
+    // Establecer el estado de la cita como "pendiente"
+    this.cita.estado = 'pendiente';
     // Obtener la hora seleccionada del componente ion-select y asignarla al campo 'hora'
     this.cita.hora = this.cita.hora.substring(0, 5);
     // Guardar el dniUsuarioActual en cita.pacienteId
@@ -297,9 +299,10 @@ export class CitasComponent implements OnInit {
       //this.cita.pacienteId &&
       this.cita.doctorId &&
       this.cita.especialidad &&
-      this.cita.fecha &&
-      this.cita.motivo &&
-      this.cita.estado
+      //this.cita.fecha &&
+      //      this.cita.estado
+      this.cita.motivo 
+
     );
   }
 
