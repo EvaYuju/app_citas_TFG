@@ -77,6 +77,7 @@
           <p>Hora: {{ cita.hora }}</p>
           <p>Motivo: {{ cita.motivo }}</p>
           <p>Estado: {{ cita.estado }}</p>
+          <p>DNI paciente: {{ cita.pacienteId }}</p>
           <ion-item [ngStyle]="{ 'width': '260px' }">
         <ion-label class="custom-label" [ngStyle]="{ 'background-color': getColorByEstado(cita.estado), 'margin-right': '10px' }">Estado: {{ cita.estado }}</ion-label>
       </ion-item>
