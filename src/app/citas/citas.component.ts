@@ -151,6 +151,15 @@ export class CitasComponent implements OnInit {
       return;
     }
 
+      // Check if the patient with the specified DNI exists
+      const pacienteExists = await this.pacientesService.getPacientePorDNI(
+        this.cita.pacienteId
+      );
+  
+      if (!pacienteExists) {
+        this.mensaje = 'El DNI del paciente no coincide con ningún paciente registrado.';
+        return;
+      }
     // Obtener la hora seleccionada del componente ion-select y asignarla al campo 'hora'
     this.cita.hora = this.cita.hora.substring(0, 5);
 
