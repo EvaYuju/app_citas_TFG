@@ -55,6 +55,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.CitasComponent = void 0;
 var core_1 = require("@angular/core");
+// prueba
 var firestore_1 = require("@angular/fire/firestore");
 var CitasComponent = /** @class */ (function () {
     function CitasComponent(citasService, doctorsService, specialtiesService, usuariosService, alertController, pacientesService, firestore, auth, authService) {
@@ -107,7 +108,7 @@ var CitasComponent = /** @class */ (function () {
             if (correo) {
                 _this.usuariosService.getUsuarioRol(correo).then(function (rol) {
                     _this.usuarioRol = rol || '';
-                    // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+                    // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado
                     if (_this.usuarioRol === 'PACIENTE') {
                         _this.pacientesService.getPacientePorCorreo(correo).then(function (paciente) {
                             if (paciente) {
@@ -123,7 +124,7 @@ var CitasComponent = /** @class */ (function () {
         var _this = this;
         return this.usuariosService.getUsuarioRol(correo).then(function (rol) {
             _this.usuarioRol = rol || '';
-            // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+            // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado
             if (_this.usuarioRol === 'PACIENTE') {
                 return _this.pacientesService.getPacientePorCorreo(correo).then(function (paciente) {
                     if (paciente) {

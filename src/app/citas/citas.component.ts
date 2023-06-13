@@ -12,7 +12,7 @@ import { PacientesService } from './../services/pacientes.service';
 import { Usuarios } from '../models/usuarios';
 import { AuthService } from './../services/auth.service';
 
-
+// prueba
 import {
   Firestore,
   collection,
@@ -77,7 +77,7 @@ export class CitasComponent implements OnInit {
     private firestore: Firestore,
     private auth: AuthService,
     private authService: AuthService
-    
+
     ) {}
 
   ngOnInit() {
@@ -85,7 +85,7 @@ export class CitasComponent implements OnInit {
     this.loadSpecialties();
     this.obtenerUsuarioRol(); // Obtener el rol del usuario
     this.obtenerUsuarioDNI(); // Obtener el DNI del paciente logueado
-    
+
   }
   // ***
   obtenerUsuarioRol() {
@@ -93,8 +93,8 @@ export class CitasComponent implements OnInit {
       if (correo) {
         this.usuariosService.getUsuarioRol(correo).then((rol) => {
           this.usuarioRol = rol || '';
-  
-          // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+
+          // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado
           if (this.usuarioRol === 'PACIENTE') {
             this.pacientesService.getPacientePorCorreo(correo).then((paciente) => {
               if (paciente) {
@@ -107,11 +107,11 @@ export class CitasComponent implements OnInit {
       }
     });
   }
-  
+
   getUsuarioRol(correo: string): Promise<string | null> {
     return this.usuariosService.getUsuarioRol(correo).then((rol) => {
       this.usuarioRol = rol || '';
-      // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+      // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado
       if (this.usuarioRol === 'PACIENTE') {
         return this.pacientesService.getPacientePorCorreo(correo).then((paciente) => {
           if (paciente) {
@@ -124,7 +124,7 @@ export class CitasComponent implements OnInit {
       }
     });
   }
-  
+
 
   obtenerUsuarioDNI() {
     this.authService.getUsuarioEmail().subscribe((correo) => {
@@ -139,7 +139,7 @@ export class CitasComponent implements OnInit {
       }
     });
   }
-  
+
 
 
   async agregarCitaD() {
@@ -147,18 +147,18 @@ export class CitasComponent implements OnInit {
       this.mensaje = 'Por favor, complete todos los campos.';
       return;
     }
-  
+
     // Obtener la hora seleccionada del componente ion-select y asignarla al campo 'hora'
     this.cita.hora = this.cita.hora.substring(0, 5);
-    
+
     if (this.usuarioRol !== 'MEDICO') {
       this.mensaje = 'Acceso no autorizado. Solo los médicos pueden agregar citas.';
       return;
     }
-  
+
     // Guardar el dniUsuarioActual en cita.medicoId
     //this.cita.pacienteId = this.dniUsuarioActual;
-  
+
     // Agregar la cita a Firestore
     try {
       const docRef = await addDoc(collection(this.firestore, 'citas'), this.cita);
@@ -174,12 +174,12 @@ export class CitasComponent implements OnInit {
       this.mensaje = 'Por favor, complete todos los campos.';
       return;
     }
-  
+
     // Obtener la hora seleccionada del componente ion-select y asignarla al campo 'hora'
     this.cita.hora = this.cita.hora.substring(0, 5);
     // Guardar el dniUsuarioActual en cita.pacienteId
     this.cita.pacienteId = this.dniUsuarioActual;
-  
+
     // Agregar la cita a Firestore
   try {
     const docRef = await addDoc(collection(this.firestore, 'citas'), this.cita);
@@ -189,7 +189,7 @@ export class CitasComponent implements OnInit {
     this.mensaje = 'Error al agregar la cita: ' + error;
   }
   }
-  
+
 
   buscarCitaPorID(id: string) {
     this.citasService.buscarCitaPorID(id)
