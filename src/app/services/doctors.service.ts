@@ -47,7 +47,7 @@ export class DoctorsService {
   }
 
 
-  buscarDoctorPorDNI(dni: string) {
+  async buscarDoctorPorDNI(dni: string) {
     const doctorRef2 = collection(this.firestore, 'doctores');
     const q = query(doctorRef2, where('dni', '==', dni));
     return getDocs(q)
@@ -59,6 +59,7 @@ export class DoctorsService {
             doctor.id = doc.id;
             doctors.push(doctor);
           });
+          console.log(doctors)
           return doctors;
         } else {
           return [];

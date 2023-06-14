@@ -55,10 +55,9 @@ export class CitasComponent implements OnInit {
   mensaje: string = '';
   mensajeID: string = '';
   mensajeDoc: string = '';
-  mostrarHoras: boolean = false;
 
   specialtyBuscar: string = '';
-  doctorSeleccionado: Doctor | null = null;
+  doctorSeleccionado?: Doctor;
   citasEncontradas: Citas[] = [];
   citaSeleccionada: Citas | null = null;
   especialidades: Especialidad[] = [];
@@ -87,6 +86,19 @@ export class CitasComponent implements OnInit {
     this.loadSpecialties();
     this.obtenerUsuarioRol(); // Obtener el rol del usuario
     this.obtenerUsuarioDNI(); // Obtener el DNI del paciente logueado
+    //this.selectDoctor("20000009H",new Date());
+
+  }
+
+  async selectDoctor(dni?:string, date?:Date){
+    let doctores:Doctor[] = [];
+    if(dni && date){
+      await this.doctorsService.buscarDoctorPorDNI(dni).then((value) => {doctores = value});
+    this.seleccionarDoctor(
+      doctores[0],
+      date
+      );
+    }
   }
   // ***
   obtenerUsuarioRol() {
@@ -207,26 +219,26 @@ export class CitasComponent implements OnInit {
     }
   }
 
-  filtarHorariosDoctor(doctor: Doctor, fecha: Date) {
+  async filtarHorariosDoctor(doctor: Doctor, fecha: Date) {
     let horasCitas: string[] = [];
+    let horas_final: string[] =[];
     let date = this.datepipe.transform(fecha, 'yyyy-MM-dd');
     if (date) {
-      this.citasService
-        .buscarCitasPorDoctorDNI(doctor.nombre, date)
+      await this.citasService
+        .buscarCitasPorDoctorDNI(doctor.dni, date)
         .then((citas) => {
           citas.forEach((cita) => {
-            let hora = this.datepipe.transform(cita.fecha, 'yyyy-MM-dd');
-            if (hora) {
-              horasCitas.push(hora);
+            horasCitas.push(cita.hora);
+          });
+          doctor.horario.forEach((searchElement) => {
+
+            if(!horasCitas.includes(searchElement)){
+              horas_final.push(searchElement);
             }
           });
-          horasCitas = doctor.horario.filter((el) => !horasCitas.includes(el));
-        })
-        .catch((error) => {
-          console.log('Error: ' + error);
         });
-      console.log(horasCitas);
-      return horasCitas;
+
+      return horas_final;
     }
     return [];
   }
@@ -257,11 +269,11 @@ export class CitasComponent implements OnInit {
     });
   }
 
-  seleccionarDoctor(doctor: Doctor) {
+  async seleccionarDoctor(doctor: Doctor, fecha:Date) {
     this.doctorSeleccionado = { ...doctor };
-    this.doctorSeleccionado.horario = this.filtarHorariosDoctor(
+    this.doctorSeleccionado.horario = await this.filtarHorariosDoctor(
       this.doctorSeleccionado,
-      new Date()
+      fecha
     );
     this.loadDoctorSchedule();
   }
@@ -313,15 +325,11 @@ export class CitasComponent implements OnInit {
     );
   }
 
-  showTimes() {
-    this.mostrarHoras = !this.mostrarHoras;
-    if (!this.mostrarHoras) {
-      this.borrarHoras();
-    }
+  async showTimes(fecha?:Date) {
+    await this.selectDoctor(this.cita.doctorId, fecha);
   }
 
   borrarHoras() {
-    console.log('borrar horas');
     let horas = this.horariosDoctor;
     this.horariosDoctor = [];
     this.horariosDoctor = horas;

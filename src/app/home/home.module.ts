@@ -29,7 +29,6 @@ export class HomePageModule {
     localStorage.removeItem('ROL');
     this.auth.logout();
     this.router.navigate(['/landing-page']);
-  }
-  */
+  }*/
 
 }

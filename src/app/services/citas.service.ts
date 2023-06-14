@@ -27,24 +27,6 @@ export class CitasService {
     return getDocs(q).then((snapshot) => !snapshot.empty);
   }
 
-  getCitasPorEspecialidad(especialidad: string) {
-    const citaRef = collection(this.firestore, 'citas');
-    const q = query(citaRef, where('especialidad', '==', especialidad));
-    return getDocs(q).then((snapshot) => {
-      if (!snapshot.empty) {
-        const citas: Citas[] = [];
-        snapshot.forEach((doc) => {
-          const cita = doc.data() as Citas;
-          cita.id = doc.id;
-          citas.push(cita);
-        });
-        return citas;
-      } else {
-        return [];
-      }
-    });
-  }
-
   buscarCitaPorID(id: string) {
     const citaRef = collection(this.firestore, 'citas');
     const q = query(citaRef, where('id', '==', id));
@@ -117,7 +99,6 @@ export class CitasService {
       }
     });
   }
-
 
   modificarCita(cita: Citas) {
     const citaRef = doc(this.firestore, 'citas', cita.id);

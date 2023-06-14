@@ -88,9 +88,7 @@ var CitasComponent = /** @class */ (function () {
         this.mensaje = '';
         this.mensajeID = '';
         this.mensajeDoc = '';
-        this.mostrarHoras = false;
         this.specialtyBuscar = '';
-        this.doctorSeleccionado = null;
         this.citasEncontradas = [];
         this.citaSeleccionada = null;
         this.especialidades = [];
@@ -106,6 +104,25 @@ var CitasComponent = /** @class */ (function () {
         this.loadSpecialties();
         this.obtenerUsuarioRol(); // Obtener el rol del usuario
         this.obtenerUsuarioDNI(); // Obtener el DNI del paciente logueado
+        //this.selectDoctor("20000009H",new Date());
+    };
+    CitasComponent.prototype.selectDoctor = function (dni, date) {
+        return __awaiter(this, void 0, void 0, function () {
+            var doctores;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        doctores = [];
+                        if (!(dni && date)) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.doctorsService.buscarDoctorPorDNI(dni).then(function (value) { doctores = value; })];
+                    case 1:
+                        _a.sent();
+                        this.seleccionarDoctor(doctores[0], date);
+                        _a.label = 2;
+                    case 2: return [2 /*return*/];
+                }
+            });
+        });
     };
     // ***
     CitasComponent.prototype.obtenerUsuarioRol = function () {
@@ -232,27 +249,34 @@ var CitasComponent = /** @class */ (function () {
         }
     };
     CitasComponent.prototype.filtarHorariosDoctor = function (doctor, fecha) {
-        var _this = this;
-        var horasCitas = [];
-        var date = this.datepipe.transform(fecha, 'yyyy-MM-dd');
-        if (date) {
-            this.citasService
-                .buscarCitasPorDoctorDNI(doctor.nombre, date)
-                .then(function (citas) {
-                citas.forEach(function (cita) {
-                    var hora = _this.datepipe.transform(cita.fecha, 'yyyy-MM-dd');
-                    if (hora) {
-                        horasCitas.push(hora);
-                    }
-                });
-                horasCitas = doctor.horario.filter(function (el) { return !horasCitas.includes(el); });
-            })["catch"](function (error) {
-                console.log('Error: ' + error);
+        return __awaiter(this, void 0, void 0, function () {
+            var horasCitas, horas_final, date;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        horasCitas = [];
+                        horas_final = [];
+                        date = this.datepipe.transform(fecha, 'yyyy-MM-dd');
+                        if (!date) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.citasService
+                                .buscarCitasPorDoctorDNI(doctor.dni, date)
+                                .then(function (citas) {
+                                citas.forEach(function (cita) {
+                                    horasCitas.push(cita.hora);
+                                });
+                                doctor.horario.forEach(function (searchElement) {
+                                    if (!horasCitas.includes(searchElement)) {
+                                        horas_final.push(searchElement);
+                                    }
+                                });
+                            })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, horas_final];
+                    case 2: return [2 /*return*/, []];
+                }
             });
-            console.log(horasCitas);
-            return horasCitas;
-        }
-        return [];
+        });
     };
     CitasComponent.prototype.buscarDoctorPorEspecialidad = function (especialidad) {
         var _this = this;
@@ -280,10 +304,22 @@ var CitasComponent = /** @class */ (function () {
             _this.especialidades = listSpecialties;
         });
     };
-    CitasComponent.prototype.seleccionarDoctor = function (doctor) {
-        this.doctorSeleccionado = __assign({}, doctor);
-        this.doctorSeleccionado.horario = this.filtarHorariosDoctor(this.doctorSeleccionado, new Date());
-        this.loadDoctorSchedule();
+    CitasComponent.prototype.seleccionarDoctor = function (doctor, fecha) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        this.doctorSeleccionado = __assign({}, doctor);
+                        _a = this.doctorSeleccionado;
+                        return [4 /*yield*/, this.filtarHorariosDoctor(this.doctorSeleccionado, fecha)];
+                    case 1:
+                        _a.horario = _b.sent();
+                        this.loadDoctorSchedule();
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     CitasComponent.prototype.loadDoctorSchedule = function () {
         if (this.doctorSeleccionado) {
@@ -326,14 +362,19 @@ var CitasComponent = /** @class */ (function () {
             this.cita.motivo &&
             this.cita.estado);
     };
-    CitasComponent.prototype.showTimes = function () {
-        this.mostrarHoras = !this.mostrarHoras;
-        if (!this.mostrarHoras) {
-            this.borrarHoras();
-        }
+    CitasComponent.prototype.showTimes = function (fecha) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.selectDoctor(this.cita.doctorId, fecha)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     CitasComponent.prototype.borrarHoras = function () {
-        console.log('borrar horas');
         var horas = this.horariosDoctor;
         this.horariosDoctor = [];
         this.horariosDoctor = horas;
