@@ -112,13 +112,10 @@
             >Pendiente</ion-select-option
           >
           <ion-select-option value="pendiente" *ngIf="usuarioRol === 'MEDICO'"
-            >Pendiente</ion-select-option
+            >Dejar pendiente</ion-select-option
           >
           <ion-select-option value="confirmada" *ngIf="usuarioRol === 'MEDICO'"
-            >Confirmar</ion-select-option
-          >
-          <ion-select-option value="denegada" *ngIf="usuarioRol === 'MEDICO'"
-            >Rechazar</ion-select-option
+            >Confirmar cita</ion-select-option
           >
         </ion-select>
       </ion-item>
@@ -135,7 +132,7 @@
     >
   </ion-card>
 
-  <ion-card color="primary">
+<ion-card color="primary">
     <ion-card-content class="ion-text-center">
       <ion-row *ngIf="mensaje">
         <ion-col>

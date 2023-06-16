@@ -30,7 +30,8 @@ import {
 export class MisCitasComponent implements OnInit {
   citasPaciente: Citas[] = [];
   dni: string = '';
-  pacienteId: string = '';
+  pacienteId: string ='';
+  doctorId: string ='';
   nuevoEstado: string = ''; // Almacenar el cambio del estado
   usuarioRol: string = ''; // Agrega esta línea para almacenar el rol del usuario
   usuarioPacienteDni: string = '';
@@ -159,6 +160,18 @@ export class MisCitasComponent implements OnInit {
 
   buscarCitasPorPacienteID() {
     if (this.pacienteId !== '') {
+      this.citasService.buscarCitasPorPacienteID(this.pacienteId).then((citas) => {
+        this.citasPaciente = citas;
+                console.log("Citas del paciente:", this.citasPaciente);
+
+      });
+    } else {
+      this.citasPaciente = [];
+    }
+  }
+
+  buscarCitasPorDoctorID() {
+    if (this.doctorId !== '') {
       this.citasService.buscarCitasPorPacienteID(this.pacienteId).then((citas) => {
         this.citasPaciente = citas;
                 console.log("Citas del paciente:", this.citasPaciente);

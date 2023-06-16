@@ -22,6 +22,7 @@ var MisCitasComponent = /** @class */ (function () {
         this.citasPaciente = [];
         this.dni = '';
         this.pacienteId = '';
+        this.doctorId = '';
         this.nuevoEstado = ''; // Almacenar el cambio del estado
         this.usuarioRol = ''; // Agrega esta línea para almacenar el rol del usuario
         this.usuarioPacienteDni = '';
@@ -137,6 +138,18 @@ var MisCitasComponent = /** @class */ (function () {
     MisCitasComponent.prototype.buscarCitasPorPacienteID = function () {
         var _this = this;
         if (this.pacienteId !== '') {
+            this.citasService.buscarCitasPorPacienteID(this.pacienteId).then(function (citas) {
+                _this.citasPaciente = citas;
+                console.log("Citas del paciente:", _this.citasPaciente);
+            });
+        }
+        else {
+            this.citasPaciente = [];
+        }
+    };
+    MisCitasComponent.prototype.buscarCitasPorDoctorID = function () {
+        var _this = this;
+        if (this.doctorId !== '') {
             this.citasService.buscarCitasPorPacienteID(this.pacienteId).then(function (citas) {
                 _this.citasPaciente = citas;
                 console.log("Citas del paciente:", _this.citasPaciente);

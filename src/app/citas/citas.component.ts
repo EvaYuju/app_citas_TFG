@@ -165,7 +165,11 @@ export class CitasComponent implements OnInit {
 
     // Obtener la hora seleccionada del componente ion-select y asignarla al campo 'hora'
     this.cita.hora = this.cita.hora.substring(0, 5);
-
+    const docRef = await addDoc(
+      collection(this.firestore, 'citas'),
+      this.cita
+    );
+    this.cita.id = docRef.id;
     if (this.usuarioRol === 'PACIENTE') {
       this.cita.pacienteId = this.dniUsuarioActual;
     }
@@ -176,9 +180,13 @@ export class CitasComponent implements OnInit {
         collection(this.firestore, 'citas'),
         this.cita
       );
+      this.cita.id = docRef.id;
+
       this.mensajeID =
-        'Cita agregada correctamente. ID de la cita: ' + docRef.id;
+        'Cita agregada correctamente en *** (ID de la cita: ' + docRef.id +').' ;
       this.limpiarFormulario();
+      this.limpiarMensaje(); // Limpia el mensaje 1º
+
     } catch (error) {
       this.mensaje = 'Error al agregar la cita: ' + error;
     }
@@ -349,5 +357,8 @@ export class CitasComponent implements OnInit {
       estado: '',
       comentario: '',
     };
+  }
+  limpiarMensaje() {
+    this.mensaje = '';
   }
 }
