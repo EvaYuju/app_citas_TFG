@@ -98,12 +98,16 @@ var CitasComponent = /** @class */ (function () {
         this.horariosDoctor = [];
         this.usuarioPacienteDni = '';
         this.dniUsuarioActual = '';
+        this.correoUsuarioActual = '';
     }
     CitasComponent.prototype.ngOnInit = function () {
         this.citaSeleccionada = this.cita;
         this.loadSpecialties();
         this.obtenerUsuarioRol(); // Obtener el rol del usuario
+        this.usuarioRol = '';
         this.obtenerUsuarioDNI(); // Obtener el DNI del paciente logueado
+        this.dniUsuarioActual = '';
+        //this.correoUsuarioActual = '';
         //this.selectDoctor("20000009H",new Date());
     };
     CitasComponent.prototype.selectDoctor = function (dni, date) {
@@ -183,7 +187,7 @@ var CitasComponent = /** @class */ (function () {
     };
     CitasComponent.prototype.agregarCita = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var docRef, docRef_1, error_1;
+            var pacienteExists, docRef, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -191,12 +195,20 @@ var CitasComponent = /** @class */ (function () {
                             this.mensaje = 'Por favor, complete todos los campos.';
                             return [2 /*return*/];
                         }
+                        return [4 /*yield*/, this.pacientesService.getPacientePorDNI(this.cita.pacienteId)];
+                    case 1:
+                        pacienteExists = _a.sent();
+                        if (!pacienteExists) {
+                            this.mensaje = 'El DNI del paciente no coincide con ningún paciente registrado.';
+                            return [2 /*return*/];
+                        }
                         // Obtener la hora seleccionada del componente ion-select y asignarla al campo 'hora'
                         this.cita.hora = this.cita.hora.substring(0, 5);
-                        return [4 /*yield*/, firestore_1.addDoc(firestore_1.collection(this.firestore, 'citas'), this.cita)];
-                    case 1:
-                        docRef = _a.sent();
-                        this.cita.id = docRef.id;
+                        /*const docRef = await addDoc(
+                          collection(this.firestore, 'citas'),
+                          this.cita
+                        );
+                        this.cita.id = docRef.id; */
                         if (this.usuarioRol === 'PACIENTE') {
                             this.cita.pacienteId = this.dniUsuarioActual;
                         }
@@ -205,10 +217,10 @@ var CitasComponent = /** @class */ (function () {
                         _a.trys.push([2, 4, , 5]);
                         return [4 /*yield*/, firestore_1.addDoc(firestore_1.collection(this.firestore, 'citas'), this.cita)];
                     case 3:
-                        docRef_1 = _a.sent();
-                        this.cita.id = docRef_1.id;
+                        docRef = _a.sent();
+                        this.cita.id = docRef.id;
                         this.mensajeID =
-                            'Cita agregada correctamente en *** (ID de la cita: ' + docRef_1.id + ').';
+                            'Cita agregada correctamente en *** (ID de la cita: ' + docRef.id + ').';
                         this.limpiarFormulario();
                         this.limpiarMensaje(); // Limpia el mensaje 1º
                         return [3 /*break*/, 5];

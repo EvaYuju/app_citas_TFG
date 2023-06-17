@@ -12,21 +12,25 @@ var operators_1 = require("rxjs/operators");
 var firestore_1 = require("@angular/fire/firestore");
 var MisCitasComponent = /** @class */ (function () {
     //cita: Citas;
-    function MisCitasComponent(citasService, usuariosService, pacientesService, firestore, specialtiesService, authService) {
+    function MisCitasComponent(citasService, usuariosService, pacientesService, doctorsService, firestore, specialtiesService, authService) {
         this.citasService = citasService;
         this.usuariosService = usuariosService;
         this.pacientesService = pacientesService;
+        this.doctorsService = doctorsService;
         this.firestore = firestore;
         this.specialtiesService = specialtiesService;
         this.authService = authService;
         this.citasPaciente = [];
+        this.citasDoctor = []; // ***
         this.dni = '';
         this.pacienteId = '';
         this.doctorId = '';
         this.nuevoEstado = ''; // Almacenar el cambio del estado
         this.usuarioRol = ''; // Agrega esta línea para almacenar el rol del usuario
-        this.usuarioPacienteDni = '';
+        //usuarioPacienteDni: string = '';
         this.dniUsuarioActual = '';
+        this.tlfUsuarioActual = '';
+        this.correoUsuarioActual = '';
         this.nombreUsuarioActual = ''; // pendiente hacer y en todas
         this.citasEncontradasEspecialidad = [];
         this.especialidades = [];
@@ -48,11 +52,20 @@ var MisCitasComponent = /** @class */ (function () {
         this.loadSpecialties();
         this.obtenerUsuarioRol().then(function () {
             _this.obtenerUsuarioDNI().then(function () {
-                _this.buscarCitas();
+                _this.buscarCitas(); // Inizializar ver citas de paciente logueado
+                _this.buscarCitasDoc(); // Inizializar ver citas de doctor logueado
+                _this.buscarCitasPorDoctorID(); // Agrega esta línea para buscar las citas del doctor
             });
         });
+        /*this.citasService.obtenerCitas().subscribe(
+          (citasV) => {
+            this.citasDoctor = citasV;
+          },
+          (error) => {
+            console.error(error);
+          }
+        );*/
     };
-    // ROL PACIENTE
     MisCitasComponent.prototype.obtenerUsuarioDNI = function () {
         var _this = this;
         return this.authService.getUsuarioEmail().pipe(operators_1.take(1)).toPromise().then(function (correo) {
@@ -60,13 +73,22 @@ var MisCitasComponent = /** @class */ (function () {
                 if (_this.usuarioRol === 'PACIENTE') {
                     return _this.pacientesService.getPacientePorCorreo(correo).then(function (paciente) {
                         if (paciente) {
-                            _this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+                            _this.dniUsuarioActual = paciente.dni;
                         }
-                        return null; // Add a return statement here
+                        return null;
+                    });
+                }
+                else if (_this.usuarioRol === 'DOCTOR') {
+                    return _this.doctorsService.getDoctorPorCorreo(correo).then(function (doctor) {
+                        if (doctor) {
+                            _this.dniUsuarioActual = doctor.dni;
+                            _this.doctorId = doctor.id;
+                        }
+                        return null;
                     });
                 }
             }
-            return null; // Add a return statement here
+            return null;
         });
     };
     MisCitasComponent.prototype.obtenerUsuarioRol = function () {
@@ -80,6 +102,16 @@ var MisCitasComponent = /** @class */ (function () {
                         return _this.pacientesService.getPacientePorCorreo(correo).then(function (paciente) {
                             if (paciente) {
                                 _this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+                            }
+                            return rol;
+                        });
+                    }
+                    else if (_this.usuarioRol === 'MEDICO') {
+                        return _this.doctorsService.getDoctorPorCorreo(correo).then(function (doctor) {
+                            if (doctor) {
+                                _this.correoUsuarioActual = doctor.correoElectronico; // 
+                                _this.dniUsuarioActual = doctor.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+                                _this.obtenerDatosUsuario(); // Llamar a obtenerDatosUsuario() después de obtener el rol del usuario
                             }
                             return rol;
                         });
@@ -105,8 +137,33 @@ var MisCitasComponent = /** @class */ (function () {
                     return rol;
                 });
             }
+            else if (_this.usuarioRol === 'MEDICO') {
+                return _this.doctorsService.getDoctorPorCorreo(correo).then(function (doctor) {
+                    if (doctor) {
+                        _this.dniUsuarioActual = doctor.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+                    }
+                    return rol;
+                });
+            }
             else {
                 return rol;
+            }
+        });
+    };
+    MisCitasComponent.prototype.obtenerDatosUsuario = function () {
+        var _this = this;
+        this.authService.getUsuarioEmail().subscribe(function (correo) {
+            if (correo && _this.usuarioRol === 'MEDICO') {
+                _this.doctorsService.getDoctorPorCorreo(correo).then(function (doctor) {
+                    if (doctor) {
+                        _this.dniUsuarioActual = doctor.dni;
+                        _this.correoUsuarioActual = doctor.correoElectronico;
+                        // Asignar los valores después de obtener los datos del docotr
+                        //this.telefonoPaciente = this.tlfUsuarioActual;
+                        //this.emailPaciente = this.correoUsuarioActual;
+                        //this.pacienteDni = this.dniUsuarioActual;
+                    }
+                });
             }
         });
     };
@@ -122,6 +179,18 @@ var MisCitasComponent = /** @class */ (function () {
             this.citasPaciente = [];
         }
     };
+    MisCitasComponent.prototype.buscarCitasDoc = function () {
+        var _this = this;
+        if (this.dniUsuarioActual !== '') {
+            this.citasService.buscarCitasPorDoctorID(this.dniUsuarioActual).then(function (citas) {
+                _this.citasDoctor = citas;
+                console.log("Citas del doc:", _this.citasDoctor);
+            });
+        }
+        else {
+            this.citasPaciente = [];
+        }
+    };
     // ROL MEDICO
     MisCitasComponent.prototype.buscarCitasPorDNI = function () {
         var _this = this;
@@ -129,6 +198,7 @@ var MisCitasComponent = /** @class */ (function () {
         if (this.dni !== '') {
             this.citasService.buscarCitasPorDNI(this.dni).then(function (citas) {
                 _this.citasPaciente = citas;
+                console.log("Citas del paciente:", _this.citasPaciente);
             });
         }
         else {
@@ -144,19 +214,20 @@ var MisCitasComponent = /** @class */ (function () {
             });
         }
         else {
-            this.citasPaciente = [];
+            this.citasPaciente = []; // este si lo pilla
         }
     };
     MisCitasComponent.prototype.buscarCitasPorDoctorID = function () {
         var _this = this;
         if (this.doctorId !== '') {
-            this.citasService.buscarCitasPorPacienteID(this.pacienteId).then(function (citas) {
-                _this.citasPaciente = citas;
-                console.log("Citas del paciente:", _this.citasPaciente);
+            this.citasService.buscarCitasPorDoctorID(this.doctorId).then(function (citas) {
+                _this.citasDoctor = citas;
+                console.log("Citas del doctor1:", _this.citasDoctor);
             });
         }
         else {
-            this.citasPaciente = [];
+            this.citasDoctor = []; // este no...
+            //console.log("Citas del doctor:", this.citasDoctor);
         }
     };
     MisCitasComponent.prototype.buscarCitasPorEspecialidad = function (especialidad) {
@@ -212,6 +283,19 @@ var MisCitasComponent = /** @class */ (function () {
                 return 0;
             }
         });
+        this.citasDoctor.sort(function (citaA, citaB) {
+            var estadoA = _this.obtenerValorEstado(citaA.estado);
+            var estadoB = _this.obtenerValorEstado(citaB.estado);
+            if (estadoA < estadoB) {
+                return -1;
+            }
+            else if (estadoA > estadoB) {
+                return 1;
+            }
+            else {
+                return 0;
+            }
+        });
     };
     MisCitasComponent.prototype.obtenerValorEstado = function (estado) {
         switch (estado) {
@@ -236,6 +320,18 @@ var MisCitasComponent = /** @class */ (function () {
                 console.error('Error al modificar el estado de la cita:', error);
             });
         }
+    };
+    MisCitasComponent.prototype.borrarCita = function (citaId) {
+        var _this = this;
+        this.citasService.borrarCita(citaId)
+            .then(function () {
+            console.log('Cita borrada exitosamente');
+            // Aquí puedes actualizar la lista de citas si es necesario
+            _this.citasPaciente = _this.citasPaciente.filter(function (cita) { return cita.id !== citaId; });
+            _this.citasDoctor = _this.citasDoctor.filter(function (cita) { return cita.id !== citaId; });
+        })["catch"](function (error) {
+            console.error('Error al borrar la cita:', error);
+        });
     };
     MisCitasComponent = __decorate([
         core_1.Component({

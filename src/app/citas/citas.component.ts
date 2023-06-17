@@ -67,6 +67,7 @@ export class CitasComponent implements OnInit {
   horariosDoctor: string[] = [];
   usuarioPacienteDni: string = '';
   dniUsuarioActual: string = '';
+  correoUsuarioActual: string = '';
 
   constructor(
     private citasService: CitasService,
@@ -85,7 +86,12 @@ export class CitasComponent implements OnInit {
     this.citaSeleccionada = this.cita;
     this.loadSpecialties();
     this.obtenerUsuarioRol(); // Obtener el rol del usuario
+    this.usuarioRol = '';
     this.obtenerUsuarioDNI(); // Obtener el DNI del paciente logueado
+    this.dniUsuarioActual = '';
+    //this.correoUsuarioActual = '';
+
+
     //this.selectDoctor("20000009H",new Date());
 
   }
@@ -140,6 +146,7 @@ export class CitasComponent implements OnInit {
       }
     });
   }
+  
 
   obtenerUsuarioDNI() {
     this.authService.getUsuarioEmail().subscribe((correo) => {
@@ -163,13 +170,23 @@ export class CitasComponent implements OnInit {
       return;
     }
 
+    // Comprobar si el dni existe
+    const pacienteExists = await this.pacientesService.getPacientePorDNI(
+      this.cita.pacienteId
+    );
+
+    if (!pacienteExists) {
+      this.mensaje = 'El DNI del paciente no coincide con ningún paciente registrado.';
+      return;
+    }
+
     // Obtener la hora seleccionada del componente ion-select y asignarla al campo 'hora'
     this.cita.hora = this.cita.hora.substring(0, 5);
-    const docRef = await addDoc(
+    /*const docRef = await addDoc(
       collection(this.firestore, 'citas'),
       this.cita
     );
-    this.cita.id = docRef.id;
+    this.cita.id = docRef.id; */
     if (this.usuarioRol === 'PACIENTE') {
       this.cita.pacienteId = this.dniUsuarioActual;
     }

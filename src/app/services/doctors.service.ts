@@ -27,6 +27,25 @@ export class DoctorsService {
       .then((snapshot) => !snapshot.empty);
   }
 
+  getDoctorPorCorreo(correo: string) {
+    const doctorRef = collection(this.firestore, 'doctores');
+    const q = query(doctorRef, where('correoElectronico', '==', correo));
+    return getDocs(q)
+      .then((snapshot) => {
+        if (!snapshot.empty) {
+          const doctor = snapshot.docs[0].data() as Doctor;
+          doctor.id = snapshot.docs[0].id;
+          console.log(q);
+          console.log(correo);
+          return doctor;
+        } else {
+          return null;
+        }
+      });
+  }
+
+
+
   buscarDoctorPorEspecialidad(especialidad: string) {
     const doctorRef = collection(this.firestore, 'doctores');
     const q = query(doctorRef, where('especialidad', '==', especialidad));

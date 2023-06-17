@@ -5,10 +5,10 @@
       <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
     <ion-title style="font-family: 'Kanit', sans-serif; font-weight: 400">
-      <ng-container *ngIf="usuarioRol === 'MEDICO'">Buscar citas </ng-container>
+      <ng-container *ngIf="usuarioRol === 'MEDICO'">Citas</ng-container>
     <ng-container *ngIf="usuarioRol === 'PACIENTE'">Mis citas</ng-container>
     </ion-title>
-    <ion-button slot="end" shape="round" fill="outline" (click)="ordenarCitasPorEstado()" *ngIf="citasPaciente.length">Ordenar citas por estado</ion-button>
+    <ion-button slot="end" shape="round" fill="outline" (click)="ordenarCitasPorEstado()">Ordenar citas por estado</ion-button>
 
   </ion-toolbar>
 </ion-header>
@@ -17,41 +17,25 @@
   <ion-card-header>
     <ion-card-title>
       <ng-container *ngIf="usuarioRol === 'MEDICO'"
-        >Buscador de citas</ng-container
+        >Listado de citas</ng-container
       >
       <ng-container *ngIf="usuarioRol === 'PACIENTE'"
         >Aquí apareceran sus citas y el estado en el que se encuentran</ng-container
       >
-      <ion-card-subtitle
-        >Busque las citas de un paciente por su DNI o directamente desde la especialidad que desee</ion-card-subtitle
-      >
     </ion-card-title>
+    <ion-card-subtitle>Gestione el estado de sus citas aquí.</ion-card-subtitle>
   </ion-card-header>
 
-  <!-- Código para médico -->
-  <div class="search-bar-container" *ngIf="usuarioRol === 'MEDICO'">
-    <ion-searchbar [(ngModel)]="pacienteId" (ionChange)="buscarCitasPorPacienteID()" placeholder="Escriba el DNI del paciente"></ion-searchbar>
-    <ion-button shape="round" (click)="buscarCitasPorPacienteID()">Buscar Citas</ion-button>
-
-  <ion-item>
-    <ion-label position="floating">Buscar por especialidad</ion-label>
-    <ion-select placeholder="Especialidad" [(ngModel)]="cita.especialidad" (ngModelChange)="buscarCitasPorEspecialidad(cita.especialidad)">
-      <ion-select-option *ngFor="let especialidad of especialidades" [value]="especialidad.nombre">
-        {{ especialidad.nombre }}
-      </ion-select-option>
-    </ion-select>
-  </ion-item>
-  <ion-button shape="round" (click)="buscarCitasPorEspecialidad(specialtyBuscar)">Buscar Citas</ion-button>
-</div>
 
   <!-- Código para paciente -->
   <div class="search-bar-container" *ngIf="usuarioRol === 'PACIENTE'">
     <p>DNI Usuario Actual: {{ dniUsuarioActual }}</p>
   </div>
 
+
   <!-- Código para paciente -->
   <div class="citas-container" *ngIf="citasPaciente.length > 0 && usuarioRol === 'PACIENTE'">
-    <ion-list>
+    <ion-list class="lista">
       <ion-item *ngFor="let cita of citasPaciente" class="custom-item">
       <ion-label [ngStyle]="{ 'margin-right': '10px' }">
           <h1>Cita: {{ cita.especialidad }}</h1>
@@ -67,10 +51,13 @@
 
     </ion-list>
   </div>
+
+
   <!-- Código para médico -->
-  <div class="citas-container" *ngIf="citasPaciente.length > 0 && usuarioRol === 'MEDICO'">
-    <ion-list>
-      <ion-item *ngFor="let cita of citasPaciente" class="custom-item">
+
+  <div class="citas-container" *ngIf="citasDoctor.length > 0 && usuarioRol === 'MEDICO'">
+    <ion-list class="lista">
+      <ion-item *ngFor="let cita of citasDoctor" class="custom-item">
         <ion-label [ngStyle]="{ 'margin-right': '10px' }">
           <h1>Cita: {{ cita.especialidad }}</h1>
           <h2>Fecha:{{ cita.fecha | date }}</h2>
@@ -78,12 +65,12 @@
           <p>Motivo: {{ cita.motivo }}</p>
           <p>Estado: {{ cita.estado }}</p>
           <p>DNI paciente: {{ cita.pacienteId }}</p>
-          <ion-item [ngStyle]="{ 'width': '260px' }">
+          <ion-item [ngStyle]="{ 'width': '260px' }" lines="none">
         <ion-label class="custom-label" [ngStyle]="{ 'background-color': getColorByEstado(cita.estado), 'margin-right': '10px' }">Estado: {{ cita.estado }}</ion-label>
       </ion-item>
     </ion-label>
 
-        <ion-item class="estado-item">
+        <ion-item class="estado-item" lines="none">
           <ion-label position="floating">Cambiar estado</ion-label>
           <ion-select [(ngModel)]="nuevoEstado" (ionChange)="modificarEstadoCita(cita)">
             <ion-select-option value="pendiente">Pendiente</ion-select-option>
@@ -92,15 +79,89 @@
           </ion-select>
         </ion-item>
 
+        <ion-item lines="none">
+          <ion-button slot="end" color="danger" (click)="borrarCita(cita.id)">
+            Borrar
+          </ion-button>
+        </ion-item>
+
       </ion-item>
     </ion-list>
   </div>
 
-  <div class="no-citas" *ngIf="citasPaciente.length === 0 && usuarioRol === 'MEDICO'">
-    <p>Sin resultados.</p>
+
+  <div class="no-citas" *ngIf="citasDoctor.length === 0 && usuarioRol === 'MEDICO'">
+    <p>No tiene citas programadas.</p>
   </div>
   <div class="no-citas" *ngIf="citasPaciente.length === 0 && usuarioRol === 'PACIENTE'">
-    <p>No tienes citas programadas.</p>
+    <p>No tiene citas programadas.</p>
   </div>
 
+
+  <ion-card-header *ngIf="usuarioRol === 'MEDICO'">
+    <ion-card-title>
+      <ng-container 
+        >Buscador de citas</ng-container>
+    </ion-card-title>
+    <ion-card-subtitle>Puede buscar otras citas de pacientes por DNI del paciente o por especialidad.</ion-card-subtitle>
+  </ion-card-header>
+
+  <div class="buscador" *ngIf="usuarioRol === 'MEDICO'">
+
+  <div class="search-bar-container" *ngIf="usuarioRol === 'MEDICO'">
+    <ion-searchbar [(ngModel)]="pacienteId" (ionChange)="buscarCitasPorPacienteID()" placeholder="Escriba el DNI del paciente"></ion-searchbar>
+    <ion-button shape="round" (click)="buscarCitasPorPacienteID()">Buscar Citas</ion-button>
+
+   <!-- <ion-searchbar [(ngModel)]="doctorId" (ionChange)="buscarCitasPorDoctorID()" placeholder="Escriba el DNI del doctor"></ion-searchbar>
+    <ion-button shape="round" (click)="buscarCitasPorDoctorID()">Buscar Citas Doc</ion-button>-->
+
+  <ion-item>
+    <ion-label position="floating">Buscar por especialidad</ion-label>
+    <ion-select placeholder="Especialidad" [(ngModel)]="cita.especialidad" (ngModelChange)="buscarCitasPorEspecialidad(cita.especialidad)">
+      <ion-select-option *ngFor="let especialidad of especialidades" [value]="especialidad.nombre">
+        {{ especialidad.nombre }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+  <!--<ion-button shape="round" (click)="buscarCitasPorEspecialidad(specialtyBuscar)">Buscar Citas</ion-button>-->
+</div>
+</div>
+<div class="lista" *ngIf="usuarioRol === 'MEDICO'">
+<div class="citas-container" *ngIf="citasPaciente.length > 0 && usuarioRol === 'MEDICO'">
+  <ion-list>
+    <ion-item *ngFor="let cita of citasPaciente" class="custom-item">
+      <ion-label [ngStyle]="{ 'margin-right': '10px' }">
+        <h1>Cita: {{ cita.especialidad }}</h1>
+        <h2>Fecha:{{ cita.fecha | date }}</h2>
+        <p>Hora: {{ cita.hora }}</p>
+        <p>Motivo: {{ cita.motivo }}</p>
+        <p>Estado: {{ cita.estado }}</p>
+        <p>DNI paciente: {{ cita.pacienteId }}</p>
+        <ion-item [ngStyle]="{ 'width': '260px' }" lines="none">
+      <ion-label class="custom-label" [ngStyle]="{ 'background-color': getColorByEstado(cita.estado), 'margin-right': '10px' }">Estado: {{ cita.estado }}</ion-label>
+    </ion-item>
+  </ion-label>
+
+      <ion-item class="estado-item" lines="none">
+        <ion-label position="floating">Cambiar estado</ion-label>
+        <ion-select [(ngModel)]="nuevoEstado" (ionChange)="modificarEstadoCita(cita)">
+          <ion-select-option value="pendiente">Pendiente</ion-select-option>
+          <ion-select-option value="confirmada">Confirmada</ion-select-option>
+          <ion-select-option value="denegada">Denegada</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-button slot="end" color="danger" (click)="borrarCita(cita.id)">
+          Borrar
+        </ion-button>
+      </ion-item>
+
+    </ion-item>
+  </ion-list>
+  <div class="no-citas" *ngIf="citasPaciente.length === 0 && usuarioRol === 'MEDICO'">
+    <p>No hay citas programadas.</p>
+  </div>
+</div>
+</div>
 </ion-content>

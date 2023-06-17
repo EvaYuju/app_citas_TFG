@@ -8,6 +8,8 @@ import { Especialidad } from '../models/specialties';
 import { Usuarios } from '../models/usuarios';
 import { AuthService } from './../services/auth.service';
 import { take } from 'rxjs/operators';
+import { DoctorsService } from './../services/doctors.service';
+
 
 import {
   Firestore,
@@ -29,13 +31,16 @@ import {
 })
 export class MisCitasComponent implements OnInit {
   citasPaciente: Citas[] = [];
+  citasDoctor: Citas[] = []; // ***
   dni: string = '';
   pacienteId: string ='';
   doctorId: string ='';
   nuevoEstado: string = ''; // Almacenar el cambio del estado
   usuarioRol: string = ''; // Agrega esta línea para almacenar el rol del usuario
-  usuarioPacienteDni: string = '';
+  //usuarioPacienteDni: string = '';
   dniUsuarioActual: string = '';
+  tlfUsuarioActual: string = '';
+  correoUsuarioActual: string = '';
   nombreUsuarioActual: string = ''; // pendiente hacer y en todas
   citasEncontradasEspecialidad: Citas[] = [];
   especialidades: Especialidad[] = [];
@@ -60,6 +65,7 @@ export class MisCitasComponent implements OnInit {
     private citasService: CitasService,
     private usuariosService: UsuariosService,
     private pacientesService: PacientesService,
+    private doctorsService: DoctorsService,
     private firestore: Firestore,
     private specialtiesService: SpecialtiesService,
     private authService: AuthService
@@ -69,26 +75,44 @@ export class MisCitasComponent implements OnInit {
     this.loadSpecialties();
     this.obtenerUsuarioRol().then(() => {
       this.obtenerUsuarioDNI().then(() => {
-        this.buscarCitas();
+        this.buscarCitas(); // Inizializar ver citas de paciente logueado
+        this.buscarCitasDoc(); // Inizializar ver citas de doctor logueado
+        this.buscarCitasPorDoctorID(); // Agrega esta línea para buscar las citas del doctor
+
       });
     });
 
+    /*this.citasService.obtenerCitas().subscribe(
+      (citasV) => {
+        this.citasDoctor = citasV;
+      },
+      (error) => {
+        console.error(error);
+      }
+    );*/
   }
 
-  // ROL PACIENTE
   obtenerUsuarioDNI() {
     return this.authService.getUsuarioEmail().pipe(take(1)).toPromise().then((correo) => {
       if (correo) {
         if (this.usuarioRol === 'PACIENTE') {
           return this.pacientesService.getPacientePorCorreo(correo).then((paciente) => {
             if (paciente) {
-              this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+              this.dniUsuarioActual = paciente.dni;
             }
-            return null; // Add a return statement here
+            return null;
+          });
+        } else if (this.usuarioRol === 'DOCTOR') {
+          return this.doctorsService.getDoctorPorCorreo(correo).then((doctor) => {
+            if (doctor) {
+              this.dniUsuarioActual = doctor.dni;
+              this.doctorId = doctor.id;
+            }
+            return null;
           });
         }
       }
-      return null; // Add a return statement here
+      return null;
     });
   }
 
@@ -103,6 +127,16 @@ export class MisCitasComponent implements OnInit {
             return this.pacientesService.getPacientePorCorreo(correo).then((paciente) => {
               if (paciente) {
                 this.dniUsuarioActual = paciente.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+              }
+              return rol;
+            });
+          } else if (this.usuarioRol === 'MEDICO') {
+            return this.doctorsService.getDoctorPorCorreo(correo).then((doctor) => {
+              if (doctor) {
+                this.correoUsuarioActual = doctor.correoElectronico; // 
+                this.dniUsuarioActual = doctor.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+                this.obtenerDatosUsuario(); // Llamar a obtenerDatosUsuario() después de obtener el rol del usuario
+
               }
               return rol;
             });
@@ -127,8 +161,34 @@ export class MisCitasComponent implements OnInit {
           }
           return rol;
         });
+      } else if (this.usuarioRol === 'MEDICO') {
+          return this.doctorsService.getDoctorPorCorreo(correo).then((doctor) => {
+            if (doctor) {
+              this.dniUsuarioActual = doctor.dni; // Almacena el DNI en una variable para usarlo en la vista HTML
+            }
+            return rol;
+          });
       } else {
         return rol;
+      }
+    });
+  }
+
+  obtenerDatosUsuario() {
+    this.authService.getUsuarioEmail().subscribe((correo) => {
+      if (correo && this.usuarioRol === 'MEDICO') {
+        this.doctorsService.getDoctorPorCorreo(correo).then((doctor) => {
+          if (doctor) {
+            this.dniUsuarioActual = doctor.dni;
+            this.correoUsuarioActual = doctor.correoElectronico;
+            
+  
+            // Asignar los valores después de obtener los datos del docotr
+            //this.telefonoPaciente = this.tlfUsuarioActual;
+            //this.emailPaciente = this.correoUsuarioActual;
+            //this.pacienteDni = this.dniUsuarioActual;
+          }
+        });
       }
     });
   }
@@ -145,6 +205,18 @@ export class MisCitasComponent implements OnInit {
     }
   }
 
+  
+  buscarCitasDoc() {
+    if (this.dniUsuarioActual !== '') {
+      this.citasService.buscarCitasPorDoctorID(this.dniUsuarioActual).then((citas) => {
+        this.citasDoctor = citas;
+        console.log("Citas del doc:", this.citasDoctor);
+
+      });
+    } else {
+      this.citasPaciente = [];
+    }
+  }
   // ROL MEDICO
   buscarCitasPorDNI() {
     console.log("Buscar citas se ha ejecutado correctamente.MED");
@@ -152,6 +224,8 @@ export class MisCitasComponent implements OnInit {
     if (this.dni !== '') {
       this.citasService.buscarCitasPorDNI(this.dni).then((citas) => {
         this.citasPaciente = citas;
+        console.log("Citas del paciente:", this.citasPaciente);
+
       });
     } else {
       this.citasPaciente = [];
@@ -166,19 +240,21 @@ export class MisCitasComponent implements OnInit {
 
       });
     } else {
-      this.citasPaciente = [];
+      this.citasPaciente = []; // este si lo pilla
     }
   }
 
   buscarCitasPorDoctorID() {
     if (this.doctorId !== '') {
-      this.citasService.buscarCitasPorPacienteID(this.pacienteId).then((citas) => {
-        this.citasPaciente = citas;
-                console.log("Citas del paciente:", this.citasPaciente);
+      this.citasService.buscarCitasPorDoctorID(this.doctorId).then((citas) => {
+        this.citasDoctor = citas;
+                console.log("Citas del doctor1:", this.citasDoctor);
 
       });
     } else {
-      this.citasPaciente = [];
+      this.citasDoctor = []; // este no...
+      //console.log("Citas del doctor:", this.citasDoctor);
+
     }
   }
 
@@ -234,6 +310,19 @@ export class MisCitasComponent implements OnInit {
         return 0;
       }
     });
+
+    this.citasDoctor.sort((citaA, citaB) => {
+      const estadoA = this.obtenerValorEstado(citaA.estado);
+      const estadoB = this.obtenerValorEstado(citaB.estado);
+
+      if (estadoA < estadoB) {
+        return -1;
+      } else if (estadoA > estadoB) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
   }
 
   obtenerValorEstado(estado: string): number {
@@ -261,5 +350,20 @@ export class MisCitasComponent implements OnInit {
           console.error('Error al modificar el estado de la cita:', error);
         });
     }
+  }
+
+  borrarCita(citaId: string) {
+    this.citasService.borrarCita(citaId)
+      .then(() => {
+        console.log('Cita borrada exitosamente');
+        // Aquí puedes actualizar la lista de citas si es necesario
+        this.citasPaciente = this.citasPaciente.filter(cita => cita.id !== citaId);
+        this.citasDoctor = this.citasDoctor.filter(cita => cita.id !== citaId);
+
+
+      })
+      .catch((error) => {
+        console.error('Error al borrar la cita:', error);
+      });
   }
 }

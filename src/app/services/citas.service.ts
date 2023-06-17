@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Firestore, collection, addDoc, query, where, getDocs, doc, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { Citas } from '../models/citas';
-import { setDoc } from 'firebase/firestore';
+import { orderBy, setDoc } from 'firebase/firestore';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +26,24 @@ export class CitasService {
     const citaRef = collection(this.firestore, 'citas');
     const q = query(citaRef, where('id', '==', id));
     return getDocs(q).then((snapshot) => !snapshot.empty);
+  }
+
+  obtenerCitas(): Observable<any[]> {
+    const citasRef = collection(this.firestore, 'citas');
+    const citasQuery = query(citasRef, orderBy('fechaConsulta'));
+    return new Observable((observer) => {
+      getDocs(citasQuery)
+        .then((querySnapshot) => {
+          const citasV: any[] = [];
+          querySnapshot.forEach((doc) => {
+            citasV.push({ id: doc.id, ...doc.data() });
+          });
+          observer.next(citasV);
+        })
+        .catch((error) => {
+          observer.error(`Error al obtener las citas: ${error}`);
+        });
+    });
   }
 
   buscarCitaPorID(id: string) {
@@ -81,6 +100,26 @@ export class CitasService {
       }
     });
   }
+
+  buscarCitasPorDoctorID(doctorId: string) {
+    const citaRef = collection(this.firestore, 'citas');
+    const q = query(citaRef, where('doctorId', '==', doctorId));
+    return getDocs(q).then((snapshot) => {
+      if (!snapshot.empty) {
+        const citas: Citas[] = [];
+        snapshot.forEach((doc) => {
+          const cita = doc.data() as Citas;
+          cita.id = doc.id;
+          citas.push(cita);
+        });
+        return citas;
+      } else {
+        return [];
+      }
+    });
+  }
+
+
 
   buscarCitasPorDoctorDNI(doctorId: string, fecha: string) {
     const citaRef = collection(this.firestore, 'citas');

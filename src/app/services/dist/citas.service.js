@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -46,6 +57,7 @@ exports.CitasService = void 0;
 var core_1 = require("@angular/core");
 var firestore_1 = require("@angular/fire/firestore");
 var firestore_2 = require("firebase/firestore");
+var rxjs_1 = require("rxjs");
 var CitasService = /** @class */ (function () {
     function CitasService(firestore) {
         this.firestore = firestore;
@@ -78,6 +90,22 @@ var CitasService = /** @class */ (function () {
         var citaRef = firestore_1.collection(this.firestore, 'citas');
         var q = firestore_1.query(citaRef, firestore_1.where('id', '==', id));
         return firestore_1.getDocs(q).then(function (snapshot) { return !snapshot.empty; });
+    };
+    CitasService.prototype.obtenerCitas = function () {
+        var citasRef = firestore_1.collection(this.firestore, 'citas');
+        var citasQuery = firestore_1.query(citasRef, firestore_2.orderBy('fechaConsulta'));
+        return new rxjs_1.Observable(function (observer) {
+            firestore_1.getDocs(citasQuery)
+                .then(function (querySnapshot) {
+                var citasV = [];
+                querySnapshot.forEach(function (doc) {
+                    citasV.push(__assign({ id: doc.id }, doc.data()));
+                });
+                observer.next(citasV);
+            })["catch"](function (error) {
+                observer.error("Error al obtener las citas: " + error);
+            });
+        });
     };
     CitasService.prototype.buscarCitaPorID = function (id) {
         var citaRef = firestore_1.collection(this.firestore, 'citas');
@@ -135,9 +163,9 @@ var CitasService = /** @class */ (function () {
             }
         });
     };
-    CitasService.prototype.buscarCitasPorDoctorDNI = function (doctorId, fecha) {
+    CitasService.prototype.buscarCitasPorDoctorID = function (doctorId) {
         var citaRef = firestore_1.collection(this.firestore, 'citas');
-        var q = firestore_1.query(citaRef, firestore_1.where('doctorId', '==', doctorId), firestore_1.where('fecha', '==', fecha));
+        var q = firestore_1.query(citaRef, firestore_1.where('doctorId', '==', doctorId));
         return firestore_1.getDocs(q).then(function (snapshot) {
             if (!snapshot.empty) {
                 var citas_4 = [];
@@ -147,6 +175,24 @@ var CitasService = /** @class */ (function () {
                     citas_4.push(cita);
                 });
                 return citas_4;
+            }
+            else {
+                return [];
+            }
+        });
+    };
+    CitasService.prototype.buscarCitasPorDoctorDNI = function (doctorId, fecha) {
+        var citaRef = firestore_1.collection(this.firestore, 'citas');
+        var q = firestore_1.query(citaRef, firestore_1.where('doctorId', '==', doctorId), firestore_1.where('fecha', '==', fecha));
+        return firestore_1.getDocs(q).then(function (snapshot) {
+            if (!snapshot.empty) {
+                var citas_5 = [];
+                snapshot.forEach(function (doc) {
+                    var cita = doc.data();
+                    cita.id = doc.id;
+                    citas_5.push(cita);
+                });
+                return citas_5;
             }
             else {
                 return [];

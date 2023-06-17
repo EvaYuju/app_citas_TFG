@@ -1,3 +1,6 @@
+
+@charset "UTF-8";
+
 .search-bar-container {
   margin-bottom: 16px;
 }
@@ -49,3 +52,43 @@
   --color: #ffffff;
   --border-radius: 8px;
 }
+
+
+.buscador {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+
+  // Ajusta el valor según tus necesidades 
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.lista {
+  //display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+
+  // Ajusta el valor según tus necesidades 
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+/*
+ion-card {
+  width: 100%;
+  max-width: 500px;
+  // Ajusta el valor según tus necesidades 
+  margin-bottom: 20px;
+}
+
+ion-button {
+  margin-top: 10px;
+}
+*/

@@ -61,7 +61,7 @@ export class ContactoPage {
       this.tlfUsuarioActual = '';
       this.correoUsuarioActual = '';
       // Llamar al método para obtener los mensajes ordenados por fecha
-    this.contactoService.obtenerConsultas().subscribe(
+      this.contactoService.obtenerConsultas().subscribe(
       (consultas) => {
         this.consultas = consultas;
       },
