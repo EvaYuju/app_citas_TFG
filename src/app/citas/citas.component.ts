@@ -173,6 +173,7 @@ export class CitasComponent implements OnInit {
     if (!this.camposValidos()) {
       this.mensaje = 'Por favor, complete todos los campos.';
       return;
+
     }
     if (this.usuarioRol === 'MEDICO') {
     // Comprobar si el dni existe
@@ -197,6 +198,8 @@ export class CitasComponent implements OnInit {
     this.cita.id = docRef.id; */
     if (this.usuarioRol === 'PACIENTE') {
       this.cita.pacienteId = this.dniUsuarioActual;
+      this.cita.estado = 'pendiente';
+
     }
 
     // Agregar la cita a Firestore
@@ -353,8 +356,8 @@ export class CitasComponent implements OnInit {
       this.cita.doctorId &&
       this.cita.especialidad &&
       this.cita.fecha &&
-      this.cita.motivo &&
-      this.cita.estado
+      this.cita.motivo 
+      //this.cita.estado
     );
   }
 

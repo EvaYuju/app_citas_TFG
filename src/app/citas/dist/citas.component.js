@@ -219,6 +219,7 @@ var CitasComponent = /** @class */ (function () {
                         this.cita.id = docRef.id; */
                         if (this.usuarioRol === 'PACIENTE') {
                             this.cita.pacienteId = this.dniUsuarioActual;
+                            this.cita.estado = 'pendiente';
                         }
                         _a.label = 3;
                     case 3:
@@ -385,8 +386,9 @@ var CitasComponent = /** @class */ (function () {
         this.cita.doctorId &&
             this.cita.especialidad &&
             this.cita.fecha &&
-            this.cita.motivo &&
-            this.cita.estado);
+            this.cita.motivo
+        //this.cita.estado
+        );
     };
     CitasComponent.prototype.showTimes = function (fecha) {
         return __awaiter(this, void 0, void 0, function () {

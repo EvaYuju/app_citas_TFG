@@ -104,12 +104,21 @@
         <ion-input [(ngModel)]="cita.motivo"></ion-input>
       </ion-item>
 
-      <ion-item class="estado-item">
+      <ion-item *ngIf="usuarioRol === 'PACIENTE'">
+        <ion-label position="floating">Estado Pendiente</ion-label>
+          <ion-input
+            type="text"
+            [(ngModel)]="cita.estado"
+            value="pendiente"
+            disabled
+          ></ion-input>
+
+      </ion-item>
+
+      <ion-item class="estado-item" *ngIf="usuarioRol === 'MEDICO'">
         <ion-label position="floating">Estado</ion-label>
         <ion-select [(ngModel)]="cita.estado">
-          <ion-select-option value="pendiente" *ngIf="usuarioRol === 'PACIENTE'"
-            >Pendiente</ion-select-option
-          >
+          
           <ion-select-option value="pendiente" *ngIf="usuarioRol === 'MEDICO'"
             >Dejar pendiente</ion-select-option
           >
