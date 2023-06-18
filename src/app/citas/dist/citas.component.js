@@ -108,6 +108,8 @@ var CitasComponent = /** @class */ (function () {
         this.obtenerUsuarioDNI(); // Obtener el DNI del paciente logueado
         this.dniUsuarioActual = '';
         this.correoUsuarioActual = '';
+        var currentDate = new Date();
+        this.minDate = this.getFormattedDate(currentDate);
         //this.selectDoctor("20000009H",new Date());
     };
     CitasComponent.prototype.selectDoctor = function (dni, date) {

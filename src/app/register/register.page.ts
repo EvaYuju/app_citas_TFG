@@ -20,6 +20,10 @@ export class RegisterPage implements OnInit {
   medico?: Doctor;
   especialidades: Especialidad[] = [];
 
+  showError = false;
+  showError2 = false;
+  errorText: string = '';
+
   customCounterFormatter(inputLength: number, maxLength: number) {
     return `${maxLength - inputLength} characters remaining`;
   }
@@ -73,8 +77,8 @@ export class RegisterPage implements OnInit {
   showNSeguridadSocialError = false;
   // Agrega una variable booleana para cada campo de error adicional que necesites
 
-  showError = false; // en consola
-
+  //showError = false; // en consola
+  //errorText: string = '';
 
 
   async registerPaciente() {

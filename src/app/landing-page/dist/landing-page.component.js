@@ -35,10 +35,10 @@ var LandingPageComponent = /** @class */ (function () {
             if (email_1 !== null && password_1 !== null) {
                 this.userService.getUsuarioRol(email_1).then(function (rol) {
                     if (rol === '') {
-                        _this.errorText = 'Usuario no registrado. Por favor, regístrese.';
+                        _this.errorText = 'Usuario o contraseña incorrectos. Sí no tiene una cuenta, regístrese.';
                     }
                     else if (rol === null) {
-                        _this.errorText = 'Usuario no registrado. Por favor, regístrese.';
+                        _this.errorText = 'Usuario o contraseña incorrectos. Sí no tiene una cuenta, regístrese.';
                     }
                     else if (rol === _this.selectedSegment) {
                         _this.auth

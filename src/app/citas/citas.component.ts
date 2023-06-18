@@ -68,6 +68,7 @@ export class CitasComponent implements OnInit {
   usuarioPacienteDni: string = '';
   dniUsuarioActual: string = '';
   correoUsuarioActual: string = '';
+  
 
   constructor(
     private citasService: CitasService,
@@ -90,6 +91,10 @@ export class CitasComponent implements OnInit {
     this.obtenerUsuarioDNI(); // Obtener el DNI del paciente logueado
     this.dniUsuarioActual = '';
     this.correoUsuarioActual = '';
+
+    const currentDate = new Date();
+    this.minDate = this.getFormattedDate(currentDate);
+
 
 
     //this.selectDoctor("20000009H",new Date());

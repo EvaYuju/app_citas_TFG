@@ -35,6 +35,10 @@ var UsuariosService = /** @class */ (function () {
             return usuario;
         });
     };
+    UsuariosService.prototype.borrarUsuario = function (id) {
+        var usuariosRef = firestore_1.doc(this.firestore, 'usuarios', id);
+        return firestore_1.deleteDoc(usuariosRef);
+    };
     UsuariosService = __decorate([
         core_1.Injectable({
             providedIn: 'root'

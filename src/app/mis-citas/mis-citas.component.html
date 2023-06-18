@@ -16,15 +16,12 @@
 <ion-content class="ion-padding">
   <ion-card-header>
     <ion-card-title>
-      <ng-container *ngIf="usuarioRol === 'MEDICO'"
-        >Listado de citas</ng-container
-      >
-      <ng-container *ngIf="usuarioRol === 'PACIENTE'"
-        >Aquí apareceran sus citas y el estado en el que se encuentran</ng-container
-      >
+      <ng-container>
+        Listado de citas
+        </ng-container>
     </ion-card-title>
     <ion-card-subtitle *ngIf="usuarioRol === 'MEDICO'">
-      Gestione el estado de sus citas aquí.
+      Gestione el estado de las citas de sus pacientes aquí.
     </ion-card-subtitle>
     <ion-card-subtitle *ngIf="usuarioRol === 'PACIENTE'">
       Aquí se mostrarán las citas que tenga y el estado en el que se encuentran.

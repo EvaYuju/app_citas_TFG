@@ -33,7 +33,10 @@ export class PacientesComponent implements OnInit{
   minDate: string = '';
 
 
-  constructor(private pacientesService: PacientesService) { }
+  constructor(
+    private pacientesService: PacientesService,
+    private usuariosService: UsuariosService
+    ) { }
 
   ngOnInit() {
     //PARA AUTHENTICATION

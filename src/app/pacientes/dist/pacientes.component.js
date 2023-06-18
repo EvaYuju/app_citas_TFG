@@ -20,8 +20,9 @@ exports.__esModule = true;
 exports.PacientesComponent = void 0;
 var core_1 = require("@angular/core");
 var PacientesComponent = /** @class */ (function () {
-    function PacientesComponent(pacientesService) {
+    function PacientesComponent(pacientesService, usuariosService) {
         this.pacientesService = pacientesService;
+        this.usuariosService = usuariosService;
         this.paciente = {
             id: '',
             nombre: '',

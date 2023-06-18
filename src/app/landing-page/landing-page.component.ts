@@ -45,9 +45,9 @@ export class LandingPageComponent implements OnInit {
       if (email !== null && password !== null) {
         this.userService.getUsuarioRol(email).then((rol) => {
           if (rol === '') {
-            this.errorText = 'Usuario no registrado. Por favor, regístrese.';
+            this.errorText = 'Usuario o contraseña incorrectos. Sí no tiene una cuenta, regístrese.';
           } else if (rol === null) {
-            this.errorText = 'Usuario no registrado. Por favor, regístrese.';
+            this.errorText = 'Usuario o contraseña incorrectos. Sí no tiene una cuenta, regístrese.';
           } else if (rol === this.selectedSegment) {
             this.auth
               .login(email, password)

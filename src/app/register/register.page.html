@@ -16,14 +16,20 @@
       <div class="informative-text">Rellene el formulario con sus datos personales para poder registrarse en nuestra clínica</div>
       <ion-list>
         <form [formGroup]="formPaciente" (ngSubmit)="registerPaciente()">
-          <ion-item>
+          <ion-item lines="none">
             <ion-label position="floating">DNI</ion-label>
             <ion-input placeholder="000000000X" formControlName="dni"></ion-input>
           </ion-item>
-          <ion-item *ngIf="formPaciente.controls['dni'].invalid && (formPaciente.controls['dni'].dirty || formPaciente.controls['dni'].touched)">
-            <div class="error-message" *ngIf="formPaciente.controls['dni'].hasError('minlength') || formPaciente.controls['dni'].hasError('maxlength')">El DNI debe tener una longitud de 9 caracteres.</div>
-            <div class="error-message" *ngIf="formPaciente.controls['dni'].hasError('dniExists')">El DNI ya existe.</div>
-          </ion-item>
+          <ion-label 
+          class="error-label" 
+          *ngIf="formPaciente.controls['dni'].hasError('minlength') || 
+          formPaciente.controls['dni'].hasError('maxlength')">
+          El DNI debe tener una longitud de 9 caracteres.
+        </ion-label>
+        <ion-label class="error-label" 
+            *ngIf="formPaciente.controls['dni'].hasError('dniExists')">
+            El DNI ya existe.
+          </ion-label>
           <ion-item>
             <ion-label position="floating">Nombre</ion-label>
             <ion-input formControlName="nombre"></ion-input>
@@ -37,11 +43,14 @@
             <ion-input formControlName="nSeguridadSocial"></ion-input>
           </ion-item>
           <ion-item *ngIf="formPaciente.controls['nSeguridadSocial'].invalid && (formPaciente.controls['nSeguridadSocial'].dirty || formPaciente.controls['nSeguridadSocial'].touched)">
-            <div class="error-message" *ngIf="formPaciente.controls['nSeguridadSocial'].hasError('minlength')">El número de Seguridad Social debe tener una longitud mínima de 6 caracteres.</div>
+            <ion-label class="error-label" 
+            *ngIf="formPaciente.controls['nSeguridadSocial'].hasError('minlength')">
+            El número de Seguridad Social debe tener una longitud mínima de 6 caracteres.
+          </ion-label>
           </ion-item>
           <ion-item>
             <ion-label label="Fixed label" labelPlacement="fixed">Fecha de nacimiento</ion-label>
-            <ion-input type="date" formControlName="fechaNacimiento"></ion-input>
+            <ion-input type="date" formControlName="fechaNacimiento | date:'yyyy-MM-dd'"></ion-input>
           </ion-item>
           <ion-item>
             <ion-label position="floating">Dirección</ion-label>
@@ -55,11 +64,11 @@
             <ion-label position="floating">Email de usuario</ion-label>
             <ion-input type="email" formControlName="email" placeholder="nombre_usuario@clinicasafa.com"></ion-input>
           </ion-item>
-          <ion-item>
-            <ion-input type="password" formControlName="password" label="Contraseña" labelPlacement="floating" [counter]="true" maxlength="8"></ion-input>
+          <ion-item lines="none">
+            <ion-input type="password" formControlName="password" label="Contraseña" labelPlacement="floating" [counter]="true" maxlength="6"></ion-input>
           </ion-item>
-          <ion-item>
-            <ion-input type="password" formControlName="confirmPassword" label="Repita contraseña" labelPlacement="floating" [counter]="true" maxlength="8"></ion-input>
+          <ion-item lines="none">
+            <ion-input type="password" formControlName="confirmPassword" label="Repita contraseña" labelPlacement="floating" [counter]="true" maxlength="6"></ion-input>
           </ion-item>
           <div class="error-message" *ngIf="formPaciente.invalid && (formPaciente.dirty || formPaciente.touched)">
             Todos los campos son obligatorios.
@@ -81,10 +90,17 @@
             <ion-label position="floating">DNI</ion-label>
             <ion-input placeholder="00000000X" formControlName="dni"></ion-input>
           </ion-item>
-          <ion-item *ngIf="formMedico.controls['dni'].invalid && (formMedico.controls['dni'].dirty || formMedico.controls['dni'].touched)">
-            <div class="error-message" *ngIf="formMedico.controls['dni'].hasError('minlength') || formPaciente.controls['dni'].hasError('maxlength')">El DNI debe tener una longitud de 9 caracteres.</div>
-            <div class="error-message" *ngIf="formMedico.controls['dni'].hasError('dniExists')">El DNI ya existe.</div>
-          </ion-item>
+          <ion-label 
+          class="error-label" 
+          *ngIf="formMedico.controls['dni'].hasError('minlength') || 
+          formPaciente.controls['dni'].hasError('maxlength')">
+          El DNI debe tener una longitud de 9 caracteres.
+        </ion-label>
+        <ion-label class="error-label" 
+            *ngIf="formMedico.controls['dni'].hasError('dniExists')">
+            El DNI ya existe.
+          </ion-label>
+         
           <ion-item>
             <ion-label position="floating">Nombre</ion-label>
             <ion-input formControlName="nombre"></ion-input>
@@ -120,7 +136,7 @@
             <ion-label position="floating">Repita contraseña</ion-label>
             <ion-input formControlName="confirmPassword"></ion-input>
           </ion-item>
-          <div class="error-message" *ngIf="formMedico.invalid && (formMedico.dirty || formMedico.touched)">
+          <div class="error-label" *ngIf="formMedico.invalid && (formMedico.dirty || formMedico.touched)">
             Todos los campos son obligatorios.
           </div>
           <ion-button expand="block" type="submit">Agregar Datos Doctor</ion-button>

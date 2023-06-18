@@ -70,10 +70,11 @@ export class PacientesService {
       id: paciente.id,
       dni: paciente.dni,
       nombre: paciente.nombre,
-      edad: paciente.fechaNacimiento,
+      apellidos: paciente.apellidos,
+      fechaNacimiento: paciente.fechaNacimiento,
       direccion: paciente.direccion,
       telefono: paciente.telefono,
-      email: paciente.correoElectronico
+      correoElectronico: paciente.correoElectronico
     };
     return updateDoc(pacienteRef, pacienteData);
   }

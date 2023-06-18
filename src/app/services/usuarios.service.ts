@@ -45,4 +45,12 @@ export class UsuariosService {
     });
   }
 
+  borrarUsuario(id: string) {
+    const usuariosRef = doc(this.firestore, 'usuarios', id);
+    return deleteDoc(usuariosRef);
+    
+  }
+  
+
+
 }

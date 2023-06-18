@@ -67,6 +67,9 @@ var RegisterPage = /** @class */ (function () {
         this.doctorsService = doctorsService;
         this.type = "PACIENTE";
         this.especialidades = [];
+        this.showError = false;
+        this.showError2 = false;
+        this.errorText = '';
         this.formPaciente = this.formBuilder.group({
             dni: ['', [forms_1.Validators.minLength(9), forms_1.Validators.maxLength(9), forms_1.Validators.required]],
             nombre: ['', [forms_1.Validators.required]],
@@ -94,8 +97,6 @@ var RegisterPage = /** @class */ (function () {
         this.showNombreError = false;
         this.showApellidosError = false;
         this.showNSeguridadSocialError = false;
-        // Agrega una variable booleana para cada campo de error adicional que necesites
-        this.showError = false; // en consola
     }
     RegisterPage.prototype.customCounterFormatter = function (inputLength, maxLength) {
         return maxLength - inputLength + " characters remaining";
@@ -108,6 +109,9 @@ var RegisterPage = /** @class */ (function () {
             _this.type = obj.type;
         });
     };
+    // Agrega una variable booleana para cada campo de error adicional que necesites
+    //showError = false; // en consola
+    //errorText: string = '';
     RegisterPage.prototype.registerPaciente = function () {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
