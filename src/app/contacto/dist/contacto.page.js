@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 exports.ContactoPage = void 0;
 var core_1 = require("@angular/core");
+var uuid_1 = require("uuid");
 var ContactoPage = /** @class */ (function () {
     function ContactoPage(contactoService, usuariosService, pacientesService, firestore, authService) {
         this.contactoService = contactoService;
@@ -49,6 +50,7 @@ var ContactoPage = /** @class */ (function () {
     };
     ContactoPage.prototype.submitForm = function () {
         var _this = this;
+        this.contactForm.id = uuid_1.v4(); // Asigna un ID aleatorio
         this.contactoService.guardarConsulta(this.contactForm)
             .then(function () {
             _this.mensaje = 'Consulta enviada correctamente';
@@ -73,7 +75,7 @@ var ContactoPage = /** @class */ (function () {
             if (correo) {
                 _this.usuariosService.getUsuarioRol(correo).then(function (rol) {
                     _this.usuarioRol = rol || '';
-                    // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+                    // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado
                     if (_this.usuarioRol === 'PACIENTE') {
                         _this.pacientesService.getPacientePorCorreo(correo).then(function (paciente) {
                             if (paciente) {
@@ -92,7 +94,7 @@ var ContactoPage = /** @class */ (function () {
         var _this = this;
         return this.usuariosService.getUsuarioRol(correo).then(function (rol) {
             _this.usuarioRol = rol || '';
-            // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+            // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado
             if (_this.usuarioRol === 'PACIENTE') {
                 return _this.pacientesService.getPacientePorCorreo(correo).then(function (paciente) {
                     if (paciente) {

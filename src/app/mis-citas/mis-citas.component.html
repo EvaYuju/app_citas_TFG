@@ -46,7 +46,7 @@
           <p>Hora: {{ cita.hora }}</p>
           <p>Motivo: {{ cita.motivo }}</p>
           <p>Estado: {{ cita.estado }}</p>
-          <ion-item [ngStyle]="{ 'width': '260px' }">
+          <ion-item [ngStyle]="{ 'width': '260px' }" lines="none">
       <ion-label class="custom-label" [ngStyle]="{ 'background-color': getColorByEstado(cita.estado), 'margin-right': '10px' }">Estado: {{ cita.estado }}</ion-label>
       </ion-item>
     </ion-label>
@@ -103,7 +103,7 @@
 
   <ion-card-header *ngIf="usuarioRol === 'MEDICO'">
     <ion-card-title>
-      <ng-container 
+      <ng-container
         >Buscador de citas</ng-container>
     </ion-card-title>
     <ion-card-subtitle>Puede buscar otras citas de pacientes por DNI del paciente o por especialidad.</ion-card-subtitle>

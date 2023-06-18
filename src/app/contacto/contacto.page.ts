@@ -5,6 +5,8 @@ import { UsuariosService } from '../services/usuarios.service';
 import { PacientesService } from './../services/pacientes.service';
 import { Usuarios } from '../models/usuarios';
 import { AuthService } from './../services/auth.service';
+import { v4 as uuidv4 } from 'uuid';
+
 import {
   Firestore,
   collection,
@@ -35,7 +37,7 @@ export class ContactoPage {
   mensajeID: string | null = null;
   consultas: any[] = []; // Variable para almacenar los mensajes
   //authService: any;
-  usuarioRol: string = ''; 
+  usuarioRol: string = '';
   dniUsuarioActual: string = '';
   tlfUsuarioActual: string = '';
   correoUsuarioActual: string = '';
@@ -49,11 +51,11 @@ export class ContactoPage {
     private authService: AuthService
 
     ) {
-      
+
     }
 
     ngOnInit() {
-      
+
       this.obtenerUsuarioRol(); // Obtener el rol del usuario
       //this.obtenerDatosUsuario();
       this.usuarioRol = '';
@@ -72,6 +74,7 @@ export class ContactoPage {
       }
 
   submitForm() {
+    this.contactForm.id = uuidv4(); // Asigna un ID aleatorio
     this.contactoService.guardarConsulta(this.contactForm)
       .then(() => {
         this.mensaje = 'Consulta enviada correctamente';
@@ -98,8 +101,8 @@ export class ContactoPage {
       if (correo) {
         this.usuariosService.getUsuarioRol(correo).then((rol) => {
           this.usuarioRol = rol || '';
-  
-          // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+
+          // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado
           if (this.usuarioRol === 'PACIENTE') {
             this.pacientesService.getPacientePorCorreo(correo).then((paciente) => {
               if (paciente) {
@@ -115,11 +118,11 @@ export class ContactoPage {
       }
     });
   }
-  
+
   getUsuarioRol(correo: string): Promise<string | null> {
     return this.usuariosService.getUsuarioRol(correo).then((rol) => {
       this.usuarioRol = rol || '';
-      // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado 
+      // Obtener el paciente.DATO_QUE_QUERAMOS del paciente logueado
       if (this.usuarioRol === 'PACIENTE') {
         return this.pacientesService.getPacientePorCorreo(correo).then((paciente) => {
           if (paciente) {
@@ -143,7 +146,7 @@ export class ContactoPage {
             this.dniUsuarioActual = paciente.dni;
             this.tlfUsuarioActual = paciente.telefono;
             this.correoUsuarioActual = paciente.correoElectronico;
-  
+
             // Asignar los valores después de obtener los datos del paciente
             this.contactForm.telefonoPaciente = this.tlfUsuarioActual;
             this.contactForm.emailPaciente = this.correoUsuarioActual;
@@ -163,5 +166,6 @@ export class ContactoPage {
         console.error('Error al eliminar la consulta:', error);
       });
   }
+
 
 }

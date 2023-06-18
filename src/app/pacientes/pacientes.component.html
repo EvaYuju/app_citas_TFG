@@ -131,8 +131,8 @@
       <ion-item>
         <ion-label position="floating">Fecha de Nacimiento</ion-label>
         <ion-input
-          type="date" 
-          [(ngModel)]="pacienteSeleccionado.fechaNacimiento" 
+          type="date"
+          [(ngModel)]="pacienteSeleccionado.fechaNacimiento"
           [value]="pacienteSeleccionado.fechaNacimiento | date:'yyyy-MM-dd'">
         </ion-input>
       </ion-item>
@@ -152,6 +152,6 @@
         ></ion-input>
       </ion-item>
     </ion-card-content>
-    <ion-button (click)="modificarPaciente()">Modificar Paciente</ion-button>
+    <ion-button expand="block" (click)="modificarPaciente()">Modificar Paciente</ion-button>
   </ion-card>
 </ion-content>
