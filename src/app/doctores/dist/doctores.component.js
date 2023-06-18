@@ -20,9 +20,10 @@ exports.__esModule = true;
 exports.DoctoresComponent = void 0;
 var core_1 = require("@angular/core");
 var DoctoresComponent = /** @class */ (function () {
-    function DoctoresComponent(doctorsService, specialtiesService) {
+    function DoctoresComponent(doctorsService, specialtiesService, usuariosService) {
         this.doctorsService = doctorsService;
         this.specialtiesService = specialtiesService;
+        this.usuariosService = usuariosService;
         this.doctor = {
             id: '',
             nombre: '',
@@ -133,6 +134,15 @@ var DoctoresComponent = /** @class */ (function () {
             _this.doctorsEncontrados = _this.doctorsEncontrados.filter(function (doctor) { return doctor.id !== id; });
         })["catch"](function (error) {
             _this.mensaje = 'Error al eliminar el doctor: ' + error;
+        });
+    };
+    // Llamada a la función de borrado de usuario en el servicio correspondiente
+    DoctoresComponent.prototype.borrarUsuario = function (correo) {
+        this.usuariosService.borrarUsuario(correo)
+            .then(function () {
+            console.log('Usuario eliminado correctamente.');
+        })["catch"](function (error) {
+            console.log('Error al eliminar el usuario: ' + error);
         });
     };
     // Validación

@@ -116,6 +116,15 @@ var PacientesComponent = /** @class */ (function () {
             _this.mensaje = 'Error al eliminar el paciente: ' + error;
         });
     };
+    // Llamada a la función de borrado de usuario en el servicio correspondiente
+    PacientesComponent.prototype.borrarUsuario = function (correo) {
+        this.usuariosService.borrarUsuario(correo)
+            .then(function () {
+            console.log('Usuario eliminado correctamente.');
+        })["catch"](function (error) {
+            console.log('Error al eliminar el usuario: ' + error);
+        });
+    };
     PacientesComponent.prototype.getFormattedDate = function (date) {
         var year = date.getFullYear();
         var month = ('0' + (date.getMonth() + 1)).slice(-2);

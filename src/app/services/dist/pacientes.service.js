@@ -78,9 +78,36 @@ var PacientesService = /** @class */ (function () {
         };
         return firestore_1.updateDoc(pacienteRef, pacienteData);
     };
+    /* borrarPaciente(id: string) {
+       const pacienteRef = doc(this.firestore, 'pacientes', id);
+       return deleteDoc(pacienteRef);
+     }
+   */
     PacientesService.prototype.borrarPaciente = function (id) {
+        var _this = this;
         var pacienteRef = firestore_1.doc(this.firestore, 'pacientes', id);
-        return firestore_1.deleteDoc(pacienteRef);
+        return firestore_1.getDoc(pacienteRef)
+            .then(function (snapshot) {
+            if (snapshot.exists()) {
+                var paciente_1 = snapshot.data();
+                return firestore_1.deleteDoc(pacienteRef).then(function () {
+                    var usuariosRef = firestore_1.collection(_this.firestore, 'usuarios');
+                    var q = firestore_1.query(usuariosRef, firestore_1.where('correo', '==', paciente_1.correoElectronico));
+                    return firestore_1.getDocs(q).then(function (usuariosSnapshot) {
+                        if (!usuariosSnapshot.empty) {
+                            usuariosSnapshot.forEach(function (usuarioDoc) {
+                                var usuarioId = usuarioDoc.id;
+                                var usuarioRef = firestore_1.doc(usuariosRef, usuarioId);
+                                return firestore_1.deleteDoc(usuarioRef);
+                            });
+                        }
+                    });
+                });
+            }
+            else {
+                return Promise.reject('El paciente no existe');
+            }
+        });
     };
     PacientesService = __decorate([
         core_1.Injectable({

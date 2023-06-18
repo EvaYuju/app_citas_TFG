@@ -3,6 +3,7 @@ import { Doctor } from '../models/doctor';
 import { DoctorsService } from '../services/doctors.service';
 import { Especialidad } from '../models/specialties';
 import { SpecialtiesService } from '../services/specialties.service';
+import { UsuariosService } from '../services/usuarios.service';
 
 @Component({
   selector: 'app-doctores',
@@ -41,7 +42,11 @@ export class DoctoresComponent implements OnInit {
 
   especialidades: Especialidad[] = [];
 
-  constructor(private doctorsService: DoctorsService, private specialtiesService: SpecialtiesService) {
+  constructor(
+    private doctorsService: DoctorsService, 
+    private specialtiesService: SpecialtiesService,     
+    private usuariosService: UsuariosService
+    ) {
     this.loadDoctorsBySpecialty();
 
 
@@ -145,6 +150,20 @@ export class DoctoresComponent implements OnInit {
         this.mensaje = 'Error al eliminar el doctor: ' + error;
       });
   }
+
+// Llamada a la función de borrado de usuario en el servicio correspondiente
+borrarUsuario(correo: string) {
+  this.usuariosService.borrarUsuario(correo)
+    .then(() => {
+      console.log('Usuario eliminado correctamente.');
+    })
+    .catch((error) => {
+      console.log('Error al eliminar el usuario: ' + error);
+    });
+}
+
+
+
 
   // Validación
   camposValidos() {

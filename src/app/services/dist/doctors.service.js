@@ -139,9 +139,35 @@ var DoctorsService = /** @class */ (function () {
         };
         return firestore_1.updateDoc(doctorRef, doctorData);
     };
+    /*borrarDoctor(id: string) {
+      const doctorRef = doc(this.firestore, 'doctores', id);
+      return deleteDoc(doctorRef);
+    }*/
     DoctorsService.prototype.borrarDoctor = function (id) {
-        var doctorRef = firestore_1.doc(this.firestore, 'doctores', id);
-        return firestore_1.deleteDoc(doctorRef);
+        var _this = this;
+        var DoctorRef = firestore_1.doc(this.firestore, 'doctores', id);
+        return firestore_1.getDoc(DoctorRef)
+            .then(function (snapshot) {
+            if (snapshot.exists()) {
+                var doctor_1 = snapshot.data();
+                return firestore_1.deleteDoc(DoctorRef).then(function () {
+                    var usuariosRef = firestore_1.collection(_this.firestore, 'usuarios');
+                    var q = firestore_1.query(usuariosRef, firestore_1.where('correo', '==', doctor_1.correoElectronico));
+                    return firestore_1.getDocs(q).then(function (usuariosSnapshot) {
+                        if (!usuariosSnapshot.empty) {
+                            usuariosSnapshot.forEach(function (usuarioDoc) {
+                                var usuarioId = usuarioDoc.id;
+                                var usuarioRef = firestore_1.doc(usuariosRef, usuarioId);
+                                return firestore_1.deleteDoc(usuarioRef);
+                            });
+                        }
+                    });
+                });
+            }
+            else {
+                return Promise.reject('El doctor no existe');
+            }
+        });
     };
     DoctorsService = __decorate([
         core_1.Injectable({

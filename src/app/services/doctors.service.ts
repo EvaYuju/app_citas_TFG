@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, query, where, getDocs, doc, updateDoc, deleteDoc } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, query, where, getDocs, doc, updateDoc, deleteDoc, getDoc } from '@angular/fire/firestore';
 import { Doctor } from '../models/doctor';
 
 @Injectable({
@@ -102,8 +102,35 @@ export class DoctorsService {
     return updateDoc(doctorRef, doctorData);
   }
 
-  borrarDoctor(id: string) {
+  /*borrarDoctor(id: string) {
     const doctorRef = doc(this.firestore, 'doctores', id);
     return deleteDoc(doctorRef);
+  }*/
+
+  borrarDoctor(id: string) {
+    const DoctorRef = doc(this.firestore, 'doctores', id);
+    return getDoc(DoctorRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const doctor = snapshot.data() as Doctor;
+          return deleteDoc(DoctorRef).then(() => {
+            const usuariosRef = collection(this.firestore, 'usuarios');
+            const q = query(usuariosRef, where('correo', '==', doctor.correoElectronico));
+            return getDocs(q).then((usuariosSnapshot) => {
+              if (!usuariosSnapshot.empty) {
+                usuariosSnapshot.forEach((usuarioDoc) => {
+                  const usuarioId = usuarioDoc.id;
+                  const usuarioRef = doc(usuariosRef, usuarioId);
+                  return deleteDoc(usuarioRef);
+                });
+              }
+            });
+          });
+        } else {
+          return Promise.reject('El doctor no existe');
+        }
+      });
   }
+  
+
 }

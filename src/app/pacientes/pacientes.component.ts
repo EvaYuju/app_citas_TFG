@@ -121,6 +121,17 @@ export class PacientesComponent implements OnInit{
     });
   }
 
+  // Llamada a la función de borrado de usuario en el servicio correspondiente
+  borrarUsuario(correo: string) {
+    this.usuariosService.borrarUsuario(correo)
+      .then(() => {
+        console.log('Usuario eliminado correctamente.');
+      })
+      .catch((error) => {
+        console.log('Error al eliminar el usuario: ' + error);
+      });
+  }
+
   getFormattedDate(date: Date): string {
     const year = date.getFullYear();
     const month = ('0' + (date.getMonth() + 1)).slice(-2);

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, query, where, getDocs, doc, updateDoc, deleteDoc } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, query, where, getDocs, doc, updateDoc, deleteDoc, getDoc } from '@angular/fire/firestore';
 import { Pacientes } from '../models/pacientes';
 //import { v4 as uuidv4 } from 'uuid'; // Importa la función uuidv4 para generar un id único
 
@@ -79,9 +79,36 @@ export class PacientesService {
     return updateDoc(pacienteRef, pacienteData);
   }
 
-  borrarPaciente(id: string) {
+ /* borrarPaciente(id: string) {
     const pacienteRef = doc(this.firestore, 'pacientes', id);
     return deleteDoc(pacienteRef);
   }
+*/
+
+borrarPaciente(id: string) {
+  const pacienteRef = doc(this.firestore, 'pacientes', id);
+  return getDoc(pacienteRef)
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        const paciente = snapshot.data() as Pacientes;
+        return deleteDoc(pacienteRef).then(() => {
+          const usuariosRef = collection(this.firestore, 'usuarios');
+          const q = query(usuariosRef, where('correo', '==', paciente.correoElectronico));
+          return getDocs(q).then((usuariosSnapshot) => {
+            if (!usuariosSnapshot.empty) {
+              usuariosSnapshot.forEach((usuarioDoc) => {
+                const usuarioId = usuarioDoc.id;
+                const usuarioRef = doc(usuariosRef, usuarioId);
+                return deleteDoc(usuarioRef);
+              });
+            }
+          });
+        });
+      } else {
+        return Promise.reject('El paciente no existe');
+      }
+    });
+}
+
 }
 
