@@ -116,7 +116,6 @@ var DoctorsService = /** @class */ (function () {
                                 doctor.id = doc.id;
                                 doctors_2.push(doctor);
                             });
-                            console.log(doctors_2);
                             return doctors_2;
                         }
                         else {

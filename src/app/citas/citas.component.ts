@@ -89,7 +89,7 @@ export class CitasComponent implements OnInit {
     this.usuarioRol = '';
     this.obtenerUsuarioDNI(); // Obtener el DNI del paciente logueado
     this.dniUsuarioActual = '';
-    //this.correoUsuarioActual = '';
+    this.correoUsuarioActual = '';
 
 
     //this.selectDoctor("20000009H",new Date());
@@ -169,17 +169,20 @@ export class CitasComponent implements OnInit {
       this.mensaje = 'Por favor, complete todos los campos.';
       return;
     }
-
+    if (this.usuarioRol === 'MEDICO') {
     // Comprobar si el dni existe
+    console.log('Valor de this.cita.pacienteId:', this.cita.pacienteId);
+
     const pacienteExists = await this.pacientesService.getPacientePorDNI(
       this.cita.pacienteId
     );
+    console.log('Valor de pacienteExists:', pacienteExists);
 
     if (!pacienteExists) {
       this.mensaje = 'El DNI del paciente no coincide con ningún paciente registrado.';
       return;
     }
-
+  }
     // Obtener la hora seleccionada del componente ion-select y asignarla al campo 'hora'
     this.cita.hora = this.cita.hora.substring(0, 5);
     /*const docRef = await addDoc(

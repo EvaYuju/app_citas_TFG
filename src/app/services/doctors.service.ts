@@ -78,7 +78,6 @@ export class DoctorsService {
             doctor.id = doc.id;
             doctors.push(doctor);
           });
-          console.log(doctors)
           return doctors;
         } else {
           return [];

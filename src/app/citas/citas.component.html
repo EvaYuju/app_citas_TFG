@@ -31,10 +31,9 @@
 
     <ion-card-content>
       <ion-item *ngIf="usuarioRol === 'MEDICO'">
-        <ion-label placeholder="DNI del paciente" position="floating"
-          >DNI Paciente</ion-label
-        >
-
+        <ion-label placeholder="DNI del paciente" position="floating">
+          DNI Paciente
+        </ion-label>
         <ion-input [(ngModel)]="cita.pacienteId"></ion-input>
       </ion-item>
       <ion-item *ngIf="usuarioRol === 'PACIENTE'">

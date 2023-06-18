@@ -23,7 +23,13 @@
         >Aquí apareceran sus citas y el estado en el que se encuentran</ng-container
       >
     </ion-card-title>
-    <ion-card-subtitle>Gestione el estado de sus citas aquí.</ion-card-subtitle>
+    <ion-card-subtitle *ngIf="usuarioRol === 'MEDICO'">
+      Gestione el estado de sus citas aquí.
+    </ion-card-subtitle>
+    <ion-card-subtitle *ngIf="usuarioRol === 'PACIENTE'">
+      Aquí se mostrarán las citas que tenga y el estado en el que se encuentran.
+    </ion-card-subtitle>
+
   </ion-card-header>
 
 
