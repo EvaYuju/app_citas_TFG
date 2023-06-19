@@ -209,9 +209,13 @@ export class CitasComponent implements OnInit {
         this.cita
       );
       this.cita.id = docRef.id;
-
-      this.mensajeID =
-        'Cita agregada correctamente en *** (ID de la cita: ' + docRef.id +').' ;
+      if (this.usuarioRol === 'MEDICO') {
+        this.mensajeID =
+        'Cita agregada correctamente (ID de la cita: ' + docRef.id +').' ;
+      }  else if (this.usuarioRol === 'PACIENTE') {
+        this.mensajeID = 'Su cita ha sido agregada correctamente. Será gestionada por nuestros doctores. Podrá consultar su estado en el apartado "Mis citas".';
+      }
+      
       this.limpiarFormulario();
       this.limpiarMensaje(); // Limpia el mensaje 1º
 

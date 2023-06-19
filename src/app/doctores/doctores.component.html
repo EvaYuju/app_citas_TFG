@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <!-- Boton menú lateral -->
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home"></ion-back-button>
@@ -60,7 +60,7 @@
         <ion-input [(ngModel)]="doctor.correoElectronico"></ion-input>
       </ion-item>
 
-      <ion-button expand="full" (click)="agregarDoctor()">Agregar</ion-button>
+      <ion-button expand="block" class="buttonE" shape="round" (click)="agregarDoctor()">Agregar</ion-button>
 
       <!-- Mensaje de estado -->
       <div *ngIf="mensaje">
@@ -88,14 +88,14 @@
           </ion-select-option>
         </ion-select>
       </ion-item>
-      <ion-button expand="full" (click)="buscarDoctorPorEspecialidad(specialtyBuscar)">Buscar</ion-button>
+      <ion-button expand="block" class="buttonE" shape="round" (click)="buscarDoctorPorEspecialidad(specialtyBuscar)">Buscar</ion-button>
 
       <!-- Buscar Doctor DNI -->
       <ion-item>
         <ion-label position="floating">DNI</ion-label>
         <ion-input [(ngModel)]="dniBuscar"></ion-input>
       </ion-item>
-      <ion-button expand="full" (click)="buscarDoctorPorDNI(dniBuscar)">Buscar</ion-button>
+      <ion-button expand="block" class="buttonE" shape="round" (click)="buscarDoctorPorDNI(dniBuscar)">Buscar</ion-button>
 
       <!-- Mensaje de resultado de búsqueda -->
       <div *ngIf="doctorsEncontrados.length === 0 && mensajeBusq">
@@ -111,7 +111,6 @@
       <ion-card-title *ngIf="doctorsEncontrados.length > 0">Doctores Encontrados</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-list></ion-list>
       <ion-label *ngIf="doctorsEncontrados.length > 0">Lista de doctores encontrados - Seleccione un doctor para
         modificar</ion-label>
       <ion-list>
@@ -174,7 +173,7 @@
         <ion-input [(ngModel)]="doctorSeleccionado.correoElectronico"></ion-input>
       </ion-item>
 
-      <ion-button expand="full" (click)="modificarDoctor()">Guardar cambios</ion-button>
+      <ion-button expand="block" class="buttonE" shape="round" (click)="modificarDoctor()">Guardar cambios</ion-button>
     </ion-card-content>
   </ion-card>
 

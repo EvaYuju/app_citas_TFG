@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <!-- Boton menú lateral -->
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home"></ion-back-button>
@@ -8,20 +8,20 @@
       <ng-container *ngIf="usuarioRol === 'MEDICO'">Citas</ng-container>
     <ng-container *ngIf="usuarioRol === 'PACIENTE'">Mis citas</ng-container>
     </ion-title>
-    <ion-button slot="end" shape="round" fill="outline" (click)="ordenarCitasPorEstado()">Ordenar citas por estado</ion-button>
+    <ion-button color="Secondary" slot="end" shape="round" (click)="ordenarCitasPorEstado()"><ion-icon slot="icon-only" name="funnel"></ion-icon> Ordenar citas por estado</ion-button>
 
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-card-header>
+<ion-content >
+  <ion-card-header class="ion-padding">
     <ion-card-title>
       <ng-container>
-        Listado de citas
+        <b>Listado de citas</b>
         </ng-container>
     </ion-card-title>
     <ion-card-subtitle *ngIf="usuarioRol === 'MEDICO'">
-      Gestione el estado de las citas de sus pacientes aquí.
+      Gestione el estado de las citas de sus pacientes.
     </ion-card-subtitle>
     <ion-card-subtitle *ngIf="usuarioRol === 'PACIENTE'">
       Aquí se mostrarán las citas que tenga y el estado en el que se encuentran.
@@ -31,21 +31,20 @@
 
 
   <!-- Código para paciente -->
-  <div class="search-bar-container" *ngIf="usuarioRol === 'PACIENTE'">
+  <div class="custom-label" *ngIf="usuarioRol === 'PACIENTE'">
     <p>DNI Usuario Actual: {{ dniUsuarioActual }}</p>
   </div>
 
 
   <!-- Código para paciente -->
   <div class="citas-container" *ngIf="citasPaciente.length > 0 && usuarioRol === 'PACIENTE'">
-    <ion-list class="lista">
-      <ion-item *ngFor="let cita of citasPaciente" class="custom-item">
+    <ion-list class="lista" >
+      <ion-item *ngFor="let cita of citasPaciente" class="custom-item"  color="#Shade" lines="none">
       <ion-label [ngStyle]="{ 'margin-right': '10px' }">
-          <h1>Cita: {{ cita.especialidad }}</h1>
-          <h2>Fecha:{{ cita.fecha | date }}</h2>
+        <h1><b>Cita: {{ cita.especialidad }}</b></h1>
+        <h2>Fecha:{{ cita.fecha | date }}</h2>
           <p>Hora: {{ cita.hora }}</p>
           <p>Motivo: {{ cita.motivo }}</p>
-          <p>Estado: {{ cita.estado }}</p>
           <ion-item [ngStyle]="{ 'width': '260px' }" lines="none">
       <ion-label class="custom-label" [ngStyle]="{ 'background-color': getColorByEstado(cita.estado), 'margin-right': '10px' }">Estado: {{ cita.estado }}</ion-label>
       </ion-item>
@@ -59,14 +58,14 @@
   <!-- Código para médico -->
 
   <div class="citas-container" *ngIf="citasDoctor.length > 0 && usuarioRol === 'MEDICO'">
-    <ion-list class="lista">
-      <ion-item *ngFor="let cita of citasDoctor" class="custom-item">
+    <ion-list class="lista" color="#Shade">
+      
+      <ion-item *ngFor="let cita of citasDoctor" class="custom-item"  color="#Shade" lines="none">
         <ion-label [ngStyle]="{ 'margin-right': '10px' }">
-          <h1>Cita: {{ cita.especialidad }}</h1>
+          <h1><b>Cita: {{ cita.especialidad }}</b></h1>
           <h2>Fecha:{{ cita.fecha | date }}</h2>
           <p>Hora: {{ cita.hora }}</p>
           <p>Motivo: {{ cita.motivo }}</p>
-          <p>Estado: {{ cita.estado }}</p>
           <p>DNI paciente: {{ cita.pacienteId }}</p>
           <ion-item [ngStyle]="{ 'width': '260px' }" lines="none">
         <ion-label class="custom-label" [ngStyle]="{ 'background-color': getColorByEstado(cita.estado), 'margin-right': '10px' }">Estado: {{ cita.estado }}</ion-label>
@@ -101,10 +100,10 @@
   </div>
 
 
-  <ion-card-header *ngIf="usuarioRol === 'MEDICO'">
+  <ion-card-header *ngIf="usuarioRol === 'MEDICO'" class="lista">
     <ion-card-title>
       <ng-container
-        >Buscador de citas</ng-container>
+        ><b>Buscador de citas</b></ng-container>
     </ion-card-title>
     <ion-card-subtitle>Puede buscar otras citas de pacientes por DNI del paciente o por especialidad.</ion-card-subtitle>
   </ion-card-header>

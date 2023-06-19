@@ -10,3 +10,14 @@
   white-space: pre-wrap;
   /* Permite el salto de línea */
 }
+
+.mensajeID {
+  font-size: 20;
+}
+
+.buttonE {
+  display: flex;
+  margin-top: 26px;
+  margin-left: 200px;
+  margin-right: 200px;
+}

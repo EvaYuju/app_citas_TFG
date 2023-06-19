@@ -1,4 +1,14 @@
 @charset "UTF-8";
+#h1 {
+  font-size: 25px;
+}
+
+.ion-padding {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
 .search-bar-container {
   margin-bottom: 16px;
 }

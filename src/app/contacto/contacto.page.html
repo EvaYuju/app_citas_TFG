@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <!-- Boton menú lateral -->
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home"></ion-back-button>
@@ -9,11 +9,12 @@
 </ion-header>
 
 <ion-content>
+
   <ion-grid>
     <ion-row>
       <ion-col size-md="6" offset-md="3">
         <ion-card *ngIf="usuarioRol === 'PACIENTE'">
-          <ion-card-header>
+          <ion-card-header color="primary">
             <ion-card-title>Formulario de Contacto</ion-card-title>
           </ion-card-header>
           <ion-card-content>
@@ -47,7 +48,7 @@
                 <ion-textarea name="textoMensaje" [(ngModel)]="contactForm.textoMensaje"></ion-textarea>
               </ion-item>
 
-              <ion-button expand="full" type="submit">Enviar</ion-button>
+              <ion-button class="buttonE" shape="round"  type="submit">Enviar</ion-button>
             </form>
           </ion-card-content>
         </ion-card>
@@ -82,7 +83,7 @@
         </ion-card-content>
         <ion-row>
           <ion-col>
-            <ion-button color="danger" (click)="borrarConsulta(consulta.id)">Eliminar</ion-button>
+            <ion-button color="danger" (click)="borrarConsulta(consulta)">Eliminar</ion-button>
           </ion-col>
         </ion-row>
       </ion-card>
